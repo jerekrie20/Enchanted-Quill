@@ -1,3 +1,78 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    h1 {
+        @apply text-[36px] leading-[1.25] font-heading font-bold;
+    }
+
+    h2 {
+        @apply text-[30px] leading-[1.3] font-heading font-semibold;
+    }
+
+    h3 {
+        @apply text-[24px] leading-[1.35] font-heading;
+    }
+
+    h4 {
+        @apply text-[20px] leading-[1.4] font-heading;
+    }
+
+    p {
+        @apply text-[16px] leading-[1.6] font-sans;
+    }
+
+    small {
+        @apply text-[14px] leading-[1.5] font-sans;
+    }
+}
+
+@layer base {
+    /* Set default fonts */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif; /* Heading font */
+    }
+
+    p {
+        font-family: 'Roboto', sans-serif; /* Body font */
+        font-size: 16px; /* Base size */
+        line-height: 1.6; /* Readable spacing */
+    }
+
+    small {
+        font-size: 14px; /* Smaller text */
+        line-height: 1.5;
+    }
+}
+
+@layer base {
+    :root {
+        /* Light mode variables */
+        --color-bg: #ffffff; /* White */
+        --color-text: #0d1117; /* Charcoal Black */
+        --color-secondaryText: #E0E6ED; /* Off White */
+        --color-primary: #00a3e0; /* Cyan Blue */
+        --color-secondary: #00cfc1; /* Teal Green */
+        --color-accent: #13293d; /* Deep Navy */
+        --color-navbg: #0D1117; /* Charcoal Black */
+        --color-secondarynavbg: #13293d; /* Deep Navy */
+        --color-danger: #981A1A /* Danger */
+    }
+
+    [data-theme="dark"] {
+        /* Dark mode variables */
+        --color-bg: #0d1117; /* Charcoal Black */
+        --color-text: #e0e6ed; /* Off-White */
+        --color-secondaryText: #59788e; /* Off White */
+        --color-primary: #00cfc1; /* Teal Green */
+        --color-secondary: #00a3e0; /* Cyan Blue */
+        --color-accent: #59788e; /* Muted Blue-Grey */
+    }
+
+    body {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        transition: background-color 0.3s, color 0.3s;
+    }
+}

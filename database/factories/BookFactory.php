@@ -21,8 +21,6 @@ class BookFactory extends Factory
             'published_at' => Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
-            'categories_id' => Category::factory(),
             'author_id' => Author::factory(),
         ];
     }

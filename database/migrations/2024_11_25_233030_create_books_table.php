@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description');
-            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->string('cover')->nullable();
             $table->foreignId('author_id')->constrained('authors')->cascadeOnDelete();
             $table->smallInteger('status')->default(0);
             $table->dateTime('published_at')->nullable();
