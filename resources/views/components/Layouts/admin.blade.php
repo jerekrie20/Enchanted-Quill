@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     @vite('resources/css/app.css')
+    @vite('resources/js/app.js')
     @livewireStyles
     @livewireScripts
     <meta charset="utf-8">
@@ -20,7 +21,7 @@
             <img src="{{ asset('graphic/quill.webp') }}" alt="logo" class="h-12">
         </a>
         <div class="flex items-center space-x-6 rtl:space-x-reverse">
-            <a href="tel:5541251234" class="text-secondaryText hover:underline">Settings</a>
+            <a href="{{route('admin.settings')}}" class="hover:text-secondary {{request()->routeIs('admin.settings') ? 'text-secondary' : 'text-secondaryText '}}">Settings</a>
             <a href="#" class="text-secondaryText  hover:underline">My Space</a>
             <a href="#" ><x-icons.bell/></a>
             <button id="themeToggle" class="flex items-center">

@@ -13,9 +13,16 @@ Route::get('/login', function (){
 })->name('login');
 
 
+Route::middleware('auth')->group(function (){
+
+});
+
 
 Route::middleware(['auth', 'can:admin-access'])->group(function () {
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::get('/admin/users', Users::class)->name('admin.users');
     Route::get('/admin/users/{id}', Users::class)->name('admin.user');
+    Route::get('/admin/settings', function (){
+        return view('livewire.admin.settings');
+    })->name('admin.settings');
 });

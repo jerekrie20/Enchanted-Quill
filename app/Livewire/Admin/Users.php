@@ -127,8 +127,13 @@ class Users extends Component
 
     }
 
-    protected function delete(){
-
+    public function delete($id): void
+    { //Delete a User if authorized to do so
+        $user = User::find($id);
+        $name = $user['name'];
+        $this->authorize('delete', $user);
+        $user->delete();
+        session()->flash('success', "$name was deleted successfully!");
     }
 
     public function updatingSearch()

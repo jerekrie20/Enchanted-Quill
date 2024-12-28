@@ -32,7 +32,7 @@
 
 
     <div>
-      <x-alerts.success/>
+        <x-alerts.success/>
     </div>
 
 
@@ -53,10 +53,12 @@
                     </button>
 
 
-                    <a href="">
-                        <button class="border-2 border-secondary text-center pr-10 pl-10 pt-1 pb-1 rounded-md">Delete
-                        </button>
-                    </a>
+                    <button
+                        type="button"
+                        wire:click="delete({{$user->id}})"
+                        wire:confirm="Are you sure you want to delete {{$user->name}}"
+                        class="border-2 border-secondary text-center pr-10 pl-10 pt-1 pb-1 rounded-md">Delete
+                    </button>
                 </p>
 
 
