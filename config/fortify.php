@@ -73,7 +73,12 @@ return [
     |
     */
 
-    'home' => '/home',
+    'home' => function () {
+        if (auth()->check() && auth()->user()->role === 'admin') {
+            return '/admin/dashboard';
+        }
+        return '/dashboard';
+    },
 
     /*
     |--------------------------------------------------------------------------

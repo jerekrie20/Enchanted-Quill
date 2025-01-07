@@ -41,8 +41,8 @@ class ImageService
         if ($image) {
             // Read the uploaded image file
             $img = Image::read($image->getRealPath());
-            // Resize the image to 400x300
-            $img->cover(400,300,'center');
+            // Resize the image to 300x300
+            $img->cover(300,300,'center');
             // Generate a new filename
             $filename = $base . '_' . rand(1000, 9999) . '.' . $image->getClientOriginalExtension();
 
@@ -112,7 +112,7 @@ class ImageService
                 // Read the uploaded image file
                 $img = Image::read($image->getRealPath());
                 // Resize the image to 300x300
-                $img->cover(400,300,'center');
+                $img->cover(300,300,'center');
                 // Generate a new filename
                 $filename = $base . '_'  . rand(1000, 9999) . '.' . $image->getClientOriginalExtension();
 

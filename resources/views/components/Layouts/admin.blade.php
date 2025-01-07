@@ -49,6 +49,15 @@
                 <li>
                     <a href="#" class="text-secondaryText  hover:text-secondary active:text-secondary">Blogs</a>
                 </li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="px-3 py-1 bg-gray-300 hover:bg-gray-400 text-black font-medium rounded-sm">
+                            Log Out
+                        </button>
+                    </form>
+
+                </li>
             </ul>
         </div>
     </div>

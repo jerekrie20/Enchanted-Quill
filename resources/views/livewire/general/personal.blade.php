@@ -24,15 +24,21 @@
                         <img class="w-32 h-32 rounded-full" src="https://images.pexels.com/photos/2690323/pexels-photo-2690323.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Default Image" />
                     @endif
                 </div>
+                <p class="text-danger text-center italic">Image is cropped to 300x300, centered</p>
                 <input wire:model.live="avatar" accept="image/*" class="block w-full mt-2 text-sm text-secondaryText rounded-lg cursor-pointer bg-text focus:outline-none" aria-describedby="user_avatar_help" id="user_avatar" type="file">
                 <div>
                     @error('avatar') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
+
+                <div class="flex flex-col justify-center mt-3">
+                    <x-forms.input-text name="name" wire:model.blur="name"/>
+                    <x-forms.input-email name="email" wire:model.blur="email"/>
+                </div>
             </div>
 
-        <div class="mt-2 flex justify-between">
+        <div class="mt-2 flex justify-center">
             <x-forms.input-submit/>
-            <x-forms.input-reset/>
+          <!--  <x-forms.input-reset/> -->
         </div>
 
     </form>

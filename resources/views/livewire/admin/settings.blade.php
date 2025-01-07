@@ -28,18 +28,16 @@
     </div>
 
     <div id="default-tab-content">
-        <div class="hidden p-4 bg-secondaryText mx-2" id="profile" role="tabpanel"
+        <div class="hidden p-4 bg-secondaryText mx-2 mb-5" id="profile" role="tabpanel"
              aria-labelledby="profile-tab">
             <livewire:general.personal/>
         </div>
-        <div class="hidden p-4 bg-secondaryText mx-2" id="dashboard" role="tabpanel"
+        <div class="hidden p-4 bg-secondaryText mx-2 mb-5" id="dashboard" role="tabpanel"
              aria-labelledby="dashboard-tab">
-            <p class="text-sm text-gray-500 dark:text-gray-400">This is some placeholder content the <strong
-                    class="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</strong>.
-                Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps
-                classes to control the content visibility and styling.</p>
+            <livewire:general.security/>
         </div>
     </div>
+
 
 
 </x-Layouts.admin>
