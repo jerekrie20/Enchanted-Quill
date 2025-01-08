@@ -2,6 +2,8 @@
 
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Users;
+use App\Livewire\General\BlogEditor;
+use App\Livewire\General\BlogList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,8 +23,10 @@ Route::middleware('auth')->group(function (){
 Route::middleware(['auth', 'can:admin-access'])->group(function () {
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::get('/admin/users', Users::class)->name('admin.users');
-    Route::get('/admin/users/{id}', Users::class)->name('admin.user');
     Route::get('/admin/settings', function (){
         return view('livewire.admin.settings');
     })->name('admin.settings');
+
+    Route::get('/admin/blogs', BlogList::class)->name('admin.blogs');
+    Route::get('/admin/blog/{id}', BlogEditor::class)->name('admin.blog-id');
 });

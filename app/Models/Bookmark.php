@@ -26,7 +26,7 @@ class Bookmark extends Model
     }
 
     /**
-     * The model that this bookmark references (Book or Blog).
+     * The model that this bookmark references (Book or BlogList).
      */
     public function bookmarkable(): MorphTo
     {
