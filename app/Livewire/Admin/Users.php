@@ -43,7 +43,11 @@ class Users extends Component
 
     public $avatar;
 
-    public $roleArray = ['admin', 'author', 'reader'];
+    public $roleArray = [
+        'admin' =>  'admin',
+        'author' => 'author',
+        'reader' => 'reader'
+    ];
 
     #[Locked]
     public $user;

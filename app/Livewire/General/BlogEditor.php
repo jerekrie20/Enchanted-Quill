@@ -14,8 +14,18 @@ class BlogEditor extends Component
     #[Layout('components.Layouts.admin')]
     #[Title('Edit Blog')]
 
+    //Form Fields
+    public $title;
+
     public $content;
     public $blogId;
+    public $status;
+
+    public $statusData = [
+        '0' => 'Draft',
+        '1' => 'Published',
+        '2' => 'Private'
+    ];
     protected $imageService;
 
     public function __construct()
@@ -23,7 +33,12 @@ class BlogEditor extends Component
         $this->imageService = app(ImageService::class);
     }
 
-    public function save()
+    public function saveDetails()
+    {
+
+    }
+
+    public function saveEditor()
     {
         $this->validate([
             'content' => 'required|string',
@@ -68,6 +83,8 @@ class BlogEditor extends Component
         $blog = Blog::find($id);
         $this->blogId = $id;
         $this->content = $blog->content; // Load existing content
+        $this->title = $blog->title;
+        $this->status = $blog->status;
     }
 
     public function render()

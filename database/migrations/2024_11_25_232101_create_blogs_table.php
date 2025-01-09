@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->longText('content');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->smallInteger('status')->default(0);
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

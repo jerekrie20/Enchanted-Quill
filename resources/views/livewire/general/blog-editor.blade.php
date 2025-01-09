@@ -6,7 +6,16 @@
     </div>
 
     <div>
-        <form wire:submit.prevent="save" class="p-2" id="blog-form">
+        <form wire:submit.prevent="saveDetails">
+            <div class="flex justify-center">
+                <div class="p-2"><x-forms.input-text name="Title" wire:model="title"/></div>
+                <div class="p-2"><x-forms.input-select name="Status" :data="$statusData" wire:model="status"/></div>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <form wire:submit.prevent="saveEditor" class="p-2" id="blog-form">
             @csrf
 
             <!-- This is the CKEditor area, ignore by Livewire -->

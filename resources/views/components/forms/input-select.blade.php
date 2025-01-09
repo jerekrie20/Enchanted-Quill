@@ -1,11 +1,11 @@
 @props(['name', 'data'])
 
-<label for="{{$name}}" class="block mb-2 text-lg font-medium ">Select a {{ ucfirst($name)}}</label>
+<label for="{{$name}}" class="block mb-2 text-lg font-medium "> {{ ucfirst($name)}}</label>
 
 <select class="rounded-md bg-accent  focus:ring-secondary focus:border-secondary block w-full p-2.5 text-secondaryText mb-2" {{ $attributes }}   id="{{ $name }}">
     <option disabled value="">Choose {{ ucfirst($name)}}</option>
-    @foreach($data as $opt)
-        <option value="{{$opt}}">{{$opt}}</option>
+    @foreach($data as $key => $value)
+        <option value="{{$key}}">{{$value}}</option>
     @endforeach
 </select>
 

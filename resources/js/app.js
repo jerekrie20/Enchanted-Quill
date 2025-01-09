@@ -3,13 +3,22 @@ import 'flowbite';
 
 import {
     ClassicEditor,
+    Alignment,
+    Autoformat,
     AutoImage,
     Autosave,
     BlockQuote,
-    BlockToolbar,
     Bold,
+    Code,
     Essentials,
+    FindAndReplace,
+    FontBackgroundColor,
+    FontColor,
+    FontFamily,
+    FontSize,
     Heading,
+    Highlight,
+    HorizontalLine,
     ImageBlock,
     ImageCaption,
     ImageInline,
@@ -28,23 +37,35 @@ import {
     List,
     ListProperties,
     MediaEmbed,
+    PageBreak,
     Paragraph,
     PasteFromOffice,
+    RemoveFormat,
     SimpleUploadAdapter,
     SpecialCharacters,
+    SpecialCharactersArrows,
+    SpecialCharactersCurrency,
+    SpecialCharactersEssentials,
+    SpecialCharactersLatin,
+    SpecialCharactersMathematical,
+    SpecialCharactersText,
+    Strikethrough,
+    Subscript,
+    Superscript,
     Table,
     TableCaption,
     TableCellProperties,
     TableColumnResize,
     TableProperties,
     TableToolbar,
+    TextTransformation,
+    Title,
     TodoList,
-    Underline
+    Underline,
+    WordCount
 } from 'ckeditor5';
 
 import 'ckeditor5/ckeditor5.css';
-
-const licenseKey = import.meta.env.VITE_CKEDITOR_LICENSE_KEY;
 
 function initEditor() {
     const editorElement = document.querySelector('#editor')
@@ -53,13 +74,22 @@ function initEditor() {
 
     ClassicEditor.create(editorElement, {
         plugins: [
+            Alignment,
+            Autoformat,
             AutoImage,
             Autosave,
             BlockQuote,
-            BlockToolbar,
             Bold,
+            Code,
             Essentials,
+            FindAndReplace,
+            FontBackgroundColor,
+            FontColor,
+            FontFamily,
+            FontSize,
             Heading,
+            Highlight,
+            HorizontalLine,
             ImageBlock,
             ImageCaption,
             ImageInline,
@@ -78,39 +108,70 @@ function initEditor() {
             List,
             ListProperties,
             MediaEmbed,
+            PageBreak,
             Paragraph,
             PasteFromOffice,
+            RemoveFormat,
             SimpleUploadAdapter,
             SpecialCharacters,
+            SpecialCharactersArrows,
+            SpecialCharactersCurrency,
+            SpecialCharactersEssentials,
+            SpecialCharactersLatin,
+            SpecialCharactersMathematical,
+            SpecialCharactersText,
+            Strikethrough,
+            Subscript,
+            Superscript,
             Table,
             TableCaption,
             TableCellProperties,
             TableColumnResize,
             TableProperties,
             TableToolbar,
+            TextTransformation,
+            Title,
             TodoList,
-            Underline
+            Underline,
+            WordCount
         ],
-        blockToolbar: ['bold', 'italic', '|', 'link', 'insertImage', 'insertTable', '|', 'bulletedList', 'numberedList', 'outdent', 'indent'],
 
         toolbar: [
+            'findAndReplace',
+            '|',
             'heading',
+            '|',
+            'fontSize',
+            'fontFamily',
+            'fontColor',
+            'fontBackgroundColor',
             '|',
             'bold',
             'italic',
             'underline',
+            'strikethrough',
+            'subscript',
+            'superscript',
+            'code',
+            'removeFormat',
             '|',
+            'specialCharacters',
+            'horizontalLine',
+            'pageBreak',
             'link',
             'insertImage',
             'mediaEmbed',
             'insertTable',
+            'highlight',
             'blockQuote',
+            '|',
+            'alignment',
             '|',
             'bulletedList',
             'numberedList',
-            '|',
-            'undo',
-            'redo'
+            'todoList',
+            'outdent',
+            'indent'
         ],
         image: {
             toolbar: [
@@ -137,6 +198,7 @@ function initEditor() {
                 }
             }
         },
+        licenseKey: 'GPL',
         list: {
             properties: {
                 styles: true,
@@ -154,7 +216,6 @@ function initEditor() {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
         },
-        licenseKey
     })
         .then(editor => {
             // Keep hidden input in sync with CKEditor
