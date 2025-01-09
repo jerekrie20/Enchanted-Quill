@@ -22,14 +22,30 @@ class BlogList extends Component
     public $sort;
     public $perPage = 10;
 
-    public function unpublish($id)
+
+    public function updateStatus($blogId, $status)
     {
-            dd("works");
+        $blog = BlogModel::find($blogId);
+
+        // Ensure the user is authorized to update
+        $this->authorize('update', $blog);
+
+        // Update the status
+        $blog->update([
+            'status' => $status,
+        ]);
+
+        $this->dispatch('status-updated', blogId: $blogId);
+
     }
 
-    public function delete($id)
+    public function delete(BlogModel $blog)
     {
-        dd("works");
+        $this->authorize('delete', $blog);
+
+        $blog->delete();
+
+        session()->flash('success', "$blog->title was deleted");
     }
 
     public function render()

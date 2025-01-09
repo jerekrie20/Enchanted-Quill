@@ -1,4 +1,9 @@
 <div>
+
+    <div>
+        <x-alerts.success/>
+    </div>
+
     <h1 class="p-2">Blogs Management</h1>
 
     <x-buttons.primary href=" " text="Add New Blog"/>
@@ -85,7 +90,19 @@
                                 {{$blogCategory->name}} |
                             @endforeach
                         </p>
-                        <p><span>Status:</span> {{$blog->status_label}}</p>
+                        <p
+                            x-data="{ flash: false }"
+                            x-init="@this.on('status-updated', (event) => {
+                                if (event.blogId === {{ $blog->id }}) {
+                                    flash = true;
+                                    setTimeout(() => flash = false, 1000);
+                                }
+                              })"
+                            :class="flash ? 'bg-green-200 text-green-800' : ''"
+                            class="transition-all duration-500 rounded"
+                        >
+                            <span>Status:</span> {{$blog->status_label}}
+                        </p>
                         <p><span>Published:</span> {{ $blog->created_at->format('l j, Y ') }}</p>
                         <p><span>Updated:</span> {{ $blog->updated_at->format('l j, Y ') }}</p>
                     </div>
@@ -94,9 +111,23 @@
                 <div class="flex">
                     <x-buttons.secondary href="{{route('admin.blog-id', $blog->id)}}" text="Edit"
                                          class="pr-5 pl-5 pt-1 pb-1"/>
-                    <x-buttons.tertiary href="" wire:click.prevent="unpublish({{$blog->id}})" text="Unpublish"
-                                        class="pr-6 pl-6 pt-1 pb-1"/>
-                    <x-buttons.delete href=" " text="Delete" class="pr-6 pl-6 pt-1 pb-1"
+
+                    <div class="m-auto text-center p-2">
+
+                        <select
+                            name="status"
+                            id="status"
+                            class="bg-accent text-secondaryText rounded-md mr-2 pr-4 pl-4 pt-1 pb-1"
+                            wire:change="updateStatus({{ $blog->id }}, $event.target.value)"
+                        >
+                            <option disabled  value="">Status</option>
+                            <option value="0" @if($blog->status == 0) selected @endif>Draft</option>
+                            <option value="1" @if($blog->status == 1) selected @endif>Published</option>
+                            <option value="2" @if($blog->status == 2) selected @endif>Private</option>
+                        </select>
+
+                    </div>
+                    <x-buttons.delete href=" " text="Delete" class="pr-4 pl-4 pt-1 pb-1"
                                       wire:click.prevent="delete({{$blog->id}})"
                                       wire:confirm="Are you sure you want to delete {{$blog->title}}"
                     />
