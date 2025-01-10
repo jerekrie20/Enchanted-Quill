@@ -17,6 +17,8 @@ class Blog extends Model
     const STATUS_PUBLISHED = 1;
     const STATUS_PRIVATE = 2;
 
+    const STATUS_Publish_later = 3;
+
     protected $fillable = [
         'title',
         'slug',
@@ -35,6 +37,7 @@ class Blog extends Model
             self::STATUS_DRAFT => 'Draft',
             self::STATUS_PUBLISHED => 'Published',
             self::STATUS_PRIVATE => 'Private',
+            self::STATUS_Publish_later => 'Publish Later',
             default => 'Unknown',
         };
     }

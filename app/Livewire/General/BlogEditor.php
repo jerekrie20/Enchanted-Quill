@@ -19,12 +19,15 @@ class BlogEditor extends Component
 
     public $content;
     public $blogId;
+
     public $status;
+    public $publish_at;
 
     public $statusData = [
         '0' => 'Draft',
         '1' => 'Published',
-        '2' => 'Private'
+        '2' => 'Private',
+        '3' => 'Publish Later'
     ];
     protected $imageService;
 
@@ -48,8 +51,6 @@ class BlogEditor extends Component
         $blog->update([
             'content' => $this->content,
         ]);
-
-        $this->skipRender();
 
         session()->flash('success', 'Blog updated successfully!');
         $this->dispatch('blog-updated', message: 'Blog updated successfully!');
