@@ -6,6 +6,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
 use /**
  * Class Image
  *
@@ -140,12 +141,20 @@ class ImageService
         return null;
     }
 
-    public function deleteImage($image,$folder)
+    public function deleteImage($image, $folder=null)
     {
-        //Check if the file exists
-        if (file_exists(storage_path('app/public/'.$folder.'/' . $image))) {
-            //Delete the file
-            unlink(storage_path('app/public/'.$folder.'/' . $image));
+        if($folder){
+            $fullPath = storage_path('app/public/' . $folder . '/' . $image);
+        }else{
+            $fullPath = storage_path('app/public/' . $image);
+        }
+       // Log::info("Attempting to delete: $fullPath");
+
+        if (file_exists($fullPath)) {
+            unlink($fullPath);
+           // Log::info("File deleted successfully: $fullPath");
+        } else {
+            Log::warning("File not found: $fullPath");
         }
     }
 

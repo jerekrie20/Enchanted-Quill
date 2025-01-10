@@ -17,6 +17,7 @@ Route::get('/login', function (){
 
 Route::middleware('auth')->group(function (){
     Route::post('/upload', [BlogEditor::class, 'store'])->name('ckeditor.upload');
+    Route::post('/delete-image', [BlogEditor::class, 'deleteImages'])->name('ckeditor.delete');
 });
 
 

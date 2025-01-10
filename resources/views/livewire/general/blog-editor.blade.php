@@ -6,7 +6,7 @@
     </div>
 
     <div>
-        <form wire:submit.prevent="saveDetails">
+        <form wire:submit="saveDetails">
             <div class="flex justify-center">
                 <div class="p-2"><x-forms.input-text name="Title" wire:model="title"/></div>
                 <div class="p-2"><x-forms.input-select name="Status" :data="$statusData" wire:model.live.debounce.500ms="status"/></div>

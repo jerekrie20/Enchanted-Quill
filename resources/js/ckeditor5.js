@@ -67,9 +67,11 @@ import 'ckeditor5/ckeditor5.css';
 let classicEditorInstance = null;
 
 function initEditor() {
-    console.log("editor is running")
+    console.log("editor is running");
     const editorElement = document.querySelector('#editor');
     const hiddenInput = document.querySelector('#editor-content');
+
+    let previousContent; // Track the previous editor content for detecting changes
 
     if (!editorElement) return; // If there's no #editor in the DOM, do nothing
 
@@ -77,7 +79,6 @@ function initEditor() {
     if (classicEditorInstance) {
         // Save the editor content to the hiddenInput BEFORE destroying
         hiddenInput.value = classicEditorInstance.getData();
-      //  console.log("Saving editor content before destroying:", currentContent);
 
         classicEditorInstance.destroy()
             .then(() => {
@@ -237,29 +238,87 @@ function initEditor() {
         .then(editor => {
             classicEditorInstance = editor; // Store editor instance globally
 
-          //  console.log('Hidden input initial value:', hiddenInput.value);
-
-            // Populate the editor with the content from the hidden input (Livewire-bound)
             if (hiddenInput.value) {
                 editor.setData(hiddenInput.value);
-                //console.log('Editor initialized with data:', editor.getData());
+                previousContent = hiddenInput.value;
             } else {
                 console.warn('No initial content in hiddenInput.value.');
+                previousContent = editor.getData(); //
             }
 
             // Sync CKEditor with hidden input value
             editor.model.document.on('change:data', () => {
-                hiddenInput.value = editor.getData();
-                hiddenInput.dispatchEvent(new Event('input')); // Notify Livewire
-            });
+                const currentContent = editor.getData();
 
-           // console.log('CKEditor instance content:', editor.getData());
+               // console.log('Current Content:', currentContent); // Log current editor content
+              //  console.log('Previous Content:', previousContent); // Log previous editor content
+
+                // Detect removed images
+                const removedImages = findRemovedImages(previousContent, currentContent);
+                //console.log('Detected removed images:', removedImages); // Check the output of findRemovedImages
+
+                if (removedImages.length > 0) {
+                   // console.log('Calling removeImagesFromServer with:', removedImages); // Add log here
+                    removeImagesFromServer(removedImages);
+                }
+
+                // Update previous content and hidden input
+                hiddenInput.value = currentContent;
+                hiddenInput.dispatchEvent(new Event('input')); // Notify Livewire
+                previousContent = currentContent; // Track changes
+            });
         })
         .catch(error => {
             console.error('CKEditor init error:', error);
         });
 }
 
-// Attach the function to the global scope:
+// Helper function to find removed images
+function findRemovedImages(previousContent, currentContent) {
+   // console.log('finding remove images');
+    const parser = new DOMParser();
+
+    // Parse previous and current content into DOM
+    const previousDoc = parser.parseFromString(previousContent, 'text/html');
+    const currentDoc = parser.parseFromString(currentContent, 'text/html');
+
+    // Get all image sources, filter out invalid/null src attributes
+    const previousImages = Array.from(previousDoc.querySelectorAll('img'))
+        .map(img => img.getAttribute('src'))
+        .filter(src => src !== null && src.trim() !== '');
+    const currentImages = Array.from(currentDoc.querySelectorAll('img'))
+        .map(img => img.getAttribute('src'))
+        .filter(src => src !== null && src.trim() !== '');
+
+   // console.log('Previous Images:', previousImages); // Log valid previous images
+   // console.log('Current Images:', currentImages); // Log valid current images
+
+    // Detect removed images (present in `previousImages` but not in `currentImages`)
+    // console.log('Removed Images:', removedImages); // Log detected removed images
+
+    return previousImages.filter(src => !currentImages.includes(src));
+}
+
+// Function to send a request to the server to delete images
+function removeImagesFromServer(removedImages) {
+   // console.log('Image being removed')
+
+    removedImages.forEach(imageUrl => {
+        // Extract image name/path from URL if necessary
+        const imagePath = imageUrl.replace(window.location.origin + '/storage/', '');
+
+        // Send an AJAX request to delete the image from the server
+        axios.post('/delete-image', { imagePath })
+            .then(response => {
+               // console.log('Image removed from server:', imagePath);
+            })
+            .catch(error => {
+                console.error('Error removing image on server:', error);
+            });
+    });
+}
+
+// Attach the function to the global scope
 window.initEditor = initEditor;
+
 

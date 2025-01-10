@@ -5,6 +5,7 @@ namespace App\Livewire\General;
 use App\Models\Blog;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -53,7 +54,6 @@ class BlogEditor extends Component
         ]);
 
         session()->flash('success', 'Blog updated successfully!');
-        $this->dispatch('blog-updated', message: 'Blog updated successfully!');
 
     }
 
@@ -72,10 +72,22 @@ class BlogEditor extends Component
             'blog_image' // Base name for the image
         );
 
+
         // Return the image URL to CKEditor
         return response()->json([
             'url' => asset('storage/blogs/' . $imagePath),
         ]);
+    }
+
+    public function deleteImages(Request $request)
+    {
+      //  Log::info('deleteImages route was hit');
+
+        $filePath = $request->input('imagePath'); // File path relative to /storage
+
+       // Log::info("Delete File Details: $filePath ");
+
+        $this->imageService->deleteImage($filePath);
     }
 
 
