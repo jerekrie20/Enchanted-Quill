@@ -2,27 +2,38 @@
 
 namespace App\Livewire\General;
 
+use App\Jobs\ProcessBlog;
 use App\Models\Blog;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class BlogEditor extends Component
 {
+    use WithFileUploads;
+
     #[Layout('components.Layouts.admin')]
     #[Title('Edit Blog')]
 
     //Form Fields
     public $title;
-
-    public $content;
-    public $blogId;
+    public $slug;
 
     public $status;
     public $publish_at;
+    public $image;
+    public $currentImage;
+
+    #[Locked]
+    public $blog;
 
     public $statusData = [
         '0' => 'Draft',
@@ -30,74 +41,69 @@ class BlogEditor extends Component
         '2' => 'Private',
         '3' => 'Publish Later'
     ];
-    protected $imageService;
 
-    public function __construct()
+
+
+    protected function rules()
     {
-        $this->imageService = app(ImageService::class);
+        return [
+            'title' => ['required', 'string', 'max:255'],
+            'slug' => ['required', Rule::unique('blogs')->ignore($this->blog->id), 'string'],
+            'status' => ['required', 'numeric', 'integer', 'min:0', 'max:3'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:2040'],
+            'publish_at' => ['nullable', 'date', 'after_or_equal:today'],
+        ];
+    }
+
+    public function updatedTitle()
+    {
+        $this->slug = str_replace(' ', '_', strtolower($this->title));
     }
 
     public function saveDetails()
     {
 
-    }
+        $data = $this->validate();
 
-    public function saveEditor()
-    {
-        $this->validate([
-            'content' => 'required|string',
-        ]);
+        $imageService = new ImageService();
 
-        $blog = Blog::find($this->blogId);
-        $blog->update([
-            'content' => $this->content,
-        ]);
+
+       // dd($data, $this->image);
+        if($this->image){
+            $this->image =  $imageService->saveImage($this->image,$this->currentImage,'blogs', 'blog_image');
+        }else{
+            $this->image = $this->currentImage;
+        }
+
+        $data['image'] = $this->image;
+
+        // Convert publish_at if it's set
+        if (!empty($data['publish_at'])) {
+            $data['publish_at'] = Carbon::parse($data['publish_at']);
+        }
+
+        $this->blog->update($data);
+
+        // Schedule the job if status is "Publish Later"
+        if ($this->status == 3 && !empty($data['publish_at'])) {
+            ProcessBlog::dispatch($this->blog->id)->delay($data['publish_at']);
+        }
 
         session()->flash('success', 'Blog updated successfully!');
-
     }
 
-    public function store(Request $request)
-    {
-        // Validate the file upload
-        $request->validate([
-            'upload' => 'required|image|max:2048',
-        ]);
 
-        // Use the ImageService to save the image
-        $imagePath = $this->imageService->saveImage(
-            $request->file('upload'),
-            null, // No current image to replace
-            'blogs', // Folder where images are stored
-            'blog_image' // Base name for the image
-        );
-
-
-        // Return the image URL to CKEditor
-        return response()->json([
-            'url' => asset('storage/blogs/' . $imagePath),
-        ]);
-    }
-
-    public function deleteImages(Request $request)
-    {
-      //  Log::info('deleteImages route was hit');
-
-        $filePath = $request->input('imagePath'); // File path relative to /storage
-
-       // Log::info("Delete File Details: $filePath ");
-
-        $this->imageService->deleteImage($filePath);
-    }
 
 
     public function mount($id)
     {
         $blog = Blog::find($id);
-        $this->blogId = $id;
-        $this->content = $blog->content; // Load existing content
+        $this->blog = $blog;
         $this->title = $blog->title;
+        $this->slug = $blog->slug;
         $this->status = $blog->status;
+        $this->currentImage = $blog->image;
+        $this->publish_at = $blog->publish_at;
     }
 
     public function render()

@@ -4,6 +4,7 @@ use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Users;
 use App\Livewire\General\BlogEditor;
 use App\Livewire\General\BlogList;
+use App\Livewire\General\CKEditor;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,8 +17,8 @@ Route::get('/login', function (){
 
 
 Route::middleware('auth')->group(function (){
-    Route::post('/upload', [BlogEditor::class, 'store'])->name('ckeditor.upload');
-    Route::post('/delete-image', [BlogEditor::class, 'deleteImages'])->name('ckeditor.delete');
+    Route::post('/upload', [CKEditor::class, 'store'])->name('ckeditor.upload');
+    Route::post('/delete-image', [CKEditor::class, 'deleteImages'])->name('ckeditor.delete');
 });
 
 

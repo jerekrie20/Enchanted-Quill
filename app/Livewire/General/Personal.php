@@ -4,6 +4,7 @@ namespace App\Livewire\General;
 
 use App\Services\ImageService;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -35,6 +36,7 @@ class Personal extends Component
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg'],
         ];
     }
+
 
     public function save()
     {

@@ -8,49 +8,40 @@
     <div>
         <form wire:submit="saveDetails">
             <div class="flex justify-center">
-                <div class="p-2"><x-forms.input-text name="Title" wire:model="title"/></div>
+                <div class="p-2">
+                    <x-forms.input-text name="Title" wire:model.live="title"/>
+                </div>
                 <div class="p-2"><x-forms.input-select name="Status" :data="$statusData" wire:model.live.debounce.500ms="status"/></div>
             </div>
 
+            <p class="text-center text-sm">slug: {{$slug}}</p>
+            <input type="hidden" wire:model="slug">
+
             @if($status == 3)
-                <div class="p-2"><x-forms.input-date-time name="Publish Later" wire:model="publish_at"/></div>
+                <div class="p-2"><x-forms.input-date-time name="Publish Later" modal="publish_at"  wire:model="publish_at"/></div>
             @endif
-        </form>
-    </div>
 
-    <div>
-        <form wire:submit.prevent="saveEditor" class="p-2" id="blog-form">
-            @csrf
-
-            <!-- This is the CKEditor area, ignore by Livewire -->
-            <div >
-                <div id="editor" class="m-h-96">
-                    {!! $content !!}
+            <div class="p-2 flex justify-center mt-4">
+                <div class="p-2 w-32 h-32">
+                    <img class="w-full h-auto" src="{{ asset('blogs/' . $currentImage) }}" alt="{{$currentImage}}" />
+                </div>
+                <div>
+                <x-forms.input-file wire:model="image" modal="image" name="Upload Thumbnail" />
                 </div>
 
-            </div>
 
-            <!-- Hidden input bound to Livewire property -->
-            <input
-                type="hidden"
-                id="editor-content"
-                name="content"
-                wire:model="content"
-            >
+            </div>
 
             <div class="flex justify-center mt-2">
                 <x-forms.input-submit />
             </div>
         </form>
     </div>
+
+    <!-- Child Component for Blog Content/CKEditor -->
+    <div class="mt-6">
+        @livewire('general.c-k-editor', ['blogId' => $blog->id])
+    </div>
 </div>
 
 
-@script
-<script>
-    initEditor()
-    Livewire.hook('morphed',  ({ el, component }) => {
-        initEditor()
-    })
-</script>
-@endscript

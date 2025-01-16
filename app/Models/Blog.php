@@ -25,6 +25,8 @@ class Blog extends Model
         'content',
         'user_id',
         'status',
+        'image',
+        'publish_at'
     ];
 
     /**

@@ -230,9 +230,11 @@ function initEditor() {
         },
         simpleUpload: {
             uploadUrl: '/upload',
+            maxFileSize: 50000000, // 50MB in bytes
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
+
         }
     })
         .then(editor => {
