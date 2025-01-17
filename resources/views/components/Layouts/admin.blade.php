@@ -51,7 +51,7 @@
                     <a href="#" class="text-secondaryText  hover:text-secondary active:text-secondary">Books</a>
                 </li>
                 <li>
-                    <a href="{{route('admin.blogs')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('admin.blogs') ? 'text-secondary' : 'text-secondaryText '}}">Blogs</a>
+                    <a href="{{route('blogs')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('blogs') ? 'text-secondary' : 'text-secondaryText '}}">Blogs</a>
                 </li>
 {{--                <li>--}}
 {{--                    <form method="POST" action="{{ route('logout') }}">--}}

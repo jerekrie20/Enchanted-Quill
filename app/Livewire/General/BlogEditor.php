@@ -4,12 +4,11 @@ namespace App\Livewire\General;
 
 use App\Jobs\ProcessBlog;
 use App\Models\Blog;
+use App\Models\Category;
 use App\Services\ImageService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
@@ -21,8 +20,7 @@ class BlogEditor extends Component
     use WithFileUploads;
 
     #[Layout('components.Layouts.admin')]
-    #[Title('Edit Blog')]
-
+    #[Title('Manage Blog')]
     //Form Fields
     public $title;
     public $slug;
@@ -31,6 +29,9 @@ class BlogEditor extends Component
     public $publish_at;
     public $image;
     public $currentImage;
+
+    public $category = [];
+    public $categories;
 
     #[Locked]
     public $blog;
@@ -43,14 +44,14 @@ class BlogEditor extends Component
     ];
 
 
-
     protected function rules()
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', Rule::unique('blogs')->ignore($this->blog->id), 'string'],
+            'slug' => ['required', Rule::unique('blogs')->ignore($this->blog->id ?? null), 'string'],
             'status' => ['required', 'numeric', 'integer', 'min:0', 'max:3'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg','max:2040'],
+            'category.*' => Rule::exists('categories', 'id'),
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2040'],
             'publish_at' => ['nullable', 'date', 'after_or_equal:today'],
         ];
     }
@@ -62,16 +63,20 @@ class BlogEditor extends Component
 
     public function saveDetails()
     {
+        // Ensure the user is authorized to update
+        if ($this->blog) {
+            $this->authorize('update', $this->blog);
+        }
 
         $data = $this->validate();
 
         $imageService = new ImageService();
 
 
-       // dd($data, $this->image);
-        if($this->image){
-            $this->image =  $imageService->saveImage($this->image,$this->currentImage,'blogs', 'blog_image');
-        }else{
+        // dd($data, $this->image);
+        if ($this->image) {
+            $this->image = $imageService->saveImage($this->image, $this->currentImage, 'blogs', 'blog_image');
+        } else {
             $this->image = $this->currentImage;
         }
 
@@ -82,7 +87,21 @@ class BlogEditor extends Component
             $data['publish_at'] = Carbon::parse($data['publish_at']);
         }
 
-        $this->blog->update($data);
+        if (!$this->blog) {
+            $data['user_id'] = auth()->id();
+            $this->blog = Blog::create($data);
+            // Schedule the job if status is "Publish Later"
+            if ($this->status == 3 && !empty($data['publish_at'])) {
+                ProcessBlog::dispatch($this->blog->id)->delay($data['publish_at']);
+            }
+            $this->blog->categories()->attach($this->category);
+            session()->flash('success', 'Blog created successfully!');
+            return;
+        }
+
+        $this->blog->update($data); // Update the existing blog
+
+        $this->blog->categories()->sync($this->category);
 
         // Schedule the job if status is "Publish Later"
         if ($this->status == 3 && !empty($data['publish_at'])) {
@@ -93,17 +112,27 @@ class BlogEditor extends Component
     }
 
 
-
-
     public function mount($id)
     {
-        $blog = Blog::find($id);
-        $this->blog = $blog;
-        $this->title = $blog->title;
-        $this->slug = $blog->slug;
-        $this->status = $blog->status;
-        $this->currentImage = $blog->image;
-        $this->publish_at = $blog->publish_at;
+        $this->categories = Category::all();
+
+        if ($id && $id !== 'create') {
+            $blog = Blog::findOrFail($id);
+            $this->blog = $blog;
+            $this->title = $blog->title;
+            $this->slug = $blog->slug;
+            $this->category = $blog->categories->pluck('id')->toArray();
+            $this->status = $blog->status;
+            $this->currentImage = $blog->image;
+            $this->publish_at = $blog->publish_at;
+        } else {
+            $this->blog = false;
+            $this->title = '';
+            $this->slug = '';
+            $this->status = 0; // default to draft
+            $this->currentImage = null;
+            $this->publish_at = null;
+        }
     }
 
     public function render()

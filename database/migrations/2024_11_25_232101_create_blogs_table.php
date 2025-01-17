@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->longText('content');
+            $table->longText('content')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->smallInteger('status')->default(0);
             $table->string('image')->nullable();

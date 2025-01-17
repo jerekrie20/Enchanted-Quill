@@ -6,7 +6,7 @@
 
     <h1 class="p-2">Blogs Management</h1>
 
-    <x-buttons.primary href=" " text="Add New Blog"/>
+    <x-buttons.primary href="{{route('blog.manage','create')}} " text="Add New Blog"/>
 
     <div class="flex flex-wrap items-center justify-center p-2" x-data="{ show: @entangle('show') }">
         <input type="text" name="search" id="search" placeholder="Search"
@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="flex">
-                    <x-buttons.secondary href="{{route('admin.blog-id', $blog->id)}}" text="Edit"
+                    <x-buttons.secondary href="{{route('blog.manage', $blog->id)}}" text="Edit"
                                          class="pr-5 pl-5 pt-1 pb-1"/>
 
                     <div class="m-auto text-center p-2">

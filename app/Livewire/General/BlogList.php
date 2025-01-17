@@ -59,6 +59,10 @@ class BlogList extends Component
             ->when($this->status, function ($query){
                 $query->where('status', $this->status);
             })
+            ->when(auth()->user()->role != 'admin', function ($query) {
+                // Restrict to blogs that belong to the current user if the user is not an admin
+                return $query->where('user_id', auth()->id());
+            })
             ->orderBy('created_at', $this->sort ?: 'desc')
             ->cursorPaginate($this->perPage);
 

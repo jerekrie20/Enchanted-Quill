@@ -19,6 +19,8 @@ Route::get('/login', function (){
 Route::middleware('auth')->group(function (){
     Route::post('/upload', [CKEditor::class, 'store'])->name('ckeditor.upload');
     Route::post('/delete-image', [CKEditor::class, 'deleteImages'])->name('ckeditor.delete');
+    Route::get('/blogs', BlogList::class)->name('blogs');
+    Route::get('/blog/{id?}', BlogEditor::class)->name('blog.manage');
 });
 
 
@@ -29,6 +31,5 @@ Route::middleware(['auth', 'can:admin-access'])->group(function () {
         return view('livewire.admin.settings');
     })->name('admin.settings');
 
-    Route::get('/admin/blogs', BlogList::class)->name('admin.blogs');
-    Route::get('/admin/blog/{id}', BlogEditor::class)->name('admin.blog-id');
+
 });
