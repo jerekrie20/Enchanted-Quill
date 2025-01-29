@@ -28,11 +28,11 @@
     </div>
 
     <div id="default-tab-content">
-        <div class="hidden p-4 bg-secondaryText mx-2 mb-5" id="profile" role="tabpanel"
+        <div class="hidden p-4 bg-lightGray  mx-2 mb-5" id="profile" role="tabpanel"
              aria-labelledby="profile-tab">
             <livewire:general.personal/>
         </div>
-        <div class="hidden p-4 bg-secondaryText mx-2 mb-5" id="dashboard" role="tabpanel"
+        <div class="hidden p-4 bg-lightGray  mx-2 mb-5" id="dashboard" role="tabpanel"
              aria-labelledby="dashboard-tab">
             <livewire:general.security/>
         </div>

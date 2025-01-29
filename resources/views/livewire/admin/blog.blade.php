@@ -10,11 +10,11 @@
 
     <div class="flex flex-wrap items-center justify-center p-2" x-data="{ show: @entangle('show') }">
         <input type="text" name="search" id="search" placeholder="Search"
-               class="bg-secondaryText rounded-md border-0 text-text mr-2 w-full mb-2"
+               class="bg-lightGray  rounded-md border-0 text-text mr-2 w-full mb-2"
                wire:model.live.debounce.500ms="search"
         >
 
-        <select name="status" id="status" class="bg-secondaryText rounded-md border-0 text-text mr-2 w-1/2 mb-2"
+        <select name="status" id="status" class="bg-lightGray  rounded-md border-0 text-text mr-2 w-1/2 mb-2"
                 wire:model.live.debounce.500ms="status">
             <option value="">Status</option>
             <option value="0">Draft</option>
@@ -22,7 +22,7 @@
             <option value="2">Private</option>
         </select>
 
-        <select name="perPage" id="perPage" class="bg-secondaryText rounded-md border-0 text-text mr-2 w-1/5 mb-2"
+        <select name="perPage" id="perPage" class="bg-lightGray  rounded-md border-0 text-text mr-2 w-1/5 mb-2"
                 wire:model.live.debounce.500ms="perPage">
             <option value="">Per page</option>
             <option value="4">4</option>
@@ -32,7 +32,7 @@
             <option value="12">12</option>
         </select>
 
-        <select name="sort" id="sort" class="bg-secondaryText rounded-md border-0 text-text w-1/4 mb-2"
+        <select name="sort" id="sort" class="bg-lightGray  rounded-md border-0 text-text w-1/4 mb-2"
                 wire:model.live.debounce.500ms="sort">
             <option value="">Sort</option>
             <option value="desc">Desc</option>
@@ -43,7 +43,7 @@
             <!-- category -->
             <section>
                 <button @click="show = !show" id="dropdownBgHoverButton"
-                        class="bg-secondaryText rounded-md border-0 text-text w-full mr-2 mb-2 p-2">
+                        class="bg-lightGray  rounded-md border-0 text-text w-full mr-2 mb-2 p-2">
                     Click Here For Categories
                 </button>
 
@@ -76,7 +76,7 @@
     <div>
         @foreach($blogs as $blog)
 
-            <div class="bg-secondaryText rounded drop-shadow-sm m-2">
+            <div class="bg-lightGray  rounded drop-shadow-xs m-2">
                 <div class="flex justify-start">
                     <div class="w-1/3 mr-2">
                         <img src="{{asset('graphic/forest-8765686_640.jpg')}}" class="rounded-tl" alt="Blog Img">
@@ -117,7 +117,7 @@
                         <select
                             name="status"
                             id="status"
-                            class="bg-accent text-secondaryText rounded-md mr-2 pr-4 pl-4 pt-1 pb-1"
+                            class="bg-accent text-white rounded-md mr-2 pr-4 pl-4 pt-1 pb-1"
                             wire:change="updateStatus({{ $blog->id }}, $event.target.value)"
                         >
                             <option disabled  value="">Status</option>

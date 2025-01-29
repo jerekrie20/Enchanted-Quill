@@ -25,14 +25,14 @@
                     @endif
                 </div>
                 <p class="text-danger text-center italic">Image is cropped to 300x300, centered</p>
-                <input wire:model.live="avatar" accept="image/*" class="block w-full mt-2 text-sm text-secondaryText rounded-lg cursor-pointer bg-text focus:outline-none" aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                <input wire:model.live="avatar" accept="image/*" class="block w-full mt-2 text-sm text-white rounded-lg cursor-pointer bg-text focus:outline-hidden" aria-describedby="user_avatar_help" id="user_avatar" type="file">
                 <div>
                     @error('avatar') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="flex flex-col justify-center mt-3">
-                    <x-forms.input-text name="name" wire:model.blur="name"/>
-                    <x-forms.input-email name="email" wire:model.blur="email"/>
+                    <x-forms.input-text name="name" wire:model.blur-sm="name"/>
+                    <x-forms.input-email name="email" wire:model.blur-sm="email"/>
                 </div>
             </div>
 

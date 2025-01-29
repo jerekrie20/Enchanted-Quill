@@ -20,13 +20,13 @@
 
 
 <nav class="bg-navbg ">
-    <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
+    <div class="flex flex-wrap justify-between items-center mx-auto max-w-(--breakpoint-xl) p-4">
         <a href="{{ route('login') }}" class="flex items-center space-x-3 rtl:space-x-reverse">
             <img src="{{ asset('graphic/quill.webp') }}" alt="logo" class="h-12">
         </a>
         <div class="flex items-center space-x-6 rtl:space-x-reverse">
-            <a href="{{route('admin.settings')}}" class="hover:text-secondary {{request()->routeIs('admin.settings') ? 'text-secondary' : 'text-secondaryText '}}">Settings</a>
-            <a href="#" class="text-secondaryText  hover:underline">My Space</a>
+            <a href="{{route('admin.settings')}}" class="hover:text-secondary {{request()->routeIs('admin.settings') ? 'text-secondary' : 'text-white '}}">Settings</a>
+            <a href="#" class="text-white  hover:underline">My Space</a>
             <a href="#" ><x-icons.bell/></a>
             <button id="themeToggle" class="flex items-center">
                 <x-icons.moon />
@@ -38,20 +38,20 @@
 </nav>
 
 <nav class="bg-secondarynavbg ">
-    <div class="max-w-screen-xl px-4 py-3 mx-auto">
+    <div class="max-w-(--breakpoint-xl) px-4 py-3 mx-auto">
         <div class="flex items-center justify-center">
             <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
                 <li>
-                    <a href="{{ route('admin.dashboard') }}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('admin.dashboard') ? 'text-secondary' : 'text-secondaryText '}}" aria-current="page">Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('admin.dashboard') ? 'text-secondary' : 'text-white '}}" aria-current="page">Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{route('admin.users')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('admin.users') ? 'text-secondary' : 'text-secondaryText '}}">Users</a>
+                    <a href="{{route('admin.users')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('admin.users') ? 'text-secondary' : 'text-white '}}">Users</a>
                 </li>
                 <li>
-                    <a href="#" class="text-secondaryText  hover:text-secondary active:text-secondary">Books</a>
+                    <a href="#" class="text-white  hover:text-secondary active:text-secondary">Books</a>
                 </li>
                 <li>
-                    <a href="{{route('blogs')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('blogs') ? 'text-secondary' : 'text-secondaryText '}}">Blogs</a>
+                    <a href="{{route('blogs')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('blogs') ? 'text-secondary' : 'text-white '}}">Blogs</a>
                 </li>
 {{--                <li>--}}
 {{--                    <form method="POST" action="{{ route('logout') }}">--}}
@@ -74,16 +74,16 @@
 
 
 <footer class="bg-navbg mt-auto">
-    <div class="flex flex-wrap justify-center items-center mx-auto max-w-screen-xl p-4">
+    <div class="flex flex-wrap justify-center items-center mx-auto max-w-(--breakpoint-xl) p-4">
         <div class="flex items-center space-x-6 rtl:space-x-reverse">
-            <a href="/" class="text-secondaryText hover:underline">Home</a>
-            <a href="#" class="text-secondaryText  hover:underline">Help/Support</a>
-            <a href="#" class="text-secondaryText  hover:underline">Policies</a>
-            <a href="#" class="text-secondaryText  hover:underline">Terms</a>
+            <a href="/" class="text-white hover:underline">Home</a>
+            <a href="#" class="text-white  hover:underline">Help/Support</a>
+            <a href="#" class="text-white  hover:underline">Policies</a>
+            <a href="#" class="text-white  hover:underline">Terms</a>
         </div>
     </div>
     <div class="flex items-center justify-center">
-        <a href="" class="text-secondaryText "><i class="fa-regular fa-copyright"></i> {{date("Y")}} Enchanted Quill</a>
+        <a href="" class="text-white "><i class="fa-regular fa-copyright"></i> {{date("Y")}} Enchanted Quill</a>
     </div>
 
 </footer>

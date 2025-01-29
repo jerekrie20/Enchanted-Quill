@@ -3,11 +3,11 @@
 
     <div class="flex items-center justify-center p-2">
         <input type="text" name="search" id="search" placeholder="Search"
-               class="bg-secondaryText rounded-md border-0 text-text mr-2 w-1/2"
+               class="bg-lightGray rounded-md border-0 text-text mr-2 w-1/2"
                wire:model.live.debounce.500ms="search"
         >
 
-        <select name="sortRole" id="sortRole" class="bg-secondaryText rounded-md border-0 text-text w-1/4 mr-2 "
+        <select name="sortRole" id="sortRole" class="bg-lightGray  rounded-md border-0 text-text w-1/4 mr-2 "
                 wire:model.live.debounce.500ms="sortRole">
             <option value="">Role</option>
             <option value="admin">Admin</option>
@@ -15,7 +15,7 @@
             <option value="reader">Reader</option>
         </select>
 
-        <select name="sort" id="sort" class="bg-secondaryText rounded-md border-0 text-text w-1/4"
+        <select name="sort" id="sort" class="bg-lightGray  rounded-md border-0 text-text w-1/4"
                 wire:model.live.debounce.500ms="sort">
             <option value="desc">Sort</option>
             <option value="desc">Desc</option>
@@ -38,7 +38,7 @@
 
     <div class="p-2 ">
         @foreach($users as $user)
-            <div class="md:hidden bg-secondaryText rounded-md shadow-md hover:shadow-lg p-3 mb-4">
+            <div class="md:hidden bg-lightGray  rounded-md shadow-md hover:shadow-lg p-3 mb-4">
                 <p class="text-text"><span class="font-semibold">Name: </span>{{$user->name}}</p>
                 <p class="text-text"><span class="font-semibold">Email: </span>{{$user->email}}</p>
                 <p class="text-text"><span class="font-semibold">Role: </span> {{$user->role}}</p>
@@ -78,9 +78,9 @@
                 <form wire:submit="update">
 
                     <div class="flex flex-col justify-center">
-                        <x-forms.input-text name="name" wire:model.blur="name"/>
-                        <x-forms.input-email name="email" wire:model.blur="email"/>
-                        <x-forms.input-select name="role" wire:model.blur="role" :data="$roleArray"/>
+                        <x-forms.input-text name="name" wire:model.blur-sm="name"/>
+                        <x-forms.input-email name="email" wire:model.blur-sm="email"/>
+                        <x-forms.input-select name="role" wire:model.blur-sm="role" :data="$roleArray"/>
                     </div>
 
                     <div class="flex flex-col justify-center">
