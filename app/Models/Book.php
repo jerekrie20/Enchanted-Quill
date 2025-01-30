@@ -16,7 +16,8 @@ class Book extends Model
     // Define status constants
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
-    const STATUS_ARCHIVED = 2;
+    const  STATUS_PUBLISHED_Later = 2;
+    const STATUS_ARCHIVED = 3;
 
 
     /**
@@ -27,6 +28,7 @@ class Book extends Model
         return match ($this->status) {
             self::STATUS_DRAFT => 'Draft',
             self::STATUS_PUBLISHED => 'Published',
+            self::STATUS_PUBLISHED_Later => 'Published At',
             self::STATUS_ARCHIVED => 'Archived',
             default => 'Unknown',
         };
@@ -36,7 +38,9 @@ class Book extends Model
         'title',
         'slug',
         'description',
+        'cover'.
         'author_id',
+        'status',
         'published_at',
     ];
 

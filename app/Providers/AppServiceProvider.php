@@ -27,7 +27,12 @@ class AppServiceProvider extends ServiceProvider
 
         // Define a gate for admin access
         Gate::define('admin-access', function ($user) {
-            return $user->role === 'admin'; // Assuming you have a 'role' column
+            return $user->role === 'admin'; //
+        });
+
+        //Define a gate for Admin or Author access
+        Gate::define('admin-or-author-access', function ($user){
+            return $user->role === 'admin' || $user->role === 'author';
         });
 
         // Update the last_active timestamp for the authenticated user

@@ -48,7 +48,7 @@
                     <a href="{{route('admin.users')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('admin.users') ? 'text-secondary' : 'text-white '}}">Users</a>
                 </li>
                 <li>
-                    <a href="#" class="text-white  hover:text-secondary active:text-secondary">Books</a>
+                    <a href="{{route('admin.books')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('admin.books') ? 'text-secondary' : 'text-white '}}">Books</a>
                 </li>
                 <li>
                     <a href="{{route('blogs')}}" wire:navigate.hover class="hover:text-secondary {{request()->routeIs('blogs') ? 'text-secondary' : 'text-white '}}">Blogs</a>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Admin\Books;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Users;
 use App\Livewire\General\BlogEditor;
@@ -16,20 +17,25 @@ Route::get('/login', function (){
 })->name('login');
 
 
+//Regular User Routes
 Route::middleware('auth')->group(function (){
-    Route::post('/upload', [CKEditor::class, 'store'])->name('ckeditor.upload');
-    Route::post('/delete-image', [CKEditor::class, 'deleteImages'])->name('ckeditor.delete');
+    Route::post('/upload', [CKEditor::class, 'store'])->name('ckeditor.upload'); //image upload for the Ckeditor
+    Route::post('/delete-image', [CKEditor::class, 'deleteImages'])->name('ckeditor.delete'); // Delete image for the Ckeditor
     Route::get('/blogs', BlogList::class)->name('blogs');
     Route::get('/blog/{id?}', BlogEditor::class)->name('blog.manage');
 });
 
+//Authors and admins routes
+Route::middleware(['auth', 'can:admin-or-author-access'])->group(function (){
+    Route::get('/admin/books', Books::class)->name('admin.books');
+});
 
+//Just Admin routes
 Route::middleware(['auth', 'can:admin-access'])->group(function () {
     Route::get('/admin/dashboard', Dashboard::class)->name('admin.dashboard');
     Route::get('/admin/users', Users::class)->name('admin.users');
     Route::get('/admin/settings', function (){
-        return view('livewire.admin.settings');
+         return view('livewire.admin.settings');
     })->name('admin.settings');
-
 
 });

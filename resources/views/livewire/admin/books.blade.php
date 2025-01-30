@@ -1,0 +1,138 @@
+<div>
+    <div>
+        <x-alerts.success/>
+    </div>
+
+    <h1 class="p-2">Books Management</h1>
+
+    <x-buttons.primary href="{{route('blog.manage','create')}} " text="Add New Book"/>
+
+    <div class="flex flex-wrap items-center justify-center p-2" x-data="{ show: @entangle('show') }">
+        <input type="text" name="search" id="search" placeholder="Search"
+               class="bg-lightGray  rounded-md border-0 text-text mr-2 w-full mb-2"
+               wire:model.live.debounce.500ms="search"
+        >
+
+        <select name="status" id="status" class="bg-lightGray  rounded-md border-0 text-text mr-2 w-1/2 mb-2"
+                wire:model.live.debounce.500ms="status">
+            <option value="">Status</option>
+            <option value="0">Draft</option>
+            <option value="1">Published</option>
+            <option value="3">Archived</option>
+        </select>
+
+        <select name="perPage" id="perPage" class="bg-lightGray  rounded-md border-0 text-text mr-2 w-1/5 mb-2"
+                wire:model.live.debounce.500ms="perPage">
+            <option value="">Per page</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="12">12</option>
+        </select>
+
+        <select name="sort" id="sort" class="bg-lightGray  rounded-md border-0 text-text w-1/4 mb-2"
+                wire:model.live.debounce.500ms="sort">
+            <option value="">Sort</option>
+            <option value="desc">Desc</option>
+            <option value="asc">Asc</option>
+        </select>
+
+        <div class="font-semibold relative w-full">
+            <!-- category -->
+            <section>
+                <button @click="show = !show" id="dropdownBgHoverButton"
+                        class="bg-lightGray  rounded-md border-0 text-text w-full mr-2 mb-2 p-2">
+                    Click Here For Categories
+                </button>
+
+                <!-- Dropdown menu -->
+
+                <div @click.away="show = false" x-show="show"
+                     class="absolute left-1/2 transform -translate-x-1/2 bg-white border border-gray-200 rounded-lg shadow-lg mt-2 z-50 text-xl sm:text-lg w-full sm:w-screen sm:max-w-lg">
+
+                    <ul class="py-1 flex justify-start flex-wrap">
+                        @foreach($categories as $category)
+                            <li class="px-4 py-2 hover:bg-gray-100">
+                                <input type="checkbox" id="{{ $category->id }}" value="{{ $category->id }}"
+                                       wire:model.live="category">
+                                <label for="{{ $category->id }}">{{ $category->name }}</label>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+    <div class="mt-4 p-2">
+        {{ $books->links() }}
+    </div>
+
+    <div>
+        @foreach($books as $book)
+
+            <div class="bg-lightGray  rounded drop-shadow-xs m-2">
+                <div class="flex justify-start">
+                    <div class="w-1/3 mr-2">
+                        <img src="{{asset('graphic/forest-8765686_640.jpg')}}" class="rounded-tl" alt="Blog Img">
+                    </div>
+
+                    <div>
+                        <p><span>Title:</span> {{$book->title}}</p>
+                        <p><span>Author:</span>{{$book->author->first_name}} {{$book->author->last_name}}</p>
+                        <p><span>Category:</span>
+                            @foreach($book->categories as $bookCategory)
+                                {{$bookCategory->name}} |
+                            @endforeach
+                        </p>
+                        <p
+                            x-data="{ flash: false }"
+                            x-init="@this.on('status-updated', (event) => {
+                                if (event.bookId === {{ $book->id }}) {
+                                    flash = true;
+                                    setTimeout(() => flash = false, 1000);
+                                }
+                              })"
+                            :class="flash ? 'bg-green-200 text-green-800' : ''"
+                            class="transition-all duration-500 rounded"
+                        >
+                            <span>Status:</span> {{$book->status_label}}
+                        </p>
+                        <p><span>Published:</span> {{ $book->created_at->format('l j, Y ') }}</p>
+                        <p><span>Updated:</span> {{ $book->updated_at->format('l j, Y ') }}</p>
+                    </div>
+                </div>
+
+                <div class="flex">
+                    <x-buttons.secondary href="{{route('blog.manage', $book->id)}}" text="Edit"
+                                         class="pr-5 pl-5 pt-1 pb-1"/>
+
+                    <div class="m-auto text-center p-2">
+
+                        <select
+                            name="status"
+                            id="status"
+                            class="bg-accent text-white rounded-md mr-2 pr-4 pl-4 pt-1 pb-1"
+                            wire:change="updateStatus({{ $book->id }}, $event.target.value)"
+                        >
+                            <option disabled  value="">Status</option>
+                            <option value="0" @if($book->status == 0) selected @endif>Draft</option>
+                            <option value="1" @if($book->status == 1) selected @endif>Published</option>
+                            <option value="3" @if($book->status == 3) selected @endif>Archived</option>
+                        </select>
+
+                    </div>
+                    <x-buttons.delete href=" " text="Delete" class="pr-4 pl-4 pt-1 pb-1"
+                                      wire:click.prevent="delete({{$book->id}})"
+                                      wire:confirm="Are you sure you want to delete {{$book->title}}"
+                    />
+                </div>
+
+            </div>
+        @endforeach
+    </div>
+
+</div>
