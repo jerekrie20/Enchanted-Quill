@@ -4,10 +4,18 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     server: {
-        cors: true, // Enables CORS
+        cors: true,
+        strictPort: true,
+        port: 5173,
+        host: '0.0.0.0', // Bind to all interfaces
         hmr: {
-            host: 'enchanted_quill.test', // Ensure WebSocket connections match your app domain
-        }
+            host: 'enchanted-quill.test', // Use lowercase to match browser logs
+            protocol: 'wss',
+            port: 5173,
+        },
+        watch: {
+            usePolling: true,
+        },
     },
 
     plugins: [
