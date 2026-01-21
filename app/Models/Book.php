@@ -38,7 +38,7 @@ class Book extends Model
         'title',
         'slug',
         'description',
-        'cover'.
+        'cover',
         'author_id',
         'status',
         'published_at',

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Author;
 use App\Models\Blog;
 use App\Models\Book;
 use App\Models\Category;
@@ -29,7 +28,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Jeremiah Kriegel',
+            'name' => 'Syd',
             'email' => 'test@example.com',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),

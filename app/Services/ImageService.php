@@ -82,7 +82,6 @@ class ImageService
                 //Check if the file exists
                 if (file_exists(storage_path('app/public/'.$folder.'/' . $current))) {
                     //Delete the file
-
                     unlink(storage_path('app/public/'.$folder.'/' . $current));
                 }
             }

@@ -32,7 +32,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-8">
         {{-- Add New Book Button --}}
         <div class="flex justify-center">
-            <a href="{{route('blog.manage','create')}}"
+            <a href="{{route('book.manage','create')}}"
                class="relative px-8 py-3 font-serif text-sm text-white bg-secondary hover:bg-secondary/90 dark:bg-primary dark:hover:bg-primary/90 border-2 border-secondary/50 dark:border-primary/50 transition-all duration-300 group">
                 <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
                 <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
@@ -126,86 +126,153 @@
             {{ $books->links() }}
         </div>
 
-        {{-- Books Grid --}}
-        <section class="space-y-6">
-            @foreach($books as $book)
-                <article class="group relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm rounded-none border-2 border-text/10 hover:border-secondary dark:hover:border-primary hover:shadow-xl dark:hover:shadow-secondary/10 transition-all duration-500 overflow-hidden">
-                    <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-secondary/50"></div>
-                    <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-secondary/50"></div>
-                    <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-secondary/50"></div>
-                    <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-secondary/50"></div>
+        {{-- Books Showcase Grid --}}
+        <section>
+            {{-- Decorative Shelf Header --}}
+            <div class="relative mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="h-px flex-1 bg-gradient-to-r from-transparent via-primary/30 to-primary/30"></div>
+                    <div class="flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-accent/20 border-2 border-primary/20 rounded-sm">
+                        <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+                        </svg>
+                        <span class="font-heading text-text">The Grand Collection</span>
+                    </div>
+                    <div class="h-px flex-1 bg-gradient-to-l from-transparent via-primary/30 to-primary/30"></div>
+                </div>
+            </div>
 
-                    <div class="flex flex-col sm:flex-row">
-                        {{-- Book Cover --}}
-                        <div class="sm:w-1/4 relative overflow-hidden bg-gradient-to-br from-secondary/10 to-primary/10">
-                            <img src="{{asset('graphic/forest-8765686_640.jpg')}}" class="w-full h-48 sm:h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{$book->title}}">
-                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-secondary/30"></div>
-                        </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 lg:gap-6">
+                @foreach($books as $book)
+                    <article class="group relative" x-data="{ showActions: false }" :class="showActions ? 'z-50' : 'z-0'">
+                        {{-- Book Card --}}
+                        <div class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-text/10 hover:border-secondary dark:hover:border-primary rounded-sm overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-secondary/20 dark:hover:shadow-primary/20 hover:-translate-y-2">
+                            {{-- Corner Ornaments --}}
+                            <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                        {{-- Book Details --}}
-                        <div class="flex-1 p-6 space-y-4">
-                            <div>
-                                <h3 class="font-heading text-xl text-text group-hover:text-secondary dark:group-hover:text-primary transition-colors">
-                                    {{$book->title}}
-                                </h3>
-                                <p class="text-sm font-serif italic text-text/60 dark:text-text/70 mt-1">
-                                    by {{$book->author->first_name}} {{$book->author->last_name}}
-                                </p>
-                            </div>
+                            {{-- Book Cover with Spine Effect --}}
+                            <div class="relative aspect-[2/3] overflow-hidden bg-gradient-to-br from-primary/5 to-secondary/5">
+                                {{-- Spine decoration --}}
+                                <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-secondary/30 via-secondary/40 to-secondary/30"></div>
+                                <div class="absolute left-1.5 top-0 bottom-0 w-px bg-secondary/20"></div>
 
-                            <div class="flex flex-wrap gap-2">
-                                @foreach($book->categories as $bookCategory)
-                                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary dark:bg-secondary/20 dark:text-secondary">
-                                        {{$bookCategory->name}}
-                                    </span>
-                                @endforeach
-                            </div>
+                                {{-- Cover Image --}}
+                                @if($book->cover)
+                                    <img src="{{asset('books/' . $book->cover)}}"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                         alt="{{$book->title}}">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20">
+                                        <svg class="w-16 h-16 text-text/20" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/>
+                                        </svg>
+                                    </div>
+                                @endif
 
-                            <div class="grid grid-cols-2 gap-4 text-sm font-serif">
+                                {{-- Overlay on hover --}}
+                                <div class="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                                    <button @click="showActions = !showActions"
+                                            class="w-full px-3 py-2 bg-secondary/90 hover:bg-secondary text-white font-serif text-xs rounded-sm transition-colors duration-200 flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                                        </svg>
+                                        Actions
+                                    </button>
+                                </div>
+
+                                {{-- Status Badge --}}
                                 <div
                                     x-data="{ flash: false }"
                                     x-init="@this.on('status-updated', (event) => { if (event.bookId === {{ $book->id }}) { flash = true; setTimeout(() => flash = false, 1000); } })"
-                                    :class="flash ? 'bg-secondary/20 dark:bg-primary/20' : ''"
-                                    class="transition-all duration-500 rounded px-2 py-1">
-                                    <span class="text-text/50">Status:</span>
-                                    <span class="font-semibold text-text">{{$book->status_label}}</span>
-                                </div>
-                                <div>
-                                    <span class="text-text/50">Published:</span>
-                                    <span class="text-text">{{ $book->created_at->format('M j, Y') }}</span>
+                                    :class="flash ? 'bg-secondary text-white' : ''"
+                                    class="absolute top-2 right-2 px-2 py-1 rounded-sm text-xs font-semibold backdrop-blur-md transition-all duration-500
+                                    @if($book->status == 1) bg-primary/80 text-white
+                                    @elseif($book->status == 0) bg-amber-500/80 text-white
+                                    @else bg-text/80 text-white @endif">
+                                    {{$book->status_label}}
                                 </div>
                             </div>
 
-                            {{-- Actions --}}
-                            <div class="flex flex-wrap gap-3 pt-4 border-t border-text/10">
-                                <a href="{{route('blog.manage', $book->id)}}"
-                                   class="relative px-6 py-2 font-serif text-sm text-white bg-secondary hover:bg-secondary/90 dark:bg-primary dark:hover:bg-primary/90 border-2 border-secondary/50 dark:border-primary/50 transition-all duration-300">
-                                    <span class="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30"></span>
-                                    <span class="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-white/30"></span>
-                                    Edit
-                                </a>
+                            {{-- Book Info --}}
+                            <div class="p-3 space-y-2">
+                                <h3 class="font-heading text-sm leading-tight text-text line-clamp-2 group-hover:text-secondary dark:group-hover:text-primary transition-colors duration-300">
+                                    {{$book->title}}
+                                </h3>
+                                <p class="text-xs font-serif italic text-text/60 dark:text-text/70 truncate">
+                                    {{$book->author->first_name}} {{$book->author->last_name}}
+                                </p>
 
+                                {{-- Categories (compact) --}}
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($book->categories->take(2) as $bookCategory)
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary dark:bg-secondary/20 dark:text-secondary">
+                                            {{$bookCategory->name}}
+                                        </span>
+                                    @endforeach
+                                    @if($book->categories->count() > 2)
+                                        <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-text/10 text-text/60">
+                                            +{{$book->categories->count() - 2}}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <div class="text-xs text-text/50 font-serif pt-2 border-t border-text/5">
+                                    {{ $book->created_at->format('M j, Y') }}
+                                </div>
+                            </div>
+
+                            {{-- Bottom corner ornaments --}}
+                            <div class="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+
+                        {{-- Actions Modal/Dropdown --}}
+                        <div x-show="showActions"
+                             x-transition
+                             @click.away="showActions = false"
+                             class="absolute left-0 right-0 top-0 bg-white dark:bg-accent border-2 border-secondary/30 rounded-sm shadow-2xl p-4 space-y-3">
+                            {{-- Close button --}}
+                            <div class="flex items-center justify-between mb-2 pb-2 border-b border-text/10">
+                                <h4 class="font-heading text-sm text-text">Manage Volume</h4>
+                                <button @click="showActions = false" class="text-text/50 hover:text-text">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <a href="{{route('book.manage', $book->id)}}"
+                               class="block w-full px-4 py-2 text-center font-serif text-xs text-white bg-secondary hover:bg-secondary/90 dark:bg-primary dark:hover:bg-primary/90 border-2 border-secondary/50 dark:border-primary/50 rounded-sm transition-all duration-300">
+                                Edit Volume
+                            </a>
+
+                            <div class="space-y-1">
+                                <label class="text-xs font-serif text-text/60">Change Status:</label>
                                 <select name="status"
-                                        class="px-4 py-2 font-serif text-sm bg-accent/10 dark:bg-accent/20 text-text border-2 border-accent/30 rounded-sm transition-colors duration-300"
+                                        class="w-full px-3 py-2 font-serif text-xs bg-white dark:bg-navbg/40 text-text border-2 border-text/10 rounded-sm transition-colors duration-300"
                                         wire:change="updateStatus({{ $book->id }}, $event.target.value)">
-                                    <option disabled value="">Change Status</option>
                                     <option value="0" @if($book->status == 0) selected @endif>Draft</option>
                                     <option value="1" @if($book->status == 1) selected @endif>Published</option>
                                     <option value="3" @if($book->status == 3) selected @endif>Archived</option>
                                 </select>
-
-                                <button wire:click.prevent="delete({{$book->id}})"
-                                        wire:confirm="Are you sure you want to remove {{$book->title}} from the archives?"
-                                        class="relative px-6 py-2 font-serif text-sm text-danger bg-danger/10 hover:bg-danger/20 border-2 border-danger/50 transition-all duration-300">
-                                    <span class="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-danger/30"></span>
-                                    <span class="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-danger/30"></span>
-                                    Remove
-                                </button>
                             </div>
+
+                            <button wire:click.prevent="delete({{$book->id}}); showActions = false"
+                                    wire:confirm="Are you sure you want to remove {{$book->title}} from the archives?"
+                                    class="block w-full px-4 py-2 text-center font-serif text-xs text-danger bg-danger/10 hover:bg-danger/20 border-2 border-danger/50 rounded-sm transition-all duration-300">
+                                Remove from Archives
+                            </button>
                         </div>
-                    </div>
-                </article>
-            @endforeach
+                    </article>
+                @endforeach
+            </div>
+
+            {{-- Decorative Shelf Bottom --}}
+            <div class="relative mt-8 mb-4">
+                <div class="h-3 bg-gradient-to-b from-accent/20 to-accent/40 border-t-2 border-primary/20 rounded-sm"></div>
+                <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+            </div>
         </section>
 
         {{-- Pagination Bottom --}}

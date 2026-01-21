@@ -7,7 +7,6 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Services\ImageService;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
@@ -21,16 +20,21 @@ class BlogEditor extends Component
 
     #[Layout('components.Layouts.admin')]
     #[Title('Manage Blog')]
-    //Form Fields
+    // Form Fields
     public $title;
+
     public $slug;
 
     public $status;
+
     public $publish_at;
+
     public $image;
+
     public $currentImage;
 
     public $category = [];
+
     public $categories;
 
     #[Locked]
@@ -40,9 +44,8 @@ class BlogEditor extends Component
         '0' => 'Draft',
         '1' => 'Published',
         '2' => 'Private',
-        '3' => 'Publish Later'
+        '3' => 'Publish Later',
     ];
-
 
     protected function rules()
     {
@@ -70,47 +73,51 @@ class BlogEditor extends Component
 
         $data = $this->validate();
 
-        $imageService = new ImageService();
+        // Remove image from validated data (we'll handle it separately)
+        unset($data['image']);
 
+        $imageService = new ImageService;
 
-        // dd($data, $this->image);
+        // Handle image upload
         if ($this->image) {
-            $this->image = $imageService->saveImage($this->image, $this->currentImage, 'blogs', 'blog_image');
-        } else {
-            $this->image = $this->currentImage;
+            $uploadedImage = $imageService->saveImage($this->image, $this->currentImage, 'blogs', 'blog_image');
+            $data['image'] = $uploadedImage;
+        } elseif ($this->currentImage) {
+            $data['image'] = $this->currentImage;
         }
 
-        $data['image'] = $this->image;
-
         // Convert publish_at if it's set
-        if (!empty($data['publish_at'])) {
+        if (! empty($data['publish_at'])) {
             $data['publish_at'] = Carbon::parse($data['publish_at']);
         }
 
-        if (!$this->blog) {
+        if (! $this->blog) {
+            // Create new blog
             $data['user_id'] = auth()->id();
             $this->blog = Blog::create($data);
+
             // Schedule the job if status is "Publish Later"
-            if ($this->status == 3 && !empty($data['publish_at'])) {
+            if ($this->status == 3 && ! empty($data['publish_at'])) {
                 ProcessBlog::dispatch($this->blog->id)->delay($data['publish_at']);
             }
+
             $this->blog->categories()->attach($this->category);
             session()->flash('success', 'Blog created successfully!');
+
             return;
         }
 
-        $this->blog->update($data); // Update the existing blog
-
+        // Update existing blog
+        $this->blog->update($data);
         $this->blog->categories()->sync($this->category);
 
         // Schedule the job if status is "Publish Later"
-        if ($this->status == 3 && !empty($data['publish_at'])) {
+        if ($this->status == 3 && ! empty($data['publish_at'])) {
             ProcessBlog::dispatch($this->blog->id)->delay($data['publish_at']);
         }
 
         session()->flash('success', 'Blog updated successfully!');
     }
-
 
     public function mount($id)
     {
