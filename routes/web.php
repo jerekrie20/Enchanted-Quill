@@ -6,6 +6,7 @@ use App\Livewire\Admin\Users;
 use App\Livewire\General\BlogEditor;
 use App\Livewire\General\BlogList;
 use App\Livewire\General\BookEditor;
+use App\Livewire\General\Chapters;
 use App\Livewire\General\CKEditor;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'can:admin-or-author-access'])->group(function () {
     Route::get('/admin/books', Books::class)->name('admin.books');
     Route::get('/book/{id?}', BookEditor::class)->name('book.manage');
+    Route::get('/chapter/{id}/{slug?}', Chapters::class)->name('chapter.manage');
 });
 
 // Just Admin routes

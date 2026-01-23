@@ -127,6 +127,7 @@ class BookEditor extends Component
             $this->currentCover = null;
             $this->publish_at = null;
         }
+
     }
 
     public function render()

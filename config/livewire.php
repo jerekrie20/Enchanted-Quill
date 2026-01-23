@@ -157,4 +157,8 @@ return [
     */
 
     'pagination_theme' => 'tailwind',
+
+    'make_command' => [
+        'type' => 'class',
+    ],
 ];

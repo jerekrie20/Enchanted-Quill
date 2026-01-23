@@ -30,6 +30,24 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-8">
+
+        {{-- Add New Chapter Button --}}
+        <div class="flex justify-center">
+            <a href="{{route('chapter.manage',['id' => $book->id, 'slug' => 'create'])}}"
+               class="relative px-8 py-3 font-serif text-sm text-white bg-secondary hover:bg-secondary/90 dark:bg-primary dark:hover:bg-primary/90 border-2 border-secondary/50 dark:border-primary/50 transition-all duration-300 group">
+                <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
+                <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
+                <span class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/30"></span>
+                <span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/30"></span>
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Inscribe New Chapter
+                </span>
+            </a>
+        </div>
+
         {{-- Volume Details Section --}}
         <section class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-primary/20 dark:border-primary/10 p-6 lg:p-8 rounded-sm">
             <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/50"></div>
