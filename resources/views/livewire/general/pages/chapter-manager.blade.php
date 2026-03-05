@@ -1,5 +1,7 @@
 <div
     class="min-h-screen bg-gradient-to-b from-bg via-bg to-lightGray/20 dark:from-navbg dark:via-navbg dark:to-accent/10">
+    @livewire('general.components.breadcrumbs', ['items' => $breadcrumbs])
+
     <x-alerts.success/>
 
     {{-- Header Section --}}

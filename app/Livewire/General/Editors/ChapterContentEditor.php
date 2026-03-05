@@ -30,7 +30,6 @@ class ChapterContentEditor extends Component
 
         session()->flash('success', 'Chapter content updated successfully!');
 
-        $this->dispatch('content-saved');
     }
 
     public function render()

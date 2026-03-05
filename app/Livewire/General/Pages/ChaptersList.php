@@ -43,8 +43,15 @@ class ChaptersList extends Component
             ->orderBy('chapter_number')
             ->get();
 
+        $breadcrumbs = [
+            ['label' => 'Volumes', 'url' => route('admin.books'), 'wire:navigate' => true],
+            ['label' => $this->bookName, 'url' => route('book.manage', ['id' => $this->bookId]), 'wire:navigate' => true],
+            ['label' => 'Chapters', 'url' => ''],
+        ];
+
         return view('livewire.general.pages.chapters-list', [
             'chapters' => $chapters,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 }

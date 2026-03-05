@@ -132,6 +132,13 @@ class BookManager extends Component
 
     public function render()
     {
-        return view('livewire.general.pages.book-manager');
+        $breadcrumbs = [
+            ['label' => 'Volumes', 'url' => route('admin.books'), 'wire:navigate' => true],
+            ['label' => $this->book ? $this->book->title : 'New Volume', 'url' => ''],
+        ];
+
+        return view('livewire.general.pages.book-manager', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
     }
 }

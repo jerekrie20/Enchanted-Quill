@@ -3,6 +3,8 @@
 namespace App\Livewire\General\Pages;
 
 use App\Models\Book;
+use App\Models\Chapter;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
@@ -26,7 +28,7 @@ class ChapterManager extends Component
     #[Locked]
     public ?int $chapterId = null;
 
-    protected function rules()
+    protected function rules(): array
     {
         return [
             'title' => 'required|string|max:255',
@@ -34,14 +36,14 @@ class ChapterManager extends Component
                 'required',
                 'integer',
                 'min:1',
-                \Illuminate\Validation\Rule::unique('chapters', 'chapter_number')
+                Rule::unique('chapters', 'chapter_number')
                     ->where('book_id', $this->bookId)
                     ->ignore($this->chapterId),
             ],
         ];
     }
 
-    protected function messages()
+    protected function messages(): array
     {
         return [
             'chapterNumber.unique' => 'This chapter number already exists for this book.',
@@ -51,13 +53,13 @@ class ChapterManager extends Component
         ];
     }
 
-    public function saveDetails()
+    public function saveDetails(): null
     {
         $this->validate();
 
         $chapter = $this->chapterId
-            ? \App\Models\Chapter::findOrFail($this->chapterId)
-            : new \App\Models\Chapter;
+            ? Chapter::findOrFail($this->chapterId)
+            : new Chapter;
 
         $chapter->fill([
             'book_id' => $this->bookId,
@@ -81,7 +83,7 @@ class ChapterManager extends Component
         return $this->redirect(route('chapter.manage', ['id' => $this->bookId, 'chapterNumber' => $this->chapterNumber]), navigate: true);
     }
 
-    public function mount(int $id, ?string $chapterNumber = null)
+    public function mount(int $id, ?string $chapterNumber = null): void
     {
         $book = Book::findOrFail($id);
         $this->bookId = $id;
@@ -98,6 +100,15 @@ class ChapterManager extends Component
 
     public function render()
     {
-        return view('livewire.general.pages.chapter-manager');
+        $breadcrumbs = [
+            ['label' => 'Volumes', 'url' => route('admin.books'), 'wire:navigate' => true],
+            ['label' => $this->bookName, 'url' => route('book.manage', ['id' => $this->bookId]), 'wire:navigate' => true],
+            ['label' => 'Chapters', 'url' => route('chapters.list', ['id' => $this->bookId]), 'wire:navigate' => true],
+            ['label' => $this->title ?: 'New Chapter', 'url' => ''],
+        ];
+
+        return view('livewire.general.pages.chapter-manager', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
     }
 }

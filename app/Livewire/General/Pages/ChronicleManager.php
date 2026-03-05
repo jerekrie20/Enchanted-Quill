@@ -144,6 +144,13 @@ class ChronicleManager extends Component
 
     public function render()
     {
-        return view('livewire.general.pages.chronicle-manager');
+        $breadcrumbs = [
+            ['label' => 'Chronicles', 'url' => route('blogs'), 'wire:navigate' => true],
+            ['label' => $this->blog ? $this->blog->title : 'New Chronicle', 'url' => ''],
+        ];
+
+        return view('livewire.general.pages.chronicle-manager', [
+            'breadcrumbs' => $breadcrumbs,
+        ]);
     }
 }

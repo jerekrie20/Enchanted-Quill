@@ -1,4 +1,5 @@
 <div>
+    <x-alerts.success/>
     <form wire:submit.prevent="saveContent" id="book-description-form" class="space-y-6">
         @csrf
 
