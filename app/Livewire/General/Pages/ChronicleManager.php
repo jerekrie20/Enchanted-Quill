@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\General;
+namespace App\Livewire\General\Pages;
 
 use App\Jobs\ProcessBlog;
 use App\Models\Blog;
@@ -14,7 +14,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class BlogEditor extends Component
+class ChronicleManager extends Component
 {
     use WithFileUploads;
 
@@ -144,6 +144,6 @@ class BlogEditor extends Component
 
     public function render()
     {
-        return view('livewire.general.blog-editor');
+        return view('livewire.general.pages.chronicle-manager');
     }
 }

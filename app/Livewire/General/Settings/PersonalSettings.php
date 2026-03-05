@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Livewire\General;
+namespace App\Livewire\General\Settings;
 
 use App\Services\ImageService;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
-use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class Personal extends Component
+class PersonalSettings extends Component
 {
     use WithFileUploads;
 
     #[Validate]
     public $avatar;
+
     #[Validate]
     public $name;
+
     #[Validate]
     public $email;
 
@@ -27,16 +27,14 @@ class Personal extends Component
     #[Locked]
     public $user;
 
-
     protected function rules()
     {
-        return[
+        return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', Rule::unique('users')->ignore($this->user->id), 'string', 'email:rfc', 'max:255'],
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg'],
         ];
     }
-
 
     public function save()
     {
@@ -46,16 +44,15 @@ class Personal extends Component
 
         $validatedData = $this->validate();
 
-        $imageService = new ImageService();
+        $imageService = new ImageService;
 
-
-        if($this->avatar) {
+        if ($this->avatar) {
             $current = '';
-            if(!empty($this->user->avatar)){
+            if (! empty($this->user->avatar)) {
                 $current = $this->user->avatar;
             }
-            $this->avatar = $imageService->saveImage($this->avatar, $current, 'avatars', 'user' );
-        }else{
+            $this->avatar = $imageService->saveImage($this->avatar, $current, 'avatars', 'user');
+        } else {
             $this->avatar = $this->currentAvatar;
         }
 
@@ -88,6 +85,6 @@ class Personal extends Component
 
     public function render()
     {
-        return view('livewire.general.personal');
+        return view('livewire.general.settings.personal-settings');
     }
 }

@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book_categories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('category_id')->constrained('categories');
-            $table->foreignId('book_id')->constrained('books');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('book_categories')) {
+            Schema::create('book_categories', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('category_id')->constrained('categories');
+                $table->foreignId('book_id')->constrained('books');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

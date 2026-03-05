@@ -15,10 +15,12 @@ class Book extends Model
 
     // Define status constants
     const STATUS_DRAFT = 0;
-    const STATUS_PUBLISHED = 1;
-    const  STATUS_PUBLISHED_Later = 2;
-    const STATUS_ARCHIVED = 3;
 
+    const STATUS_PUBLISHED = 1;
+
+    const STATUS_PUBLISHED_Later = 2;
+
+    const STATUS_ARCHIVED = 3;
 
     /**
      * Get the human-readable status label for the book.
@@ -72,6 +74,13 @@ class Book extends Model
         return $this->hasMany(Review::class);
     }
 
+    /**
+     * A book has many chapters.
+     */
+    public function chapters(): HasMany
+    {
+        return $this->hasMany(Chapter::class);
+    }
 
     /**
      * Check if the book is published.

@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit.prevent="saveContent" id="blog-form" class="space-y-6">
+    <form wire:submit.prevent="saveContent" id="chronicle-form" class="space-y-6">
         @csrf
 
         {{-- CKEditor Area --}}
@@ -9,12 +9,12 @@
                     <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
-                    Compose Your Tale
+                    Compose Your Chronicle
                 </label>
             </div>
 
             <div class="bg-white dark:bg-navbg/40 border-2 border-text/10 focus-within:border-secondary dark:focus-within:border-primary rounded-sm transition-colors duration-300 overflow-hidden">
-                <div id="editor" class="min-h-96 prose dark:prose-invert max-w-none p-4">
+                <div id="chronicle-editor" class="min-h-96 prose dark:prose-invert max-w-none p-4">
                     {!! $content !!}
                 </div>
             </div>
@@ -34,7 +34,7 @@
         {{-- Hidden input bound to Livewire property --}}
         <input
             type="hidden"
-            id="editor-content"
+            id="chronicle-editor-content"
             name="content"
             wire:model="content"
         >
@@ -46,13 +46,43 @@
 
     @script
     <script>
-        initEditor()
-        Livewire.hook('morphed', ({ el, component }) => {
-            const editorElement = document.querySelector('#editor');
-            if (editorElement) {
-                initEditor();
+        let chronicleEditorInstance = null;
+
+        function initChronicleEditor() {
+            console.log("Chronicle editor initializing");
+            const editorElement = document.querySelector('#chronicle-editor');
+            const hiddenInput = document.querySelector('#chronicle-editor-content');
+
+            if (!editorElement) return;
+
+            // Destroy existing editor
+            if (chronicleEditorInstance) {
+                hiddenInput.value = chronicleEditorInstance.getData();
+                chronicleEditorInstance.destroy()
+                    .then(() => console.log("Chronicle editor destroyed"))
+                    .catch(error => console.error("Error destroying chronicle editor:", error));
             }
-        })
+
+            // Create new editor
+            const config = window.getChronicleEditorConfig();
+            window.createEditor(editorElement, hiddenInput, config)
+                .then(editor => {
+                    chronicleEditorInstance = editor;
+                    console.log("Chronicle editor initialized successfully");
+                })
+                .catch(error => {
+                    console.error("Chronicle editor initialization error:", error);
+                });
+        }
+
+        initChronicleEditor();
+
+        Livewire.hook('morphed', ({ el, component }) => {
+            const editorElement = document.querySelector('#chronicle-editor');
+            if (editorElement) {
+                initChronicleEditor();
+            }
+        });
     </script>
     @endscript
 </div>

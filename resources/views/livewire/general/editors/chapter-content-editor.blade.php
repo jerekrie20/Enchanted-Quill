@@ -1,0 +1,88 @@
+<div>
+    <form wire:submit.prevent="saveContent" id="chapter-form" class="space-y-6">
+        @csrf
+
+        {{-- CKEditor Area --}}
+        <div class="relative">
+            <div class="mb-4">
+                <label class="block text-sm font-heading text-text mb-2 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14.17 3.25l5.58 5.58c.48.48.48 1.26 0 1.74L9.34 21H3.75v-5.59L14.17 3.25m0-1.41c-.37 0-.74.15-1.02.42L2 13.42V22h8.58L21.75 10.83c.56-.56.56-1.47 0-2.02l-5.58-5.58c-.29-.29-.67-.44-1.02-.44z"/>
+                    </svg>
+                    Inscribe Your Chapter
+                </label>
+            </div>
+
+            <div class="bg-white dark:bg-navbg/40 border-2 border-text/10 focus-within:border-primary dark:focus-within:border-secondary rounded-sm transition-colors duration-300 overflow-hidden">
+                <div id="chapter-editor" class="min-h-96 prose dark:prose-invert max-w-none p-4">
+                    {!! $content !!}
+                </div>
+            </div>
+
+            {{-- Decorative flourish --}}
+            <div class="flex items-center gap-2 mt-4">
+                <div class="h-px flex-1 bg-text/10"></div>
+                <div class="flex gap-1">
+                    <div class="w-1 h-1 rounded-full bg-primary/30"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-primary/50"></div>
+                    <div class="w-1 h-1 rounded-full bg-primary/30"></div>
+                </div>
+                <div class="h-px flex-1 bg-text/10"></div>
+            </div>
+        </div>
+
+        {{-- Hidden input bound to Livewire property --}}
+        <input
+            type="hidden"
+            id="chapter-editor-content"
+            name="content"
+            wire:model="content"
+        >
+
+        <div class="flex justify-center pt-4">
+            <x-forms.input-submit />
+        </div>
+    </form>
+
+    @script
+    <script>
+        let chapterEditorInstance = null;
+
+        function initChapterEditor() {
+            console.log("Chapter editor initializing");
+            const editorElement = document.querySelector('#chapter-editor');
+            const hiddenInput = document.querySelector('#chapter-editor-content');
+
+            if (!editorElement) return;
+
+            // Destroy existing editor
+            if (chapterEditorInstance) {
+                hiddenInput.value = chapterEditorInstance.getData();
+                chapterEditorInstance.destroy()
+                    .then(() => console.log("Chapter editor destroyed"))
+                    .catch(error => console.error("Error destroying chapter editor:", error));
+            }
+
+            // Create new editor
+            const config = window.getChapterEditorConfig();
+            window.createEditor(editorElement, hiddenInput, config)
+                .then(editor => {
+                    chapterEditorInstance = editor;
+                    console.log("Chapter editor initialized successfully");
+                })
+                .catch(error => {
+                    console.error("Chapter editor initialization error:", error);
+                });
+        }
+
+        initChapterEditor();
+
+        Livewire.hook('morphed', ({ el, component }) => {
+            const editorElement = document.querySelector('#chapter-editor');
+            if (editorElement) {
+                initChapterEditor();
+            }
+        });
+    </script>
+    @endscript
+</div>

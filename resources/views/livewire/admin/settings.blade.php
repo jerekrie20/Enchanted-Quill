@@ -75,7 +75,7 @@
                         <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/50"></div>
                         <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/50"></div>
 
-                        <livewire:general.personal/>
+                        <livewire:general.settings.personal-settings/>
                     </section>
                 </div>
                 <div class="hidden" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
@@ -85,7 +85,7 @@
                         <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/50"></div>
                         <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/50"></div>
 
-                        <livewire:general.security/>
+                        <livewire:general.settings.security-settings/>
                     </section>
                 </div>
             </div>

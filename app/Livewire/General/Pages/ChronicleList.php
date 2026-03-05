@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\General;
+namespace App\Livewire\General\Pages;
 
 use App\Models\Blog as BlogModel;
 use App\Models\Category;
@@ -9,19 +9,21 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class BlogList extends Component
+class ChronicleList extends Component
 {
     use WithPagination;
 
     #[Layout('components.Layouts.admin')]
     #[Title('Blogs')]
-
     public $search = '';
-    public $category = [];
-    public $status;
-    public $sort;
-    public $perPage = 10;
 
+    public $category = [];
+
+    public $status;
+
+    public $sort;
+
+    public $perPage = 10;
 
     public function updateStatus($blogId, $status)
     {
@@ -51,12 +53,12 @@ class BlogList extends Component
     public function render()
     {
         $blog = BlogModel::with('categories')
-            ->where(function ($query){
-                $query->where('title', 'like', '%' . $this->search . '%')
-                    ->orWhere('content', 'like', '%' . $this->search . '%');
+            ->where(function ($query) {
+                $query->where('title', 'like', '%'.$this->search.'%')
+                    ->orWhere('content', 'like', '%'.$this->search.'%');
             })
-            ->when($this->category, fn($query) => $query->whereHas('categories', fn($q) => $q->whereIn('categories.id', $this->category)))
-            ->when($this->status, function ($query){
+            ->when($this->category, fn ($query) => $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $this->category)))
+            ->when($this->status, function ($query) {
                 $query->where('status', $this->status);
             })
             ->when(auth()->user()->role != 'admin', function ($query) {
@@ -68,9 +70,9 @@ class BlogList extends Component
 
         $categories = Category::all();
 
-        return view('livewire.admin.blog',[
+        return view('livewire.admin.blog', [
             'blogs' => $blog,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 }

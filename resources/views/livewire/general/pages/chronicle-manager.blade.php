@@ -129,7 +129,7 @@
                     <h2 class="text-xl font-heading text-text">Chronicle Content</h2>
                 </div>
 
-                @livewire('general.c-k-editor', ['blogId' => $blog->id, 'isBook' => false])
+                @livewire('general.editors.chronicle-content-editor', ['blogId' => $blog->id])
             </section>
         @endif
     </main>

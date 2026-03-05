@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Livewire\General;
+namespace App\Livewire\General\Settings;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
-class Security extends Component
+class SecuritySettings extends Component
 {
     #[Validate]
     public $password;
+
     #[Validate]
     public $password_confirmation;
 
     #[Locked]
     public $user;
 
-
-    //Validation Rules
+    // Validation Rules
     protected function rules()
     {
         return [
@@ -38,7 +37,7 @@ class Security extends Component
         ];
     }
 
-    //Validation messages for passwords
+    // Validation messages for passwords
     protected $messages = [
         'password.confirmed' => 'Your password confirmation does not match.',
         'password.min' => 'Your password must be at least :min characters.',
@@ -61,7 +60,6 @@ class Security extends Component
 
         return redirect()->route('admin.settings', ['tab' => 'security']);
 
-
     }
 
     public function mount()
@@ -71,6 +69,6 @@ class Security extends Component
 
     public function render()
     {
-        return view('livewire.general.security');
+        return view('livewire.general.settings.security-settings');
     }
 }

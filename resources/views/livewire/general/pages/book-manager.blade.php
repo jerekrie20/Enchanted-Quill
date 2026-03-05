@@ -31,22 +31,38 @@
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-8">
 
-        {{-- Add New Chapter Button --}}
-        <div class="flex justify-center">
-            <a href="{{route('chapter.manage',['id' => $book->id, 'slug' => 'create'])}}"
-               class="relative px-8 py-3 font-serif text-sm text-white bg-secondary hover:bg-secondary/90 dark:bg-primary dark:hover:bg-primary/90 border-2 border-secondary/50 dark:border-primary/50 transition-all duration-300 group">
-                <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
-                <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
-                <span class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/30"></span>
-                <span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/30"></span>
-                <span class="flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Inscribe New Chapter
-                </span>
-            </a>
-        </div>
+        {{-- Chapter Management Buttons --}}
+        @if($book)
+            <div class="flex justify-center gap-4">
+                <a href="{{route('chapters.list', ['id' => $book->id])}}"
+                   class="relative px-8 py-3 font-serif text-sm text-primary dark:text-secondary bg-white dark:bg-navbg border-2 border-primary/30 dark:border-secondary/30 hover:border-primary hover:dark:border-secondary transition-all duration-300 group">
+                    <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/30"></span>
+                    <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/30"></span>
+                    <span class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary/30"></span>
+                    <span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary/30"></span>
+                    <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                        </svg>
+                        Manage Chapters
+                    </span>
+                </a>
+
+                <a href="{{route('chapter.manage', ['id' => $book->id])}}"
+                   class="relative px-8 py-3 font-serif text-sm text-white bg-secondary hover:bg-secondary/90 dark:bg-primary dark:hover:bg-primary/90 border-2 border-secondary/50 dark:border-primary/50 transition-all duration-300 group">
+                    <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
+                    <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
+                    <span class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/30"></span>
+                    <span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/30"></span>
+                    <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Inscribe New Chapter
+                    </span>
+                </a>
+            </div>
+        @endif
 
         {{-- Volume Details Section --}}
         <section class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-primary/20 dark:border-primary/10 p-6 lg:p-8 rounded-sm">
@@ -144,11 +160,13 @@
                             <path d="M14.17 3.25l5.58 5.58c.48.48.48 1.26 0 1.74L9.34 21H3.75v-5.59L14.17 3.25m0-1.41c-.37 0-.74.15-1.02.42L2 13.42V22h8.58L21.75 10.83c.56-.56.56-1.47 0-2.02l-5.58-5.58c-.29-.29-.67-.44-1.02-.44z"/>
                         </svg>
                     </div>
-                    <h2 class="text-xl font-heading text-text">Book Content</h2>
+                    <h2 class="text-xl font-heading text-text">Describe Your Story</h2>
                 </div>
 
-                @livewire('general.c-k-editor', ['blogId' => $book->id, 'isBook' => true])
+                @livewire('general.editors.book-description-editor', ['bookId' => $book->id])
             </section>
         @endif
+
+
     </main>
 </div>

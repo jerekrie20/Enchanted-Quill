@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\General;
+namespace App\Livewire\General\Pages;
 
 use App\Models\Book;
 use App\Models\Category;
@@ -13,7 +13,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class BookEditor extends Component
+class BookManager extends Component
 {
     use WithFileUploads;
 
@@ -88,7 +88,7 @@ class BookEditor extends Component
             $data['publish_at'] = Carbon::parse($data['publish_at']);
         }
 
-        if (!$this->book) {
+        if (! $this->book) {
             // Create new book
             $data['author_id'] = auth()->id();
             $this->book = Book::create($data);
@@ -132,6 +132,6 @@ class BookEditor extends Component
 
     public function render()
     {
-        return view('livewire.general.book-editor');
+        return view('livewire.general.pages.book-manager');
     }
 }

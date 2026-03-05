@@ -56,12 +56,14 @@
             <form wire:submit="saveDetails" class="space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                        <x-forms.input-text name="Title" wire:model.live="title"/>
+                        <x-forms.input-text name="Title" errorKey="title" wire:model.live="title"/>
+                    </div>
+                    <div>
+                        <x-forms.input-text name="Chapter Number" errorKey="chapterNumber" type="number" wire:model.live="chapterNumber"/>
                     </div>
                     <div>
                         <x-forms.input-text name="Book Name" readonly wire:model="bookName"/>
                     </div>
-
                 </div>
 
                 <div class="flex justify-center pt-4">
@@ -70,27 +72,37 @@
             </form>
         </section>
 
-        {{-- Book Content Section --}}
+        {{-- Chapter Content Section --}}
+        @if($chapterId)
+            <section
+                class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-primary/20 dark:border-primary/10 p-6 lg:p-8 rounded-sm">
+                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/50"></div>
+                <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary/50"></div>
+                <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/50"></div>
+                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/50"></div>
 
-        <section
-            class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-primary/20 dark:border-primary/10 p-6 lg:p-8 rounded-sm">
-            <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/50"></div>
-            <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary/50"></div>
-            <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary/50"></div>
-            <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary/50"></div>
-
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M14.17 3.25l5.58 5.58c.48.48.48 1.26 0 1.74L9.34 21H3.75v-5.59L14.17 3.25m0-1.41c-.37 0-.74.15-1.02.42L2 13.42V22h8.58L21.75 10.83c.56-.56.56-1.47 0-2.02l-5.58-5.58c-.29-.29-.67-.44-1.02-.44z"/>
-                    </svg>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M14.17 3.25l5.58 5.58c.48.48.48 1.26 0 1.74L9.34 21H3.75v-5.59L14.17 3.25m0-1.41c-.37 0-.74.15-1.02.42L2 13.42V22h8.58L21.75 10.83c.56-.56.56-1.47 0-2.02l-5.58-5.58c-.29-.29-.67-.44-1.02-.44z"/>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-heading text-text">Chapter Content</h2>
                 </div>
-                <h2 class="text-xl font-heading text-text">Book Content</h2>
-            </div>
 
-            @livewire('general.c-k-editor', ['blogId' => $bookId, 'isBook' => true])
-        </section>
+                @livewire('general.editors.chapter-content-editor', ['chapterId' => $chapterId], key($chapterId))
+            </section>
+        @endif
 
     </main>
+
+    @script
+    <script>
+        $wire.on('content-saved', () => {
+            // Force a refresh to show the flash message
+            window.location.reload();
+        });
+    </script>
+    @endscript
 </div>
