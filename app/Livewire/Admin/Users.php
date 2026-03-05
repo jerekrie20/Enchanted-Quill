@@ -20,40 +20,44 @@ class Users extends Component
     #[Layout('components.Layouts.admin')]
     #[Title('Users')]
 
-
-    //Searches
+    // Searches
     #[Url]
     public $search = '';
+
     public $sortRole;
+
     public $sort = 'desc';
 
     public $perPage = 10;
 
     public $displayModel = false;
 
-    //Forms
+    // Forms
 
     public $name;
+
     public $email;
+
     public $role;
+
     #[Validate]
     public $password;
+
     #[Validate]
     public $password_confirmation;
 
     public $avatar;
 
     public $roleArray = [
-        'admin' =>  'admin',
+        'admin' => 'admin',
         'author' => 'author',
-        'reader' => 'reader'
+        'reader' => 'reader',
     ];
 
     #[Locked]
     public $user;
 
-
-    //Validation Rules
+    // Validation Rules
     protected function rules()
     {
         return [
@@ -74,7 +78,7 @@ class Users extends Component
         ];
     }
 
-    //Validation messages for passwords
+    // Validation messages for passwords
     protected $messages = [
         'password.confirmed' => 'Your password confirmation does not match.',
         'password.min' => 'Your password must be at least :min characters.',
@@ -85,14 +89,14 @@ class Users extends Component
         'password.uncompromised' => 'Your password has been found in a data breach. Please choose a different password.',
     ];
 
-    public function openModal($id) //Open the modal and set the user
+    public function openModal($id) // Open the modal and set the user
     {
         $this->getUser($id);
 
         $this->displayModel = true;
     }
 
-    public function closeModal() //Close the modal and clear data
+    public function closeModal() // Close the modal and clear data
     {
         $this->reset(['name', 'email', 'role', 'password', 'password_confirmation']);
         $this->displayModel = false;
@@ -128,11 +132,10 @@ class Users extends Component
 
         $this->closeModal();
 
-
     }
 
     public function delete($id): void
-    { //Delete a User if authorized to do so
+    { // Delete a User if authorized to do so
         $user = User::find($id);
         $name = $user['name'];
         $this->authorize('delete', $user);
@@ -145,24 +148,24 @@ class Users extends Component
         $this->resetPage();
     }
 
-
     public function render()
     {
 
         $users = User::query()
-            ->where(function ($query){
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%');
+            ->withCount(['blogs', 'comments', 'reviews'])
+            ->where(function ($query) {
+                $query->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email', 'like', '%'.$this->search.'%');
             })
-            ->when($this->sortRole, function ($query){
+            ->when($this->sortRole, function ($query) {
                 $this->resetPage();
                 $query->where('role', $this->sortRole);
             })
             ->orderBy('created_at', $this->sort)
             ->paginate($this->perPage);
 
-        return view('livewire.admin.users',[
-            'users' => $users
+        return view('livewire.admin.users', [
+            'users' => $users,
         ]);
     }
 }

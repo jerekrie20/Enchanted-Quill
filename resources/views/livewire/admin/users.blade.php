@@ -114,6 +114,22 @@
                                 <span class="font-semibold">Last Seen:</span>
                                 {{$user->last_active ? $user->last_active->diffForHumans() : 'Never'}}
                             </p>
+
+                            {{-- User Statistics --}}
+                            <div class="grid grid-cols-3 gap-2 pt-2">
+                                <div class="text-center p-2 bg-secondary/5 dark:bg-secondary/10 rounded-sm">
+                                    <div class="text-lg font-heading font-bold text-secondary">{{ $user->blogs_count }}</div>
+                                    <div class="text-xs text-text/60 font-serif">Blogs</div>
+                                </div>
+                                <div class="text-center p-2 bg-primary/5 dark:bg-primary/10 rounded-sm">
+                                    <div class="text-lg font-heading font-bold text-primary">{{ $user->reviews_count }}</div>
+                                    <div class="text-xs text-text/60 font-serif">Reviews</div>
+                                </div>
+                                <div class="text-center p-2 bg-accent/5 dark:bg-accent/10 rounded-sm">
+                                    <div class="text-lg font-heading font-bold text-text">{{ $user->comments_count }}</div>
+                                    <div class="text-xs text-text/60 font-serif">Comments</div>
+                                </div>
+                            </div>
                         </div>
 
                         {{-- Actions --}}
