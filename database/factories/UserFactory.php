@@ -34,6 +34,20 @@ class UserFactory extends Factory
     }
 
     /**
+     * Indicate that the user is an author with additional profile fields.
+     */
+    public function author(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'author',
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'bio' => fake()->paragraph(3),
+            'profile_image' => fake()->imageUrl(400, 400, 'people'),
+        ]);
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

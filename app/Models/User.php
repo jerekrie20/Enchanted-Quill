@@ -14,8 +14,6 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
-
-
     /**
      * The attributes that are mass assignable.
      *
@@ -28,6 +26,10 @@ class User extends Authenticatable
         'avatar',
         'password',
         'last_active',
+        'first_name',
+        'last_name',
+        'bio',
+        'profile_image',
     ];
 
     /**
@@ -76,5 +78,13 @@ class User extends Authenticatable
     public function comments(): hasMany
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Get the books authored by the user.
+     */
+    public function books(): hasMany
+    {
+        return $this->hasMany(Book::class);
     }
 }

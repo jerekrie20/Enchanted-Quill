@@ -41,7 +41,7 @@ class Book extends Model
         'slug',
         'description',
         'cover',
-        'author_id',
+        'user_id',
         'status',
         'published_at',
     ];
@@ -59,11 +59,11 @@ class Book extends Model
     }
 
     /**
-     * A book belongs to one author.
+     * A book belongs to one author (user).
      */
     public function author(): BelongsTo
     {
-        return $this->belongsTo(Author::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

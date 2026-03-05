@@ -14,11 +14,11 @@ class ChapterFactory extends Factory
     public function definition(): array
     {
         return [
+            'title' => $this->faker->sentence(4),
             'chapter_number' => $this->faker->randomNumber(),
-            'content' => $this->faker->word(),
+            'content' => $this->faker->paragraphs(5, true),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
-
             'book_id' => Book::factory(),
         ];
     }

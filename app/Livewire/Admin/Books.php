@@ -4,29 +4,42 @@ namespace App\Livewire\Admin;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\User;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Books extends Component
 {
+    use WithPagination;
+
     #[Layout('components.Layouts.admin')]
     #[Title('Books Management')]
-
     public $search = '';
+
     public $category = [];
+
     public $status;
+
     public $sort;
+
     public $perPage = 10;
 
-    public  function updateStatus($bookId, $status)
+    public $authorFilter;
+
+    public $dateFrom;
+
+    public $dateTo;
+
+    public function updateStatus($bookId, $status)
     {
         $book = Book::find($bookId);
 
         $this->authorize('update', $book);
 
         $book->update([
-            'status' => $status
+            'status' => $status,
         ]);
 
         $this->dispatch('status-updated', bookId: $bookId);
@@ -42,16 +55,55 @@ class Books extends Component
         session()->flash('success', 'Book deleted successfully!');
     }
 
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingCategory(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStatus(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingAuthorFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingDateFrom(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatingDateTo(): void
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
-        $books = Book::with('categories')
-            ->where(function ($query){
-                $query->where('title', 'like', '%' . $this->search . '%')
-                    ->orWhere('description', 'like', '%' . $this->search . '%');
+        $books = Book::with(['categories', 'author'])
+            ->where(function ($query) {
+                $query->where('title', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%');
             })
-            ->when($this->category, fn($query) => $query->whereHas('categories', fn($q) => $q->whereIn('categories.id', $this->category)))
-            ->when($this->status, function ($query){
+            ->when($this->category, fn ($query) => $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $this->category)))
+            ->when($this->status !== null && $this->status !== '', function ($query) {
                 $query->where('status', $this->status);
+            })
+            ->when($this->authorFilter, function ($query) {
+                $query->where('user_id', $this->authorFilter);
+            })
+            ->when($this->dateFrom, function ($query) {
+                $query->whereDate('created_at', '>=', $this->dateFrom);
+            })
+            ->when($this->dateTo, function ($query) {
+                $query->whereDate('created_at', '<=', $this->dateTo);
             })
             ->when(auth()->user()->role != 'admin', function ($query) {
                 // Restrict to books that belong to the current user(author) if the user is not an admin
@@ -59,11 +111,16 @@ class Books extends Component
             })
             ->orderBy('created_at', $this->sort ?: 'desc')
             ->paginate($this->perPage);
+
         $categories = Category::all();
 
-        return view('livewire.admin.books',[
+        // Get all authors (users who have written books)
+        $authors = User::whereHas('books')->get();
+
+        return view('livewire.admin.books', [
             'books' => $books,
-            'categories' => $categories
+            'categories' => $categories,
+            'authors' => $authors,
         ]);
     }
 }

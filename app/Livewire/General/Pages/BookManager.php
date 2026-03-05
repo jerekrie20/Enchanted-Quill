@@ -90,7 +90,7 @@ class BookManager extends Component
 
         if (! $this->book) {
             // Create new book
-            $data['author_id'] = auth()->id();
+            $data['user_id'] = auth()->id();
             $this->book = Book::create($data);
             $this->book->categories()->attach($this->category);
             session()->flash('success', 'Book created successfully!');

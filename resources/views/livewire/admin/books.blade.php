@@ -75,6 +75,15 @@
                     <option value="3">Archived</option>
                 </select>
 
+                <select name="author"
+                        class="bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-secondary dark:focus:border-primary text-text px-4 py-2.5 font-serif transition-colors duration-300"
+                        wire:model.live.debounce.500ms="authorFilter">
+                    <option value="">All Authors</option>
+                    @foreach($authors as $author)
+                        <option value="{{ $author->id }}">{{ $author->name }}</option>
+                    @endforeach
+                </select>
+
                 <select name="perPage"
                         class="bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-secondary dark:focus:border-primary text-text px-4 py-2.5 font-serif transition-colors duration-300"
                         wire:model.live.debounce.500ms="perPage">
@@ -85,14 +94,33 @@
                     <option value="10">10</option>
                     <option value="12">12</option>
                 </select>
+            </div>
 
-                <select name="sort"
-                        class="bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-secondary dark:focus:border-primary text-text px-4 py-2.5 font-serif transition-colors duration-300"
-                        wire:model.live.debounce.500ms="sort">
-                    <option value="">Sort</option>
-                    <option value="desc">Newest First</option>
-                    <option value="asc">Oldest First</option>
-                </select>
+            {{-- Date Range Filters --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div class="flex flex-col">
+                    <label for="dateFrom" class="text-xs font-serif text-text/60 mb-1">Created From:</label>
+                    <input type="date" id="dateFrom" name="dateFrom"
+                           class="bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-secondary dark:focus:border-primary text-text px-4 py-2.5 font-serif transition-colors duration-300"
+                           wire:model.live.debounce.500ms="dateFrom">
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="dateTo" class="text-xs font-serif text-text/60 mb-1">Created To:</label>
+                    <input type="date" id="dateTo" name="dateTo"
+                           class="bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-secondary dark:focus:border-primary text-text px-4 py-2.5 font-serif transition-colors duration-300"
+                           wire:model.live.debounce.500ms="dateTo">
+                </div>
+
+                <div class="flex items-end">
+                    <select name="sort"
+                            class="w-full bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-secondary dark:focus:border-primary text-text px-4 py-2.5 font-serif transition-colors duration-300"
+                            wire:model.live.debounce.500ms="sort">
+                        <option value="">Sort By</option>
+                        <option value="desc">Newest First</option>
+                        <option value="asc">Oldest First</option>
+                    </select>
+                </div>
             </div>
 
             {{-- Categories Dropdown --}}
@@ -200,7 +228,7 @@
                                     {{$book->title}}
                                 </h3>
                                 <p class="text-xs font-serif italic text-text/60 dark:text-text/70 truncate">
-                                    {{$book->author->first_name}} {{$book->author->last_name}}
+                                    {{$book->author->name}}
                                 </p>
 
                                 {{-- Categories (compact) --}}

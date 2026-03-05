@@ -23,7 +23,7 @@ return new class extends Migration
             $table->index('created_at');
             $table->index('status');
             $table->index('published_at');
-            $table->index(['author_id', 'status']);
+            $table->index(['user_id', 'status']);
         });
 
         // Add indexes to blogs table
@@ -65,7 +65,7 @@ return new class extends Migration
             $table->dropIndex(['created_at']);
             $table->dropIndex(['status']);
             $table->dropIndex(['published_at']);
-            $table->dropIndex(['author_id', 'status']);
+            $table->dropIndex(['user_id', 'status']);
         });
 
         // Remove indexes from blogs table

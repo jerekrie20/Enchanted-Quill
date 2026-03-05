@@ -18,8 +18,12 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role',['admin','author','reader']);
+            $table->enum('role', ['admin', 'author', 'reader']);
             $table->timestamp('last_active')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->text('bio')->nullable();
+            $table->string('profile_image')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
