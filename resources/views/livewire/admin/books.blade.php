@@ -48,7 +48,7 @@
         </div>
 
         {{-- Search & Filters --}}
-        <section class="relative bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-secondary/20 dark:border-secondary/10 p-6 lg:p-8 rounded-sm" x-data="{ show: @entangle('show') }">
+        <section class="relative bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-secondary/20 dark:border-secondary/10 p-6 lg:p-8 rounded-sm" x-data="{ show: false }">
             <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-secondary/50"></div>
             <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-secondary/50"></div>
 
@@ -106,7 +106,7 @@
                 </button>
 
                 <div @click.away="show = false" x-show="show" x-transition
-                     class="absolute left-0 right-0 mt-2 bg-white dark:bg-navbg border-2 border-secondary/20 rounded-sm shadow-xl z-50 max-h-64 overflow-y-auto">
+                     class=" mt-2 bg-white dark:bg-navbg border-2 border-secondary/20 rounded-sm shadow-xl z-50 max-h-64 overflow-y-auto">
                     <ul class="p-4 grid grid-cols-2 gap-3">
                         @foreach($categories as $category)
                             <li class="flex items-center gap-2">
@@ -142,7 +142,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 lg:gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-4 lg:gap-6">
                 @foreach($books as $book)
                     <article class="group relative" x-data="{ showActions: false }" :class="showActions ? 'z-50' : 'z-0'">
                         {{-- Book Card --}}

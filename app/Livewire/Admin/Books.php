@@ -32,6 +32,16 @@ class Books extends Component
         $this->dispatch('status-updated', bookId: $bookId);
     }
 
+    public function delete($bookId): void
+    {
+        $book = Book::findOrFail($bookId);
+
+        $this->authorize('delete', $book);
+
+        $book->delete();
+        session()->flash('success', 'Book deleted successfully!');
+    }
+
     public function render()
     {
         $books = Book::with('categories')
@@ -48,7 +58,7 @@ class Books extends Component
                 return $query->where('user_id', auth()->id());
             })
             ->orderBy('created_at', $this->sort ?: 'desc')
-            ->cursorPaginate($this->perPage);
+            ->paginate($this->perPage);
         $categories = Category::all();
 
         return view('livewire.admin.books',[

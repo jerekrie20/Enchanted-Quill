@@ -92,7 +92,7 @@
                         <x-forms.input-text name="Title" wire:model.live="title"/>
                     </div>
                     <div>
-                        <x-forms.input-dropdown-checkbox name="Categories" modal="category" :data="$categories"/>
+                        <x-forms.input-dropdown-checkbox name="Categories" modal="category" :data="$categories" :selected="$category"/>
                     </div>
                     <div>
                         <x-forms.input-select name="Status" :data="$statusData" wire:model.live.debounce.500ms="status"/>

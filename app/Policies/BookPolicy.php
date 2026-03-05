@@ -34,11 +34,20 @@ class BookPolicy
         // Ensure the user can update their own book
         return $user->id == $book->author->user_id
             ? Response::allow()
-            : Response::deny('You are not authorized to edit this blog.');
+            : Response::deny('You are not authorized to edit this Book.');
     }
 
-    public function delete(User $user, Book $book): bool
+    public function delete(User $user, Book $book): Response
     {
+        //Admins can delete all blogs
+        if ($user->role == 'admin'){
+            return Response::allow();
+        }
+
+        //Ensure the user can only delete their own books
+        return $user->id == $book->author->user_id
+            ? Response::allow()
+            : Response::deny('You are not authorized to delete this Book.');
     }
 
     public function restore(User $user, Book $book): bool

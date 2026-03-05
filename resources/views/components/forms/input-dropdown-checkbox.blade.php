@@ -1,4 +1,4 @@
-@props(['name', 'modal', 'data'])
+@props(['name', 'modal', 'data', 'selected' => []])
 
 <p class="mb-2 text-lg font-medium ">{{$name}}</p>
 
@@ -18,10 +18,11 @@
                 @foreach($data as $item)
                     <div class="p-2" wire:key="{{$item->id}}">
                         <input id="checkbox-item-{{$item->id}}" type="checkbox" value="{{$item->id}}"
-                               class="w-4 h-4 text-secondary bg-gray-100 border-gray-300 rounded"
-                               wire:model.live="{{$modal}}">
+                               class="w-4 h-4 text-secondary  focus:ring-secondary focus:border-secondary"
+                               wire:model.live="{{$modal}}"
+                               @checked(in_array($item->id, $selected))>
                         <label for="checkbox-item-{{$item->id}}"
-                               class="ms-2 text-sm font-medium text-white ">{{$item->name}}</label>
+                               class="ms-2 text-sm font-medium text-white">{{$item->name}}</label>
                     </div>
                 @endforeach
             </div>
