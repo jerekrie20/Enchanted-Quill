@@ -9,23 +9,23 @@ class BookDescriptionEditor extends Component
 {
     public $book;
 
-    public $content;
+    public $description;
 
     public function mount($bookId): void
     {
         $book = Book::findOrFail($bookId);
         $this->book = $book;
-        $this->content = $book->content;
+        $this->description = $book->description;
     }
 
     public function saveContent(): void
     {
         $this->validate([
-            'content' => 'required|string',
+            'description' => 'required|string',
         ]);
 
         $this->book->update([
-            'content' => $this->content,
+            'description' => $this->description,
         ]);
 
         session()->flash('success', 'Book description updated successfully!');

@@ -15,7 +15,7 @@
 
             <div class="bg-white dark:bg-navbg/40 border-2 border-text/10 focus-within:border-primary dark:focus-within:border-secondary rounded-sm transition-colors duration-300 overflow-hidden">
                 <div id="book-description-editor" class="min-h-64 prose dark:prose-invert max-w-none p-4">
-                    {!! $content !!}
+                    {!! $description !!}
                 </div>
             </div>
 
@@ -35,8 +35,8 @@
         <input
             type="hidden"
             id="book-description-editor-content"
-            name="content"
-            wire:model="content"
+            name="description"
+            wire:model="description"
         >
 
         <div class="flex justify-center pt-4">
