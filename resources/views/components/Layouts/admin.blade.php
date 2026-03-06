@@ -1,6 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
 <head>
+    <script>
+        // Apply theme immediately to prevent flash
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.className = theme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireScripts
@@ -234,34 +242,38 @@
 
         // Check and initialize theme
         const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
+        const html = document.documentElement;
+
+        // Apply both data-theme attribute and class for compatibility
+        html.setAttribute('data-theme', currentTheme);
+        html.className = currentTheme;
 
         // Set the initial icon visibility based on the current theme
         if (currentTheme === 'light') {
-            moonIcon.classList.remove('hidden');
-            sunIcon.classList.add('hidden');
+            moonIcon.style.display = 'inline-block';
+            sunIcon.style.display = 'none';
         } else {
-            moonIcon.classList.add('hidden');
-            sunIcon.classList.remove('hidden');
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'inline-block';
         }
 
         // Add event listener to toggle theme
         toggleButton.addEventListener('click', () => {
-            const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
             // Update theme on <html> element and save to localStorage
             html.setAttribute('data-theme', newTheme);
+            html.className = newTheme;
             localStorage.setItem('theme', newTheme);
 
             // Toggle the visibility of the icons
             if (newTheme === 'light') {
-                moonIcon.classList.remove('hidden');
-                sunIcon.classList.add('hidden');
+                moonIcon.style.display = 'inline-block';
+                sunIcon.style.display = 'none';
             } else {
-                moonIcon.classList.add('hidden');
-                sunIcon.classList.remove('hidden');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'inline-block';
             }
         });
     });

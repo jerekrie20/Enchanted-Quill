@@ -5,6 +5,8 @@
 
 @plugin 'flowbite/plugin';
 
+@variant dark (&:where(.dark, .dark *));
+
 @import "trix/dist/trix.css";
 
 @theme {

@@ -69,7 +69,7 @@
             <article class="relative bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-purple-500/20 p-8 lg:p-12 rounded-sm mb-12">
                 <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
                 <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
-                <div class="prose prose-lg max-w-none text-text/90 font-serif leading-relaxed" aria-labelledby="chronicle-title">
+                <div class="prose prose-lg dark:prose-invert max-w-none text-text/90 dark:text-white/90 font-serif leading-relaxed" aria-labelledby="chronicle-title">
                     {!! $chronicle->content !!}
                 </div>
             </article>
@@ -80,7 +80,7 @@
                 <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-purple-500/50"></div>
                 <div class="flex items-center justify-between flex-wrap gap-4">
                     <div class="flex items-center gap-4" role="group" aria-label="Share this article">
-                        <span class="text-text/60 font-serif text-sm" id="share-label">Share this chronicle:</span>
+                        <span class="text-text/60 dark:text-white/60 font-serif text-sm" id="share-label">Share this chronicle:</span>
                         <button class="w-10 h-10 bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-violet-400 rounded-full flex items-center justify-center transition-colors border border-purple-500/20" aria-label="Share on Twitter">
                             <i class="fa-brands fa-twitter" aria-hidden="true"></i>
                         </button>
@@ -117,14 +117,14 @@
                         @endif
                     </div>
                     <div class="flex-1">
-                        <h3 class="text-xl font-heading text-text mb-2">About the Author</h3>
-                        <p class="text-lg font-heading text-text/80">
+                        <h3 class="text-xl font-heading text-text dark:text-white mb-2">About the Author</h3>
+                        <p class="text-lg font-heading text-text/80 dark:text-white/80">
                             <a href="{{ route('portal.profile', $chronicle->user->id) }}" wire:navigate class="hover:text-purple-600 dark:hover:text-violet-400 transition-colors" aria-label="View full profile of {{ $chronicle->user->name }}">
                                 {{ $chronicle->user->name }}
                             </a>
                         </p>
                         @if($chronicle->user->bio)
-                            <p class="text-text/70 font-serif mt-2">{{ $chronicle->user->bio }}</p>
+                            <p class="text-text/70 dark:text-white/70 font-serif mt-2">{{ $chronicle->user->bio }}</p>
                         @endif
                     </div>
                 </div>
@@ -137,9 +137,9 @@
         <div class="max-w-4xl mx-auto px-4">
             <div class="flex items-center gap-3 mb-6">
                 <div class="w-10 h-10 rounded-full bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center">
-                    <i class="fa-solid fa-comments text-purple-500" aria-hidden="true"></i>
+                    <i class="fa-solid fa-comments text-purple-500 dark:text-violet-400" aria-hidden="true"></i>
                 </div>
-                <h2 class="text-2xl font-heading text-text">Comments</h2>
+                <h2 class="text-2xl font-heading text-text dark:text-white">Comments</h2>
             </div>
 
             @auth
@@ -147,7 +147,7 @@
                     <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-purple-500/50"></div>
                     <label for="comment-input" class="sr-only">Write your comment</label>
-                    <textarea id="comment-input" placeholder="Share your thoughts..." class="w-full px-4 py-3 bg-white dark:bg-navbg/40 border-2 border-text/10 rounded-sm focus:border-purple-500 dark:focus:border-violet-400 focus:outline-none font-serif transition-colors" rows="4" aria-label="Comment text area"></textarea>
+                    <textarea id="comment-input" placeholder="Share your thoughts..." class="w-full px-4 py-3 bg-white dark:bg-navbg/40 border-2 border-text/10 dark:border-purple-500/30 rounded-sm focus:border-purple-500 dark:focus:border-violet-400 focus:outline-none text-text dark:text-white font-serif transition-colors" rows="4" aria-label="Comment text area"></textarea>
                     <div class="mt-3 flex justify-end">
                         <button class="relative bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-2 rounded-sm transition-colors duration-300 border border-violet-500/50" aria-label="Post your comment">
                             <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
@@ -158,15 +158,15 @@
                 </div>
             @else
                 <div class="text-center py-8 bg-white/80 dark:bg-accent/30 backdrop-blur-sm rounded-sm border-2 border-purple-500/20 mb-8" role="alert">
-                    <p class="text-text/60 font-serif">
+                    <p class="text-text/60 dark:text-white/60 font-serif">
                         <a href="{{ route('login') }}" class="text-purple-600 dark:text-violet-400 hover:text-purple-700 dark:hover:text-violet-300 transition-colors">Sign in</a> to join the discussion
                     </p>
                 </div>
             @endauth
 
             <div class="text-center py-12 bg-white/60 dark:bg-accent/20 backdrop-blur-sm rounded-sm border-2 border-purple-500/20" role="status">
-                <i class="fa-solid fa-comments text-6xl text-purple-500/20 mb-4" aria-hidden="true"></i>
-                <p class="text-text/60 font-serif">Comments coming soon!</p>
+                <i class="fa-solid fa-comments text-6xl text-purple-500/20 dark:text-violet-400/20 mb-4" aria-hidden="true"></i>
+                <p class="text-text/60 dark:text-white/60 font-serif">Comments coming soon!</p>
             </div>
         </div>
     </section>
