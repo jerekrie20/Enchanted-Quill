@@ -1,5 +1,13 @@
 <div class="min-h-screen bg-gradient-to-b from-bg via-bg to-lightGray/20 dark:from-navbg dark:via-navbg dark:to-accent/10">
     <x-alerts.success/>
+    @if(session('error'))
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+            <div class="bg-danger/10 border-2 border-danger/50 text-danger px-6 py-4 rounded-sm relative">
+                <strong class="font-bold">Error!</strong>
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+        </div>
+    @endif
 
     {{-- Header Section --}}
     <header class="relative mb-12 overflow-hidden">
@@ -149,6 +157,48 @@
             </div>
         </section>
 
+        {{-- Bulk Actions Bar --}}
+        @if(count($selectedBooks) > 0)
+            <div class="sticky top-4 z-40 bg-primary dark:bg-secondary border-2 border-primary/50 dark:border-secondary/50 rounded-sm shadow-2xl p-4" x-data="{ showBulkStatus: false }">
+                <div class="flex flex-wrap items-center gap-4">
+                    <span class="font-heading text-white">{{ count($selectedBooks) }} book(s) selected</span>
+
+                    <div class="flex flex-wrap gap-2">
+                        <button @click="showBulkStatus = !showBulkStatus"
+                                class="px-4 py-2 font-serif text-sm text-white bg-white/20 hover:bg-white/30 border border-white/30 rounded-sm transition-all duration-300">
+                            Change Status
+                        </button>
+
+                        <button wire:click="bulkDelete"
+                                wire:confirm="Are you sure you want to delete {{ count($selectedBooks) }} book(s)?"
+                                class="px-4 py-2 font-serif text-sm text-white bg-danger hover:bg-danger/90 border border-danger/50 rounded-sm transition-all duration-300">
+                            Delete Selected
+                        </button>
+
+                        <button wire:click="$set('selectedBooks', []); $set('selectAll', false)"
+                                class="px-4 py-2 font-serif text-sm text-white bg-white/20 hover:bg-white/30 border border-white/30 rounded-sm transition-all duration-300">
+                            Clear Selection
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Bulk Status Change --}}
+                <div x-show="showBulkStatus" x-transition class="mt-4 flex items-center gap-3 pt-4 border-t border-white/20">
+                    <label class="text-sm font-serif text-white">Change status to:</label>
+                    <select wire:model="bulkStatus" class="bg-white/20 text-white border border-white/30 rounded-sm px-3 py-2 font-serif text-sm">
+                        <option value="">Select Status</option>
+                        <option value="0">Draft</option>
+                        <option value="1">Published</option>
+                        <option value="3">Archived</option>
+                    </select>
+                    <button wire:click="bulkUpdateStatus"
+                            class="px-4 py-2 font-serif text-sm text-white bg-white/30 hover:bg-white/40 border border-white/50 rounded-sm transition-all duration-300">
+                        Apply Status
+                    </button>
+                </div>
+            </div>
+        @endif
+
         {{-- Pagination --}}
         <div class="flex justify-center">
             {{ $books->links() }}
@@ -156,11 +206,18 @@
 
         {{-- Books Showcase Grid --}}
         <section>
-            {{-- Decorative Shelf Header --}}
+            {{-- Decorative Shelf Header with Select All --}}
             <div class="relative mb-6">
                 <div class="flex items-center gap-3">
                     <div class="h-px flex-1 bg-gradient-to-r from-transparent via-primary/30 to-primary/30"></div>
-                    <div class="flex items-center gap-2 px-4 py-2 bg-white/60 dark:bg-accent/20 border-2 border-primary/20 rounded-sm">
+                    <div class="flex items-center gap-4 px-4 py-2 bg-white/60 dark:bg-accent/20 border-2 border-primary/20 rounded-sm">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox"
+                                   wire:model.live="selectAll"
+                                   class="rounded border-text/20 text-primary focus:ring-primary">
+                            <span class="text-sm font-serif text-text/70">Select All</span>
+                        </label>
+                        <div class="h-4 w-px bg-text/20"></div>
                         <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
                         </svg>
@@ -173,8 +230,18 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-4 lg:gap-6">
                 @foreach($books as $book)
                     <article class="group relative" x-data="{ showActions: false }" :class="showActions ? 'z-50' : 'z-0'">
+                        {{-- Checkbox for bulk selection --}}
+                        <div class="absolute top-2 left-2 z-10">
+                            <input type="checkbox"
+                                   value="{{ $book->id }}"
+                                   wire:model.live="selectedBooks"
+                                   @if($selectAll) checked @endif
+                                   class="w-5 h-5 rounded border-2 border-text/30 text-primary focus:ring-primary bg-white/80 backdrop-blur-sm cursor-pointer">
+                        </div>
+
                         {{-- Book Card --}}
-                        <div class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-text/10 hover:border-secondary dark:hover:border-primary rounded-sm overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-secondary/20 dark:hover:shadow-primary/20 hover:-translate-y-2">
+                        <div class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 transition-all duration-500 hover:shadow-2xl hover:shadow-secondary/20 dark:hover:shadow-primary/20 hover:-translate-y-2 rounded-sm overflow-hidden
+                             {{ in_array($book->id, $selectedBooks) ? 'border-primary dark:border-secondary ring-2 ring-primary dark:ring-secondary' : 'border-text/10 hover:border-secondary dark:hover:border-primary' }}">
                             {{-- Corner Ornaments --}}
                             <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-secondary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

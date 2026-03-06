@@ -31,6 +31,23 @@
         {{-- Success Alert --}}
         <x-alerts.success/>
 
+        {{-- Create New User Button --}}
+        <div class="flex justify-center">
+            <button wire:click="openCreateModal"
+                    class="relative px-8 py-3 font-serif text-sm text-white bg-secondary hover:bg-secondary/90 dark:bg-primary dark:hover:bg-primary/90 border-2 border-secondary/50 dark:border-primary/50 transition-all duration-300 group">
+                <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
+                <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
+                <span class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/30"></span>
+                <span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/30"></span>
+                <span class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Register New Reader
+                </span>
+            </button>
+        </div>
+
         {{-- Search & Filter Section --}}
         <section class="relative bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-primary/20 dark:border-primary/10 p-6 lg:p-8 rounded-sm">
             <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/50"></div>
@@ -180,11 +197,13 @@
                             </svg>
                             <div class="h-px w-12 bg-primary/30"></div>
                         </div>
-                        <h2 class="font-heading text-text text-2xl">Edit Reader</h2>
-                        <p class="text-sm text-text/60 font-serif italic mt-2">Update the reader's information in the registry</p>
+                        <h2 class="font-heading text-text text-2xl">{{ $isEditing ? 'Edit Reader' : 'Register New Reader' }}</h2>
+                        <p class="text-sm text-text/60 font-serif italic mt-2">
+                            {{ $isEditing ? "Update the reader's information in the registry" : "Add a new scholar to the realm" }}
+                        </p>
                     </div>
 
-                    <form wire:submit="update" class="space-y-6">
+                    <form wire:submit="save" class="space-y-6">
                         <div class="space-y-4">
                             <x-forms.input-text name="name" wire:model.blur="name"/>
                             <x-forms.input-email name="email" wire:model.blur="email"/>
@@ -192,7 +211,11 @@
                         </div>
 
                         <div class="pt-4 border-t border-text/10">
-                            <p class="text-sm font-serif text-text/60 mb-4">Leave password fields empty to keep current password</p>
+                            @if($isEditing)
+                                <p class="text-sm font-serif text-text/60 mb-4">Leave password fields empty to keep current password</p>
+                            @else
+                                <p class="text-sm font-serif text-text/60 mb-4">Set a strong password for the new user</p>
+                            @endif
                             <div class="space-y-4">
                                 <x-forms.input-password wire:model.blur="password"/>
                                 <x-forms.input-conf-password wire:model.blur="password_confirmation"/>
@@ -206,7 +229,7 @@
                                 <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
                                 <span class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/30"></span>
                                 <span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/30"></span>
-                                Save Changes
+                                {{ $isEditing ? 'Save Changes' : 'Create User' }}
                             </button>
 
                             <button type="button" wire:click.prevent="closeModal"

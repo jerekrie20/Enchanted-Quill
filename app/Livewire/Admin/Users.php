@@ -32,6 +32,8 @@ class Users extends Component
 
     public $displayModel = false;
 
+    public $isEditing = false;
+
     // Forms
 
     public $name;
@@ -60,12 +62,18 @@ class Users extends Component
     // Validation Rules
     protected function rules()
     {
+        $emailRule = $this->isEditing && $this->user
+            ? Rule::unique('users')->ignore($this->user->id)
+            : 'unique:users';
+
+        $passwordRule = $this->isEditing ? 'nullable' : 'required';
+
         return [
-            'name' => 'nullable|string|max:255',
-            'email' => ['nullable', Rule::unique('users')->ignore($this->user->id), 'string', 'email:rfc', 'max:255'],
-            'role' => ['nullable', 'string', Rule::in(['admin', 'author', 'reader'])],
+            'name' => $this->isEditing ? 'nullable|string|max:255' : 'required|string|max:255',
+            'email' => [$this->isEditing ? 'nullable' : 'required', $emailRule, 'string', 'email:rfc', 'max:255'],
+            'role' => [$this->isEditing ? 'nullable' : 'required', 'string', Rule::in(['admin', 'author', 'reader'])],
             'password' => [
-                'nullable',
+                $passwordRule,
                 'string',
                 'confirmed',
                 Password::min(8)
@@ -89,17 +97,24 @@ class Users extends Component
         'password.uncompromised' => 'Your password has been found in a data breach. Please choose a different password.',
     ];
 
-    public function openModal($id) // Open the modal and set the user
+    public function openCreateModal(): void
     {
-        $this->getUser($id);
-
+        $this->reset(['name', 'email', 'role', 'password', 'password_confirmation', 'user', 'isEditing']);
         $this->displayModel = true;
     }
 
-    public function closeModal() // Close the modal and clear data
+    public function openModal($id): void // Open the modal and set the user
     {
-        $this->reset(['name', 'email', 'role', 'password', 'password_confirmation']);
+        $this->getUser($id);
+        $this->isEditing = true;
+        $this->displayModel = true;
+    }
+
+    public function closeModal(): void // Close the modal and clear data
+    {
+        $this->reset(['name', 'email', 'role', 'password', 'password_confirmation', 'user', 'isEditing']);
         $this->displayModel = false;
+        $this->resetValidation();
     }
 
     protected function getUser($id): void
@@ -115,7 +130,34 @@ class Users extends Component
         $this->role = $getUser['role'];
     }
 
-    public function update(): void
+    public function save(): void
+    {
+        if ($this->isEditing) {
+            $this->update();
+        } else {
+            $this->create();
+        }
+    }
+
+    protected function create(): void
+    {
+        $this->authorize('create', User::class);
+
+        $validatedData = $this->validate();
+
+        User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'role' => $validatedData['role'],
+            'password' => bcrypt($validatedData['password']),
+        ]);
+
+        session()->flash('success', 'User created successfully!');
+
+        $this->closeModal();
+    }
+
+    protected function update(): void
     {
         $this->authorize('update', $this->user);
 
@@ -125,13 +167,17 @@ class Users extends Component
         // Remove null values to only update the submitted fields
         $filteredData = array_filter($validatedData);
 
+        // Hash password if it's being updated
+        if (isset($filteredData['password'])) {
+            $filteredData['password'] = bcrypt($filteredData['password']);
+        }
+
         // Update the user's data with only the changed fields
         $this->user->update($filteredData);
 
         session()->flash('success', 'User updated successfully!');
 
         $this->closeModal();
-
     }
 
     public function delete($id): void

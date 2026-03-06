@@ -32,6 +32,86 @@ class Books extends Component
 
     public $dateTo;
 
+    public $selectedBooks = [];
+
+    public $selectAll = false;
+
+    public $bulkStatus;
+
+    public function updatedSelectAll($value): void
+    {
+        if ($value) {
+            $this->selectedBooks = Book::query()
+                ->where(function ($query) {
+                    $query->where('title', 'like', '%'.$this->search.'%')
+                        ->orWhere('description', 'like', '%'.$this->search.'%');
+                })
+                ->when($this->category, fn ($query) => $query->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $this->category)))
+                ->when($this->status !== null && $this->status !== '', fn ($query) => $query->where('status', $this->status))
+                ->when($this->authorFilter, fn ($query) => $query->where('user_id', $this->authorFilter))
+                ->when($this->dateFrom, fn ($query) => $query->whereDate('created_at', '>=', $this->dateFrom))
+                ->when($this->dateTo, fn ($query) => $query->whereDate('created_at', '<=', $this->dateTo))
+                ->when(auth()->user()->role != 'admin', fn ($query) => $query->where('user_id', auth()->id()))
+                ->pluck('id')
+                ->toArray();
+        } else {
+            $this->selectedBooks = [];
+        }
+    }
+
+    public function bulkDelete(): void
+    {
+        if (empty($this->selectedBooks)) {
+            session()->flash('error', 'No books selected for deletion.');
+
+            return;
+        }
+
+        $books = Book::whereIn('id', $this->selectedBooks)->get();
+
+        foreach ($books as $book) {
+            $this->authorize('delete', $book);
+        }
+
+        Book::whereIn('id', $this->selectedBooks)->delete();
+
+        $count = count($this->selectedBooks);
+        $this->selectedBooks = [];
+        $this->selectAll = false;
+
+        session()->flash('success', "{$count} book(s) deleted successfully!");
+    }
+
+    public function bulkUpdateStatus(): void
+    {
+        if (empty($this->selectedBooks)) {
+            session()->flash('error', 'No books selected for status update.');
+
+            return;
+        }
+
+        if ($this->bulkStatus === null || $this->bulkStatus === '') {
+            session()->flash('error', 'Please select a status to apply.');
+
+            return;
+        }
+
+        $books = Book::whereIn('id', $this->selectedBooks)->get();
+
+        foreach ($books as $book) {
+            $this->authorize('update', $book);
+        }
+
+        Book::whereIn('id', $this->selectedBooks)->update(['status' => $this->bulkStatus]);
+
+        $count = count($this->selectedBooks);
+        $this->selectedBooks = [];
+        $this->selectAll = false;
+        $this->bulkStatus = null;
+
+        session()->flash('success', "{$count} book(s) status updated successfully!");
+    }
+
     public function updateStatus($bookId, $status)
     {
         $book = Book::find($bookId);

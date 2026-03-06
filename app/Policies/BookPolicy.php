@@ -11,11 +11,28 @@ class BookPolicy
 {
     use HandlesAuthorization;
 
-    public function viewAny(User $user): bool {}
+    public function viewAny(User $user): bool
+    {
+        // Authors and admins can view the books list
+        return in_array($user->role, ['admin', 'author']);
+    }
 
-    public function view(User $user, Book $book): bool {}
+    public function view(User $user, Book $book): bool
+    {
+        // Admins can view all books
+        if ($user->role === 'admin') {
+            return true;
+        }
 
-    public function create(User $user): bool {}
+        // Authors can view their own books
+        return $user->id === $book->user_id;
+    }
+
+    public function create(User $user): bool
+    {
+        // Authors and admins can create books
+        return in_array($user->role, ['admin', 'author']);
+    }
 
     public function update(User $user, Book $book): Response
     {
@@ -43,7 +60,15 @@ class BookPolicy
             : Response::deny('You are not authorized to delete this Book.');
     }
 
-    public function restore(User $user, Book $book): bool {}
+    public function restore(User $user, Book $book): bool
+    {
+        // Only admins can restore deleted books
+        return $user->role === 'admin';
+    }
 
-    public function forceDelete(User $user, Book $book): bool {}
+    public function forceDelete(User $user, Book $book): bool
+    {
+        // Only admins can permanently delete books
+        return $user->role === 'admin';
+    }
 }
