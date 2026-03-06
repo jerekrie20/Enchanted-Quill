@@ -17,9 +17,9 @@
                     <div class="h-px w-16 lg:w-32 bg-secondary/40"></div>
                 </div>
 
-                <h1 class="text-text font-heading">{{$blog ? 'Revise Chronicle' : 'Inscribe New Chronicle'}}</h1>
+                <h1 class="text-text font-heading">{{$blogId ? 'Revise Chronicle' : 'Inscribe New Chronicle'}}</h1>
                 <p class="text-base lg:text-lg text-text/70 font-serif italic mx-auto">
-                    "{{$blog ? 'Refine your tale with the care of a master scribe' : 'Begin your tale upon the enchanted parchment'}}"
+                    "{{$blogId ? 'Refine your tale with the care of a master scribe' : 'Begin your tale upon the enchanted parchment'}}"
                 </p>
 
                 <div class="flex items-center justify-center gap-2 mt-6">
@@ -115,7 +115,7 @@
         </section>
 
         {{-- Chronicle Content Section --}}
-        @if($blog)
+        @if($blogId)
             <section class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-secondary/20 dark:border-secondary/10 p-6 lg:p-8 rounded-sm">
                 <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-secondary/50"></div>
                 <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-secondary/50"></div>
@@ -131,7 +131,7 @@
                     <h2 class="text-xl font-heading text-text">Chronicle Content</h2>
                 </div>
 
-                @livewire('general.editors.chronicle-content-editor', ['blogId' => $blog->id])
+                @livewire('general.editors.chronicle-content-editor', ['blogId' => $blogId])
             </section>
         @endif
     </main>

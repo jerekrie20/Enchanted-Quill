@@ -45,23 +45,21 @@ class ChronicleManager extends Component
     public $categories;
 
     #[Locked]
-    public $blog;
+    public $blogId;
 
     public $statusData = [
-        '0' => 'Draft',
-        '1' => 'Published',
-        '2' => 'Private',
-        '3' => 'Publish Later',
+        0 => 'Draft',
+        1 => 'Published',
+        2 => 'Private',
+        3 => 'Publish Later',
     ];
 
-    protected function rules()
+    protected function rules(): array
     {
-        $blogId = $this->blog ? $this->blog->id : null;
-
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', Rule::unique('blogs')->ignore($blogId), 'string'],
-            'status' => ['required', 'numeric', 'integer', 'min:0', 'max:3'],
+            'slug' => ['required', Rule::unique('blogs')->ignore($this->blogId), 'string'],
+            'status' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
             'category.*' => Rule::exists('categories', 'id'),
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2040'],
             'publish_at' => ['nullable', 'date', 'after_or_equal:today'],
@@ -75,12 +73,14 @@ class ChronicleManager extends Component
 
     public function saveDetails()
     {
-        // Ensure the user is authorized to update
-        if ($this->blog) {
-            $this->authorize('update', $this->blog);
-        }
-
         $data = $this->validate();
+
+
+        // Ensure the user is authorized to update
+        if ($this->blogId) {
+            $blog = Blog::findOrFail($this->blogId);
+            $this->authorize('update', $blog);
+        }
 
         // Remove image from validated data (we'll handle it separately)
         unset($data['image']);
@@ -100,29 +100,30 @@ class ChronicleManager extends Component
             $data['publish_at'] = Carbon::parse($data['publish_at']);
         }
 
-        if (! $this->blog) {
+        if (! $this->blogId) {
             // Create new blog
             $data['user_id'] = auth()->id();
-            $this->blog = Blog::create($data);
+            $blog = Blog::create($data);
 
             // Schedule the job if status is "Publish Later"
             if ($this->status == 3 && ! empty($data['publish_at'])) {
-                ProcessBlog::dispatch($this->blog->id)->delay($data['publish_at']);
+                ProcessBlog::dispatch($blog->id)->delay($data['publish_at']);
             }
 
-            $this->blog->categories()->attach($this->category);
+            $blog->categories()->attach($this->category);
             session()->flash('success', 'Blog created successfully!');
 
             return;
         }
 
         // Update existing blog
-        $this->blog->update($data);
-        $this->blog->categories()->sync($this->category);
+        $blog = Blog::findOrFail($this->blogId);
+        $blog->update($data);
+        $blog->categories()->sync($this->category);
 
         // Schedule the job if status is "Publish Later"
         if ($this->status == 3 && ! empty($data['publish_at'])) {
-            ProcessBlog::dispatch($this->blog->id)->delay($data['publish_at']);
+            ProcessBlog::dispatch($blog->id)->delay($data['publish_at']);
         }
 
         session()->flash('success', 'Blog updated successfully!');
@@ -134,15 +135,16 @@ class ChronicleManager extends Component
 
         if ($id && $id !== 'create') {
             $blog = Blog::findOrFail($id);
-            $this->blog = $blog;
+            $this->blogId = $blog->id;
             $this->title = $blog->title;
             $this->slug = $blog->slug;
             $this->category = $blog->categories->pluck('id')->toArray();
-            $this->status = $blog->status;
+            // Ensure status is valid (0-3), default to 0 if invalid
+            $this->status = in_array($blog->status, [0, 1, 2, 3]) ? $blog->status : 0;
             $this->currentImage = $blog->image;
             $this->publish_at = $blog->publish_at;
         } else {
-            $this->blog = false;
+            $this->blogId = null;
             $this->title = '';
             $this->slug = '';
             $this->status = 0; // default to draft
@@ -155,7 +157,7 @@ class ChronicleManager extends Component
     {
         $breadcrumbs = [
             ['label' => 'Chronicles', 'url' => route('blogs'), 'wire:navigate' => true],
-            ['label' => $this->blog ? $this->blog->title : 'New Chronicle', 'url' => ''],
+            ['label' => $this->blogId ? $this->title : 'New Chronicle', 'url' => ''],
         ];
 
         return view('livewire.general.pages.chronicle-manager', [
