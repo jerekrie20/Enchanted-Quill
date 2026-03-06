@@ -17,15 +17,27 @@ class BookPolicy
         return in_array($user->role, ['admin', 'author']);
     }
 
-    public function view(User $user, Book $book): bool
+    public function view(?User $user, Book $book): Response
     {
+        // Allow guests to view public published books
+        if ($book->is_public && $book->status === Book::STATUS_PUBLISHED) {
+            return Response::allow();
+        }
+
+        // Guests cannot view non-public books
+        if (! $user) {
+            return Response::deny('You must be logged in to view this book.');
+        }
+
         // Admins can view all books
         if ($user->role === 'admin') {
-            return true;
+            return Response::allow();
         }
 
         // Authors can view their own books
-        return $user->id === $book->user_id;
+        return $user->id === $book->user_id
+            ? Response::allow()
+            : Response::deny('You are not authorized to view this book.');
     }
 
     public function create(User $user): bool

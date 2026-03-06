@@ -45,8 +45,11 @@ class Books extends Component
     {
         $query = Book::with(['author', 'categories'])
             ->where('status', Book::STATUS_PUBLISHED)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
+            ->where('is_public', true)
+            ->where(function ($q) {
+                $q->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            });
 
         // Apply search filter
         if ($this->search) {

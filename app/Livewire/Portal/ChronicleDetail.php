@@ -8,12 +8,16 @@ use Livewire\Component;
 
 class ChronicleDetail extends Component
 {
-    #[Layout('components.Layouts.portal')]
     public $chronicleId;
 
     public function mount($id): void
     {
         $this->chronicleId = $id;
+
+        $blog = Blog::findOrFail($id);
+
+        // Check if user can view this blog
+        $this->authorize('view', $blog);
     }
 
     public function getChronicleProperty()
@@ -24,7 +28,13 @@ class ChronicleDetail extends Component
 
     public function render()
     {
-        return view('livewire.portal.chronicle-detail')
+        // Use public layout for guests, portal layout for authenticated users
+        $layout = auth()->check() ? 'components.Layouts.portal' : 'components.Layouts.public';
+
+        return view('livewire.portal.chronicle-detail', [
+            'chronicle' => $this->chronicle,
+        ])
+            ->layout($layout)
             ->title($this->chronicle->title.' - Enchanted Quill');
     }
 }

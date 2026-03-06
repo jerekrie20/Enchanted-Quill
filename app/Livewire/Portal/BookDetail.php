@@ -13,7 +13,6 @@ class BookDetail extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.portal')]
     public $bookId;
 
     public $showReviewModal = false;
@@ -25,6 +24,11 @@ class BookDetail extends Component
     public function mount($id): void
     {
         $this->bookId = $id;
+
+        $book = Book::findOrFail($id);
+
+        // Check if user can view this book
+        $this->authorize('view', $book);
     }
 
     public function getBookProperty()
@@ -108,7 +112,7 @@ class BookDetail extends Component
         }
 
         if ($this->userReview) {
-            $this->reviewRating = $this->userReview->stars;
+            $this->reviewRating = $this->userReview->stars->value;
             $this->reviewContent = $this->userReview->content;
         }
 
@@ -155,9 +159,13 @@ class BookDetail extends Component
             ->latest()
             ->paginate(5, pageName: 'reviews');
 
+        // Use public layout for guests, portal layout for authenticated users
+        $layout = auth()->check() ? 'components.Layouts.portal' : 'components.Layouts.public';
+
         return view('livewire.portal.book-detail', [
             'reviews' => $reviews,
         ])
+            ->layout($layout)
             ->title($this->book->title.' - Enchanted Quill');
     }
 }

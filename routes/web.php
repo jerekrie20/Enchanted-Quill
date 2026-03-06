@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 // Public Frontend Routes (no authentication required)
 Route::get('/', \App\Livewire\Public\Home::class)->name('home');
-Route::get('/books', \App\Livewire\Public\Books::class)->name('public.books');
-Route::get('/blog', \App\Livewire\Public\Blog::class)->name('public.blog');
+Route::get('/books', \App\Livewire\Public\Books::class)->name('books');
+Route::get('/book/{id}', \App\Livewire\Public\BookDetail::class)->name('public.book.show');
+Route::get('/blog', \App\Livewire\Public\Blog::class)->name('blog');
+Route::get('/blog/{id}', \App\Livewire\Public\BlogDetail::class)->name('public.blog.show');
 Route::get('/about', \App\Livewire\Public\About::class)->name('public.about');
 Route::get('/contact', \App\Livewire\Public\Contact::class)->name('public.contact');
 Route::get('/faq', \App\Livewire\Public\Faq::class)->name('public.faq');
@@ -38,7 +40,7 @@ Route::middleware('auth')->group(function () {
 
     // Blog management for authors (existing routes - will update layout later)
     Route::get('/blogs', ChronicleList::class)->name('blogs');
-    Route::get('/blog/{id?}', ChronicleManager::class)->name('blog.manage');
+    Route::get('/blog/{id}/edit', ChronicleManager::class)->name('blog.manage');
 
     // Portal user routes
     Route::get('/portal/library', \App\Livewire\Portal\Library::class)->name('portal.library');
@@ -54,7 +56,7 @@ Route::middleware('auth')->group(function () {
 // Authors and admins routes
 Route::middleware(['auth', 'can:admin-or-author-access'])->group(function () {
     Route::get('/admin/books', Books::class)->name('admin.books');
-    Route::get('/book/{id?}', BookManager::class)->name('book.manage');
+    Route::get('/manage/book/{id?}', BookManager::class)->name('book.manage');
     Route::get('/chapters/{id}', ChaptersList::class)->name('chapters.list');
     Route::get('/chapter/{id}/{chapterNumber?}', ChapterManager::class)->name('chapter.manage');
 });

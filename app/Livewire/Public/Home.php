@@ -14,21 +14,19 @@ class Home extends Component
     #[Title('Welcome to Enchanted Quill - Where Words Weave Magic')]
     public function render()
     {
-        // Get featured books (recently published)
+        // Get featured books (recently published and public)
         $featuredBooks = Book::with(['author', 'categories'])
             ->where('status', Book::STATUS_PUBLISHED)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now())
-            ->latest('published_at')
+            ->where('is_public', true)
+            ->latest('updated_at')
             ->limit(6)
             ->get();
 
-        // Get recent blog posts
+        // Get recent blog posts (published and public)
         $recentBlogs = Blog::with(['user', 'categories'])
             ->where('status', Blog::STATUS_PUBLISHED)
-            ->whereNotNull('publish_at')
-            ->where('publish_at', '<=', now())
-            ->latest('publish_at')
+            ->where('is_public', true)
+            ->latest('updated_at')
             ->limit(3)
             ->get();
 

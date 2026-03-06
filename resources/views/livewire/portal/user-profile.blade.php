@@ -83,7 +83,7 @@
                             <a href="{{ route('portal.book.show', $book->id) }}" wire:navigate class="block" aria-label="View {{ $book->title }}">
                                 @if($book->cover)
                                     <div class="aspect-[3/4] overflow-hidden">
-                                        <img src="{{ asset('storage/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        <img src="{{ asset('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
                                 @else
                                     <div class="aspect-[3/4] bg-purple-500/10 flex items-center justify-center" role="img" aria-label="No cover image available for {{ $book->title }}">
@@ -137,7 +137,58 @@
                                 @endif
                                 <div class="p-4 relative">
                                     <h3 class="text-lg font-heading text-text group-hover:text-purple-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">{{ $chronicle->title }}</h3>
-                                    <p class="text-sm text-text/60 mt-2"><time datetime="{{ $chronicle->publish_at->toIso8601String() }}">{{ $chronicle->publish_at->diffForHumans() }}</time></p>
+                                    <p class="text-sm text-text/60 mt-2">
+                                        @if($chronicle->publish_at)
+                                            <time datetime="{{ $chronicle->publish_at->toIso8601String() }}">{{ $chronicle->publish_at->diffForHumans() }}</time>
+                                        @else
+                                            <time datetime="{{ $chronicle->updated_at->toIso8601String() }}">{{ $chronicle->updated_at->diffForHumans() }}</time>
+                                        @endif
+                                    </p>
+                                </div>
+                            </a>
+                        </article>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    {{-- Bookmarked Volumes --}}
+    @if(auth()->check() && auth()->id() === $this->user->id && $this->bookmarkedBooks->count() > 0)
+        <section class="py-12 @if($this->publishedBooks->count() > 0 || $this->publishedChronicles->count() > 0) border-t-2 border-purple-500/20 @endif" aria-labelledby="bookmarked-volumes-heading">
+            <div class="max-w-(--breakpoint-xl) mx-auto px-4">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center">
+                        <i class="fa-solid fa-bookmark text-purple-500"></i>
+                    </div>
+                    <h2 id="bookmarked-volumes-heading" class="text-2xl font-heading text-text">Bookmarked Volumes</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="List of bookmarked volumes">
+                    @foreach($this->bookmarkedBooks as $book)
+                        <article class="group relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm rounded-none border-2 border-purple-500/30 dark:border-purple-400/20 hover:border-purple-500 hover:shadow-xl dark:hover:shadow-purple-500/10 transition-all duration-500 overflow-hidden" role="listitem">
+                            <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
+                            <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
+                            <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-purple-500/50"></div>
+                            <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-purple-500/50"></div>
+
+                            <a href="{{ route('portal.book.show', $book->id) }}" wire:navigate class="block" aria-label="View {{ $book->title }}">
+                                @if($book->cover)
+                                    <div class="aspect-[3/4] overflow-hidden">
+                                        <img src="{{ asset('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    </div>
+                                @else
+                                    <div class="aspect-[3/4] bg-purple-500/10 flex items-center justify-center" role="img" aria-label="No cover image available for {{ $book->title }}">
+                                        <i class="fa-solid fa-book text-6xl text-purple-500/30" aria-hidden="true"></i>
+                                    </div>
+                                @endif
+                                <div class="p-4 relative">
+                                    <h3 class="text-lg font-heading text-text group-hover:text-purple-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">{{ $book->title }}</h3>
+                                    <div class="flex items-center gap-4 text-sm text-text/60 font-serif mt-2" role="list" aria-label="Book statistics">
+                                        <span role="listitem" aria-label="{{ $book->chapters_count }} chapters"><i class="fa-solid fa-book-open mr-1" aria-hidden="true"></i> {{ $book->chapters_count }} chapters</span>
+                                        <span role="listitem" aria-label="{{ $book->reviews_count }} reviews"><i class="fa-solid fa-star mr-1" aria-hidden="true"></i> {{ $book->reviews_count }} reviews</span>
+                                    </div>
+                                    <p class="text-sm text-text/60 mt-2"><time datetime="{{ $book->published_at->format('Y-m') }}">{{ $book->published_at->format('M Y') }}</time></p>
                                 </div>
                             </a>
                         </article>

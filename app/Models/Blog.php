@@ -12,9 +12,10 @@ class Blog extends Model
 {
     use HasFactory, SoftDeletes;
 
-
     const STATUS_DRAFT = 0;
+
     const STATUS_PUBLISHED = 1;
+
     const STATUS_PRIVATE = 2;
 
     const STATUS_Publish_later = 3;
@@ -26,8 +27,8 @@ class Blog extends Model
         'content',
         'user_id',
         'status',
-        'image',
-        'publish_at'
+        'is_public',
+        'publish_at',
     ];
 
     /**
@@ -61,4 +62,11 @@ class Blog extends Model
         return $this->belongsToMany(Category::class, 'blog_categories')->withTimestamps();
     }
 
+    protected function casts(): array
+    {
+        return [
+            'is_public' => 'boolean',
+            'publish_at' => 'datetime',
+        ];
+    }
 }

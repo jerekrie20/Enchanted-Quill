@@ -25,12 +25,12 @@
 
                 {{-- CTA Buttons --}}
                 <div class="flex flex-wrap gap-4 justify-center mt-8">
-                    <a href="{{ route('public.books') }}" wire:navigate class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-8 py-3 rounded-sm transition-colors duration-300 border-2 border-purple-500/50">
+                    <a href="{{ route('books') }}" wire:navigate class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-8 py-3 rounded-sm transition-colors duration-300 border-2 border-purple-500/50">
                         <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
                         <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
                         <i class="fa-solid fa-book-open mr-2" aria-hidden="true"></i>Browse Books
                     </a>
-                    <a href="{{ route('public.blog') }}" wire:navigate class="relative bg-white/10 dark:bg-white/5 hover:bg-white/20 dark:hover:bg-white/10 text-text font-serif px-8 py-3 rounded-sm border-2 border-purple-500/30 transition-colors duration-300">
+                    <a href="{{ route('blog') }}" wire:navigate class="relative bg-white/10 dark:bg-white/5 hover:bg-white/20 dark:hover:bg-white/10 text-text font-serif px-8 py-3 rounded-sm border-2 border-purple-500/30 transition-colors duration-300">
                         <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-500/30"></span>
                         <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-500/30"></span>
                         <i class="fa-solid fa-scroll mr-2" aria-hidden="true"></i>Read Blog
@@ -70,7 +70,7 @@
                             <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-purple-500/50"></div>
                             <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-purple-500/50"></div>
 
-                            <a href="{{ route('portal.book.show', $book->id) }}" wire:navigate class="block">
+                            <a href="{{ route('public.book.show', $book->id) }}" wire:navigate class="block">
                                 @if($book->cover)
                                     <div class="aspect-[3/4] overflow-hidden">
                                         <img src="{{ asset('books/' . $book->cover) }}"
@@ -102,7 +102,7 @@
 
                 {{-- View All Books Link --}}
                 <div class="text-center mt-10">
-                    <a href="{{ route('public.books') }}" wire:navigate class="inline-flex items-center gap-2 text-purple-600 dark:text-violet-400 hover:text-purple-700 dark:hover:text-violet-300 font-serif text-lg transition-colors">
+                    <a href="{{ route('books') }}" wire:navigate class="inline-flex items-center gap-2 text-purple-600 dark:text-violet-400 hover:text-purple-700 dark:hover:text-violet-300 font-serif text-lg transition-colors">
                         View All Books
                         <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                     </a>
@@ -141,10 +141,10 @@
                                 <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-violet-400/50"></div>
                                 <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-violet-400/50"></div>
 
-                                <a href="{{ route('portal.chronicle.show', $blog->id) }}" wire:navigate class="block">
+                                <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block">
                                     @if($blog->image)
                                         <div class="aspect-video overflow-hidden">
-                                            <img src="{{ asset('storage/' . $blog->image) }}"
+                                            <img src="{{ asset('blogs/' . $blog->image) }}"
                                                  alt="Featured image for {{ $blog->title }}"
                                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                         </div>
@@ -158,8 +158,8 @@
                                     <div class="p-5 relative">
                                         <h3 class="text-lg font-heading text-text group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors line-clamp-2 mb-2">{{ $blog->title }}</h3>
                                         <p class="text-sm text-text/60 font-serif mb-2">by {{ $blog->user->name }}</p>
-                                        <time class="text-xs text-text/50 font-serif italic" datetime="{{ $blog->publish_at->toIso8601String() }}">
-                                            {{ $blog->publish_at->format('M d, Y') }}
+                                        <time class="text-xs text-text/50 font-serif italic" datetime="{{ $blog->updated_at->toIso8601String() }}">
+                                            {{ $blog->updated_at->format('M d, Y') }}
                                         </time>
                                         @if($blog->categories->count() > 0)
                                             <div class="flex flex-wrap gap-1 mt-3">
@@ -176,7 +176,7 @@
 
                     {{-- View All Blog Link --}}
                     <div class="text-center mt-10">
-                        <a href="{{ route('public.blog') }}" wire:navigate class="inline-flex items-center gap-2 text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 font-serif text-lg transition-colors">
+                        <a href="{{ route('blog') }}" wire:navigate class="inline-flex items-center gap-2 text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 font-serif text-lg transition-colors">
                             View All Posts
                             <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                         </a>

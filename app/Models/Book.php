@@ -43,11 +43,13 @@ class Book extends Model
         'cover',
         'user_id',
         'status',
+        'is_public',
         'published_at',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'is_public' => 'boolean',
     ];
 
     /**
@@ -87,7 +89,7 @@ class Book extends Model
      */
     public function isPublished(): bool
     {
-        return $this->published_at !== null && $this->published_at <= now();
+        return $this->published_at === null || $this->published_at <= now();
     }
 
     /**

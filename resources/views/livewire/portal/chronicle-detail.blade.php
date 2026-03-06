@@ -14,32 +14,32 @@
 
             {{-- Chronicle Title and Meta --}}
             <div class="text-center">
-                <h1 id="chronicle-title" class="text-3xl md:text-4xl font-heading text-white mb-4">{{ $this->chronicle->title }}</h1>
+                <h1 id="chronicle-title" class="text-3xl md:text-4xl font-heading text-white mb-4">{{ $chronicle->title }}</h1>
 
                 <div class="flex items-center justify-center gap-6 text-white/80 font-serif text-sm" role="contentinfo" aria-label="Article metadata">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-user" aria-hidden="true"></i>
                         <span class="sr-only">Author:</span>
-                        <a href="{{ route('portal.profile', $this->chronicle->user->id) }}" wire:navigate class="hover:text-violet-400 transition-colors" aria-label="View profile of {{ $this->chronicle->user->name }}">
-                            {{ $this->chronicle->user->name }}
+                        <a href="{{ route('portal.profile', $chronicle->user->id) }}" wire:navigate class="hover:text-violet-400 transition-colors" aria-label="View profile of {{ $chronicle->user->name }}">
+                            {{ $chronicle->user->name }}
                         </a>
                     </div>
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-calendar" aria-hidden="true"></i>
-                        <span class="sr-only">Published on:</span>
-                        <time datetime="{{ $this->chronicle->publish_at->toIso8601String() }}">{{ $this->chronicle->publish_at->format('M d, Y') }}</time>
+                        <span class="sr-only">Updated on:</span>
+                        <time datetime="{{ $chronicle->updated_at->toIso8601String() }}">{{ $chronicle->updated_at->format('M d, Y') }}</time>
                     </div>
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-clock" aria-hidden="true"></i>
                         <span class="sr-only">Reading time:</span>
-                        <span>{{ ceil(str_word_count(strip_tags($this->chronicle->content)) / 200) }} min read</span>
+                        <span>{{ ceil(str_word_count(strip_tags($chronicle->content)) / 200) }} min read</span>
                     </div>
                 </div>
 
                 {{-- Categories --}}
-                @if($this->chronicle->categories->count() > 0)
+                @if($chronicle->categories->count() > 0)
                     <div class="flex flex-wrap justify-center gap-2 mt-4" role="list" aria-label="Article categories">
-                        @foreach($this->chronicle->categories as $category)
+                        @foreach($chronicle->categories as $category)
                             <span class="px-3 py-1 bg-purple-500/20 text-white border border-purple-500/30 rounded-full text-sm font-serif" role="listitem">{{ $category->name }}</span>
                         @endforeach
                     </div>
@@ -49,7 +49,7 @@
     </header>
 
     {{-- Featured Image --}}
-    @if($this->chronicle->image)
+    @if($chronicle->image)
         <section class="py-8 bg-gradient-to-b from-lightGray/10 to-transparent dark:from-accent/10" aria-label="Featured image">
             <div class="max-w-4xl mx-auto px-4">
                 <div class="relative">
@@ -57,7 +57,7 @@
                     <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-purple-500/50"></div>
                     <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-purple-500/50"></div>
-                    <img src="{{ asset('storage/' . $this->chronicle->image) }}" alt="Featured image for {{ $this->chronicle->title }}" class="w-full rounded-none shadow-2xl border-2 border-purple-500/20">
+                    <img src="{{ asset('storage/' . $chronicle->image) }}" alt="Featured image for {{ $chronicle->title }}" class="w-full rounded-none shadow-2xl border-2 border-purple-500/20">
                 </div>
             </div>
         </section>
@@ -70,7 +70,7 @@
                 <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
                 <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
                 <div class="prose prose-lg max-w-none text-text/90 font-serif leading-relaxed" aria-labelledby="chronicle-title">
-                    {!! $this->chronicle->content !!}
+                    {!! $chronicle->content !!}
                 </div>
             </article>
 
@@ -110,8 +110,8 @@
                 <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
                 <div class="flex items-start gap-4">
                     <div class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-purple-500/20">
-                        @if($this->chronicle->user->profile_image)
-                            <img src="{{ asset('storage/' . $this->chronicle->user->profile_image) }}" alt="Profile picture of {{ $this->chronicle->user->name }}" class="w-full h-full rounded-full object-cover">
+                        @if($chronicle->user->profile_image)
+                            <img src="{{ asset('storage/' . $chronicle->user->profile_image) }}" alt="Profile picture of {{ $chronicle->user->name }}" class="w-full h-full rounded-full object-cover">
                         @else
                             <i class="fa-solid fa-user text-2xl text-purple-600 dark:text-violet-400" aria-hidden="true"></i>
                         @endif
@@ -119,12 +119,12 @@
                     <div class="flex-1">
                         <h3 class="text-xl font-heading text-text mb-2">About the Author</h3>
                         <p class="text-lg font-heading text-text/80">
-                            <a href="{{ route('portal.profile', $this->chronicle->user->id) }}" wire:navigate class="hover:text-purple-600 dark:hover:text-violet-400 transition-colors" aria-label="View full profile of {{ $this->chronicle->user->name }}">
-                                {{ $this->chronicle->user->name }}
+                            <a href="{{ route('portal.profile', $chronicle->user->id) }}" wire:navigate class="hover:text-purple-600 dark:hover:text-violet-400 transition-colors" aria-label="View full profile of {{ $chronicle->user->name }}">
+                                {{ $chronicle->user->name }}
                             </a>
                         </p>
-                        @if($this->chronicle->user->bio)
-                            <p class="text-text/70 font-serif mt-2">{{ $this->chronicle->user->bio }}</p>
+                        @if($chronicle->user->bio)
+                            <p class="text-text/70 font-serif mt-2">{{ $chronicle->user->bio }}</p>
                         @endif
                     </div>
                 </div>

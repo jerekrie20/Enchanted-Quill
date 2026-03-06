@@ -150,7 +150,7 @@
                             <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-purple-500/50"></div>
                             <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-purple-500/50"></div>
 
-                            <a href="{{ route('portal.book.show', $book->id) }}" wire:navigate class="block">
+                            <a href="{{ route('public.book.show', $book->id) }}" wire:navigate class="block">
                                 @if($book->cover)
                                     <div class="aspect-[3/4] overflow-hidden">
                                         <img src="{{ asset('books/' . $book->cover) }}"

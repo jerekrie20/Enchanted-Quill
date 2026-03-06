@@ -157,9 +157,15 @@
                                     <h3 class="text-lg font-heading text-text group-hover:text-purple-600 dark:group-hover:text-violet-400 transition-colors line-clamp-2">{{ $chronicle->title }}</h3>
                                     <p class="text-sm text-text/60 font-serif mt-1">by {{ $chronicle->user->name }}</p>
                                     <p class="text-sm text-text/60 mt-2 font-serif italic">
-                                        <time datetime="{{ $chronicle->publish_at->toIso8601String() }}">
-                                            {{ $chronicle->publish_at->diffForHumans() }}
-                                        </time>
+                                        @if($chronicle->publish_at)
+                                            <time datetime="{{ $chronicle->publish_at->toIso8601String() }}">
+                                                {{ $chronicle->publish_at->diffForHumans() }}
+                                            </time>
+                                        @else
+                                            <time datetime="{{ $chronicle->updated_at->toIso8601String() }}">
+                                                {{ $chronicle->updated_at->diffForHumans() }}
+                                            </time>
+                                        @endif
                                     </p>
 
                                     @if($chronicle->categories->count() > 0)

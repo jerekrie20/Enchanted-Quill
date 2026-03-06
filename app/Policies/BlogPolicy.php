@@ -19,14 +19,14 @@ class BlogPolicy
 
     public function view(?User $user, Blog $blog): Response
     {
-        // Published blogs can be viewed by anyone (including guests)
-        if ($blog->status == Blog::STATUS_PUBLISHED && $blog->publish_at && $blog->publish_at <= now()) {
+        // Published and public blogs can be viewed by anyone (including guests)
+        if ($blog->is_public && $blog->status == Blog::STATUS_PUBLISHED) {
             return Response::allow();
         }
 
-        // Guests cannot view non-published blogs
+        // Guests cannot view non-public or non-published blogs
         if (! $user) {
-            return Response::deny('You are not authorized to view this blog.');
+            return Response::deny('You must be logged in to view this blog.');
         }
 
         // Admins can view all blogs
@@ -34,7 +34,7 @@ class BlogPolicy
             return Response::allow();
         }
 
-        // Users can only view their own unpublished blogs
+        // Users can only view their own unpublished or private blogs
         return $user->id == $blog->user_id
             ? Response::allow()
             : Response::deny('You are not authorized to view this blog.');

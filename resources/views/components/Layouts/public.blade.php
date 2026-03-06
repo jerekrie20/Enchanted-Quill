@@ -11,6 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ $title ?? 'Enchanted Quill - Where Words Weave Magic' }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://kit.fontawesome.com/9a1bef43f6.js" crossorigin="anonymous"></script>
 
 </head>
@@ -116,31 +117,31 @@
                     </a>
                 </li>
                 <li class="relative" role="none">
-                    <a href="{{route('public.books')}}"
+                    <a href="{{route('books')}}"
                        wire:navigate.hover
-                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('public.books') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}"
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('books') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}"
                        role="menuitem"
-                       aria-current="{{request()->routeIs('public.books') ? 'page' : 'false'}}">
+                       aria-current="{{request()->routeIs('books') ? 'page' : 'false'}}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                         </svg>
                         <span>Books</span>
-                        @if(request()->routeIs('public.books'))
+                        @if(request()->routeIs('books'))
                             <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary" aria-hidden="true"></span>
                         @endif
                     </a>
                 </li>
                 <li class="relative" role="none">
-                    <a href="{{route('public.blog')}}"
+                    <a href="{{route('blog')}}"
                        wire:navigate.hover
-                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('public.blog') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}"
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('blog') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}"
                        role="menuitem"
-                       aria-current="{{request()->routeIs('public.blog') ? 'page' : 'false'}}">
+                       aria-current="{{request()->routeIs('blog') ? 'page' : 'false'}}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                         <span>Blog</span>
-                        @if(request()->routeIs('public.blog'))
+                        @if(request()->routeIs('blog'))
                             <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary" aria-hidden="true"></span>
                         @endif
                     </a>
@@ -215,10 +216,10 @@
                     <a href="{{ route('home') }}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">Home</a>
                 </li>
                 <li role="none">
-                    <a href="{{route('public.books')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">Books</a>
+                    <a href="{{route('books')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">Books</a>
                 </li>
                 <li role="none">
-                    <a href="{{route('public.blog')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">Blog</a>
+                    <a href="{{route('blog')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">Blog</a>
                 </li>
                 <li role="none">
                     <a href="{{route('public.about')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">About</a>

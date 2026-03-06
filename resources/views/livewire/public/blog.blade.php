@@ -149,7 +149,7 @@
                             <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-violet-400/50"></div>
                             <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-violet-400/50"></div>
 
-                            <a href="{{ route('portal.chronicle.show', $blog->id) }}" wire:navigate class="block">
+                            <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block">
                                 @if($blog->image)
                                     <div class="aspect-video overflow-hidden">
                                         <img src="{{ asset('storage/' . $blog->image) }}"
@@ -166,9 +166,15 @@
                                 <div class="p-5 relative">
                                     <h3 class="text-lg font-heading text-text group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors line-clamp-2 mb-2">{{ $blog->title }}</h3>
                                     <p class="text-sm text-text/60 font-serif mb-2">by {{ $blog->user->name }}</p>
-                                    <time class="text-xs text-text/50 font-serif italic block mb-3" datetime="{{ $blog->publish_at->toIso8601String() }}">
-                                        {{ $blog->publish_at->format('M d, Y') }}
-                                    </time>
+                                    @if($blog->publish_at)
+                                        <time class="text-xs text-text/50 font-serif italic block mb-3" datetime="{{ $blog->publish_at->toIso8601String() }}">
+                                            {{ $blog->publish_at->format('M d, Y') }}
+                                        </time>
+                                    @else
+                                        <time class="text-xs text-text/50 font-serif italic block mb-3" datetime="{{ $blog->updated_at->toIso8601String() }}">
+                                            {{ $blog->updated_at->format('M d, Y') }}
+                                        </time>
+                                    @endif
                                     @if($blog->categories->count() > 0)
                                         <div class="flex flex-wrap gap-1">
                                             @foreach($blog->categories->take(2) as $category)

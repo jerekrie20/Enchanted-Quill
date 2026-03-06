@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Blog;
-use App\Models\Category;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
@@ -18,7 +17,7 @@ class BlogFactory extends Factory
             'title' => $this->faker->word(),
             'slug' => $this->faker->slug(),
             'content' => $this->faker->word(),
-            'status' => $this->faker->randomDigit(),
+            'status' => $this->faker->randomElement([Blog::STATUS_DRAFT, Blog::STATUS_PUBLISHED, Blog::STATUS_PRIVATE]),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 

@@ -47,11 +47,11 @@
                             <div class="flex items-center" role="img" aria-label="Average rating: {{ $this->averageRating }} out of 5 stars">
                                 @for($i = 1; $i <= 5; $i++)
                                     @if($i <= $this->averageRating)
-                                        <i class="fa-solid fa-star text-yellow-500" aria-hidden="true"></i>
+                                        <i class="fa-solid fa-star" style="color: #eab308;" aria-hidden="true"></i>
                                     @elseif($i - 0.5 <= $this->averageRating)
-                                        <i class="fa-solid fa-star-half-stroke text-yellow-500" aria-hidden="true"></i>
+                                        <i class="fa-solid fa-star-half-stroke" style="color: #eab308;" aria-hidden="true"></i>
                                     @else
-                                        <i class="fa-regular fa-star text-yellow-500" aria-hidden="true"></i>
+                                        <i class="fa-regular fa-star" style="color: #eab308;" aria-hidden="true"></i>
                                     @endif
                                 @endfor
                             </div>
@@ -185,12 +185,12 @@
                             <div class="flex items-start justify-between mb-3">
                                 <div>
                                     <h4 class="font-heading text-text">{{ $review->user->name }}</h4>
-                                    <div class="flex items-center gap-2 mt-1" role="img" aria-label="Rating: {{ $review->stars }} out of 5 stars">
+                                    <div class="flex items-center gap-2 mt-1" role="img" aria-label="Rating: {{ $review->stars->value }} out of 5 stars">
                                         @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $review->stars)
-                                                <i class="fa-solid fa-star text-yellow-500 text-sm" aria-hidden="true"></i>
+                                            @if($i <= $review->stars->value)
+                                                <i class="fa-solid fa-star text-sm" style="color: #eab308;" aria-hidden="true"></i>
                                             @else
-                                                <i class="fa-regular fa-star text-yellow-500 text-sm" aria-hidden="true"></i>
+                                                <i class="fa-regular fa-star text-sm" style="color: #eab308;" aria-hidden="true"></i>
                                             @endif
                                         @endfor
                                     </div>

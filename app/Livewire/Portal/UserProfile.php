@@ -45,6 +45,22 @@ class UserProfile extends Component
             ->get();
     }
 
+    public function getBookmarkedBooksProperty()
+    {
+        return Book::whereHas('bookmarks', function ($query) {
+            $query->where('user_id', $this->userId);
+        })
+            ->where('status', Book::STATUS_PUBLISHED)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->withCount(['chapters', 'reviews'])
+            ->with(['bookmarks' => function ($query) {
+                $query->where('user_id', $this->userId);
+            }])
+            ->latest('published_at')
+            ->get();
+    }
+
     public function render()
     {
         return view('livewire.portal.user-profile')
