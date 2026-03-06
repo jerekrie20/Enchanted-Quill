@@ -314,5 +314,172 @@
             </div>
         </section>
 
+        {{-- Quick Actions --}}
+        <section aria-labelledby="actions-heading" class="relative">
+            <div class="text-center mb-8">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                    <div class="h-px w-20 bg-secondary/30"></div>
+                    <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <div class="h-px w-20 bg-secondary/30"></div>
+                </div>
+                <h2 id="actions-heading" class="text-2xl lg:text-3xl font-heading text-text">Quick Actions</h2>
+                <p class="text-sm text-text/60 font-serif italic mt-2">Common tasks at your fingertips</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="{{route('admin.users')}}" wire:navigate
+                   class="group relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-primary/20 hover:border-primary dark:hover:border-secondary rounded-sm p-6 transition-all duration-300 hover:shadow-xl">
+                    <div class="flex flex-col items-center text-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-heading text-text">Add User</span>
+                    </div>
+                </a>
+
+                <a href="{{route('book.manage', 'create')}}" wire:navigate
+                   class="group relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-secondary/20 hover:border-secondary dark:hover:border-primary rounded-sm p-6 transition-all duration-300 hover:shadow-xl">
+                    <div class="flex flex-col items-center text-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-heading text-text">New Book</span>
+                    </div>
+                </a>
+
+                <a href="{{route('admin.categories')}}" wire:navigate
+                   class="group relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-primary/20 hover:border-primary dark:hover:border-secondary rounded-sm p-6 transition-all duration-300 hover:shadow-xl">
+                    <div class="flex flex-col items-center text-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-heading text-text">Categories</span>
+                    </div>
+                </a>
+
+                <a href="{{route('admin.contact-messages')}}" wire:navigate
+                   class="group relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm border-2 border-secondary/20 hover:border-secondary dark:hover:border-primary rounded-sm p-6 transition-all duration-300 hover:shadow-xl">
+                    <div class="flex flex-col items-center text-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <svg class="w-6 h-6 text-secondary" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-heading text-text">Messages</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        {{-- Recent Activity & Top Performers --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {{-- Recent Activity --}}
+            <section aria-labelledby="activity-heading" class="relative">
+                <div class="bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-primary/20 dark:border-primary/10 rounded-sm p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h2 id="activity-heading" class="text-xl font-heading text-text">Recent Activity</h2>
+                    </div>
+
+                    <div class="space-y-3">
+                        @forelse($recentActivity as $activity)
+                            <a href="{{ $activity['url'] }}" wire:navigate
+                               class="block p-3 bg-white/50 dark:bg-navbg/30 border border-text/10 rounded-sm hover:border-primary dark:hover:border-secondary transition-all duration-300">
+                                <div class="flex items-start gap-3">
+                                    <div class="flex-shrink-0 mt-1">
+                                        @if($activity['type'] === 'user')
+                                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 4a4 4 0 110 8 4 4 0 010-8zM6 21v-1a6 6 0 0112 0v1H6z"/>
+                                                </svg>
+                                            </div>
+                                        @elseif($activity['type'] === 'book')
+                                            <div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-secondary" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                                                </svg>
+                                            </div>
+                                        @else
+                                            <div class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center">
+                                                <svg class="w-4 h-4 text-text" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-heading text-text truncate">{{ $activity['title'] }}</p>
+                                        <p class="text-xs text-text/60 font-serif">{{ $activity['subtitle'] }}</p>
+                                        <p class="text-xs text-text/50 font-serif mt-1">{{ $activity['time']->diffForHumans() }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        @empty
+                            <p class="text-center py-8 text-text/60 font-serif">No recent activity</p>
+                        @endforelse
+                    </div>
+                </div>
+            </section>
+
+            {{-- Top Performers --}}
+            <section aria-labelledby="performers-heading" class="relative">
+                <div class="bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-secondary/20 dark:border-secondary/10 rounded-sm p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-secondary" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <h2 id="performers-heading" class="text-xl font-heading text-text">Top Authors</h2>
+                    </div>
+
+                    <div class="space-y-3">
+                        @forelse($topAuthors as $index => $author)
+                            <div class="flex items-center gap-3 p-3 bg-white/50 dark:bg-navbg/30 border border-text/10 rounded-sm">
+                                <div class="flex-shrink-0 w-8 h-8 rounded-full {{ $index === 0 ? 'bg-yellow-400/20' : ($index === 1 ? 'bg-gray-300/20' : ($index === 2 ? 'bg-orange-400/20' : 'bg-primary/10')) }} flex items-center justify-center">
+                                    <span class="text-sm font-heading font-bold {{ $index === 0 ? 'text-yellow-600' : ($index === 1 ? 'text-gray-600' : ($index === 2 ? 'text-orange-600' : 'text-primary')) }}">
+                                        {{ $index + 1 }}
+                                    </span>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-heading text-text truncate">{{ $author->name }}</p>
+                                    <p class="text-xs text-text/60 font-serif">{{ $author->books_count }} book(s), {{ $author->blogs_count }} blog(s)</p>
+                                </div>
+                            </div>
+                        @empty
+                            <p class="text-center py-8 text-text/60 font-serif">No authors yet</p>
+                        @endforelse
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-text/10">
+                        <h3 class="text-lg font-heading text-text mb-4">Most Reviewed Books</h3>
+                        <div class="space-y-2">
+                            @forelse($topBooks as $book)
+                                <a href="{{route('book.manage', $book->id)}}" wire:navigate
+                                   class="block p-2 bg-white/50 dark:bg-navbg/30 border border-text/10 rounded-sm hover:border-secondary transition-all duration-300">
+                                    <p class="text-sm font-heading text-text truncate">{{ $book->title }}</p>
+                                    <p class="text-xs text-text/60 font-serif">{{ $book->reviews_count }} review(s)</p>
+                                </a>
+                            @empty
+                                <p class="text-center py-4 text-text/60 font-serif text-sm">No reviews yet</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
     </main>
 </div>

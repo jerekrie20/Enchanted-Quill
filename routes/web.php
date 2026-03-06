@@ -4,6 +4,7 @@ use App\Http\Controllers\EditorUploadController;
 use App\Livewire\Admin\Books;
 use App\Livewire\Admin\Categories;
 use App\Livewire\Admin\Comments;
+use App\Livewire\Admin\ContactMessages;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Reviews;
 use App\Livewire\Admin\Users;
@@ -45,6 +46,7 @@ Route::middleware(['auth', 'can:admin-access'])->group(function () {
     Route::get('/admin/comments', Comments::class)->name('admin.comments');
     Route::get('/admin/reviews', Reviews::class)->name('admin.reviews');
     Route::get('/admin/categories', Categories::class)->name('admin.categories');
+    Route::get('/admin/contact-messages', ContactMessages::class)->name('admin.contact-messages');
     Route::get('/admin/settings', function () {
         return view('livewire.admin.settings');
     })->name('admin.settings');

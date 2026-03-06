@@ -118,6 +118,58 @@
                         @endif
                     </a>
                 </li>
+                <li class="relative">
+                    <a href="{{route('admin.comments')}}"
+                       wire:navigate.hover
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('admin.comments') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                        <span>Comments</span>
+                        @if(request()->routeIs('admin.comments'))
+                            <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary"></span>
+                        @endif
+                    </a>
+                </li>
+                <li class="relative">
+                    <a href="{{route('admin.reviews')}}"
+                       wire:navigate.hover
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('admin.reviews') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span>Reviews</span>
+                        @if(request()->routeIs('admin.reviews'))
+                            <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary"></span>
+                        @endif
+                    </a>
+                </li>
+                <li class="relative">
+                    <a href="{{route('admin.categories')}}"
+                       wire:navigate.hover
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('admin.categories') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <span>Categories</span>
+                        @if(request()->routeIs('admin.categories'))
+                            <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary"></span>
+                        @endif
+                    </a>
+                </li>
+                <li class="relative">
+                    <a href="{{route('admin.contact-messages')}}"
+                       wire:navigate.hover
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('admin.contact-messages') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Messages</span>
+                        @if(request()->routeIs('admin.contact-messages'))
+                            <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary"></span>
+                        @endif
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

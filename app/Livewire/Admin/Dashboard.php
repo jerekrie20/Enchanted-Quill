@@ -103,6 +103,54 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.admin.dashboard');
+        // Recent Activity (last 10 items across all types)
+        $recentUsers = User::latest()->take(5)->get()->map(fn ($user) => [
+            'type' => 'user',
+            'title' => $user->name.' joined',
+            'subtitle' => $user->role,
+            'time' => $user->created_at,
+            'url' => route('admin.users'),
+        ]);
+
+        $recentBooks = Book::with('author')->latest()->take(5)->get()->map(fn ($book) => [
+            'type' => 'book',
+            'title' => $book->title.' published',
+            'subtitle' => 'by '.$book->author->name,
+            'time' => $book->created_at,
+            'url' => route('book.manage', $book->id),
+        ]);
+
+        $recentBlogs = Blog::with('user')->latest()->take(5)->get()->map(fn ($blog) => [
+            'type' => 'blog',
+            'title' => $blog->title.' posted',
+            'subtitle' => 'by '.$blog->user->name,
+            'time' => $blog->created_at,
+            'url' => route('blog.manage', $blog->id),
+        ]);
+
+        $recentActivity = $recentUsers
+            ->merge($recentBooks)
+            ->merge($recentBlogs)
+            ->sortByDesc('time')
+            ->take(10);
+
+        // Top Performers
+        $topAuthors = User::withCount(['books', 'blogs'])
+            ->where('role', 'author')
+            ->orderByDesc('books_count')
+            ->take(5)
+            ->get();
+
+        $topBooks = Book::withCount('reviews')
+            ->with('author')
+            ->orderByDesc('reviews_count')
+            ->take(5)
+            ->get();
+
+        return view('livewire.admin.dashboard', [
+            'recentActivity' => $recentActivity,
+            'topAuthors' => $topAuthors,
+            'topBooks' => $topBooks,
+        ]);
     }
 }
