@@ -13,8 +13,15 @@ class ChronicleList extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.admin')]
     #[Title('Blogs')]
+    public function getLayoutProperty(): string
+    {
+        // Use portal layout for authors, admin layout for admins
+        return auth()->user()->role === 'admin'
+            ? 'components.Layouts.admin'
+            : 'components.Layouts.portal';
+    }
+
     public $search = '';
 
     public $category = [];
@@ -73,6 +80,6 @@ class ChronicleList extends Component
         return view('livewire.admin.blog', [
             'blogs' => $blog,
             'categories' => $categories,
-        ]);
+        ])->layout($this->getLayoutProperty());
     }
 }

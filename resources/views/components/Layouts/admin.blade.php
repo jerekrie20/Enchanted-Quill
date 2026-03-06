@@ -42,12 +42,19 @@
                 @endif
             </a>
 
-            <a href="#" class="text-white/80 hover:text-secondary font-serif text-sm transition-colors duration-300">My Space</a>
+            <a href="{{ route('portal') }}" class="text-white/80 hover:text-secondary font-serif text-sm transition-colors duration-300">Portal</a>
 
             <a href="#" class="relative group">
                 <x-icons.bell/>
                 <span class="absolute -top-1 -right-1 w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
             </a>
+
+            <form action="/logout" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="text-white/80 hover:text-secondary font-serif text-sm transition-colors duration-300">
+                    Logout
+                </button>
+            </form>
 
             <button id="themeToggle" class="flex items-center p-2 rounded-full hover:bg-white/10 transition-colors duration-300">
                 <x-icons.moon />

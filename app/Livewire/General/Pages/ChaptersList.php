@@ -11,8 +11,14 @@ use Livewire\Component;
 
 class ChaptersList extends Component
 {
-    #[Layout('components.Layouts.admin')]
     #[Title('Manage Chapters')]
+    public function getLayoutProperty(): string
+    {
+        // Use portal layout for authors, admin layout for admins
+        return auth()->user()->role === 'admin'
+            ? 'components.Layouts.admin'
+            : 'components.Layouts.portal';
+    }
 
     #[Locked]
     public int $bookId;
@@ -52,6 +58,6 @@ class ChaptersList extends Component
         return view('livewire.general.pages.chapters-list', [
             'chapters' => $chapters,
             'breadcrumbs' => $breadcrumbs,
-        ]);
+        ])->layout($this->getLayoutProperty());
     }
 }

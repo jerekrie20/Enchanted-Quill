@@ -13,7 +13,7 @@
                 </label>
             </div>
 
-            <div class="bg-white dark:bg-navbg/40 border-2 border-text/10 focus-within:border-secondary dark:focus-within:border-primary rounded-sm transition-colors duration-300 overflow-hidden">
+            <div class="bg-white dark:bg-navbg/40 border-2 border-text/10 focus-within:border-secondary dark:focus-within:border-primary rounded-sm transition-colors duration-300 overflow-hidden" wire:ignore>
                 <div id="chronicle-editor" class="min-h-96 prose dark:prose-invert max-w-none p-4">
                     {!! $content !!}
                 </div>
@@ -47,42 +47,56 @@
     @script
     <script>
         let chronicleEditorInstance = null;
+        let isInitializing = false;
 
         function initChronicleEditor() {
+            if (isInitializing) {
+                return;
+            }
+
             console.log("Chronicle editor initializing");
             const editorElement = document.querySelector('#chronicle-editor');
             const hiddenInput = document.querySelector('#chronicle-editor-content');
 
-            if (!editorElement) return;
+            if (!editorElement) {
+                return;
+            }
 
             // Destroy existing editor
             if (chronicleEditorInstance) {
+                isInitializing = true;
                 hiddenInput.value = chronicleEditorInstance.getData();
                 chronicleEditorInstance.destroy()
-                    .then(() => console.log("Chronicle editor destroyed"))
-                    .catch(error => console.error("Error destroying chronicle editor:", error));
+                    .then(() => {
+                        console.log("Chronicle editor destroyed");
+                        chronicleEditorInstance = null;
+                        isInitializing = false;
+                        initChronicleEditor();
+                    })
+                    .catch(error => {
+                        console.error("Error destroying chronicle editor:", error);
+                        isInitializing = false;
+                    });
+                return;
             }
+
+            isInitializing = true;
 
             // Create new editor
             const config = window.getChronicleEditorConfig();
             window.createEditor(editorElement, hiddenInput, config)
                 .then(editor => {
                     chronicleEditorInstance = editor;
+                    isInitializing = false;
                     console.log("Chronicle editor initialized successfully");
                 })
                 .catch(error => {
                     console.error("Chronicle editor initialization error:", error);
+                    isInitializing = false;
                 });
         }
 
         initChronicleEditor();
-
-        Livewire.hook('morphed', ({ el, component }) => {
-            const editorElement = document.querySelector('#chronicle-editor');
-            if (editorElement) {
-                initChronicleEditor();
-            }
-        });
     </script>
     @endscript
 </div>

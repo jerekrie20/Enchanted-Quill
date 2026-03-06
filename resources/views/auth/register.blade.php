@@ -1,39 +1,101 @@
-<x-Layouts.admin>
+<x-Layouts.auth>
+    <x-slot name="title">Register - Enchanted Quill</x-slot>
 
-    <h1 class="text-center mt-14">Register</h1>
-
-    <form action="/register" method="post" class="text-center mt-10">
-        @csrf
-        <div class="flex flex-col sm:flex-row md:flex-wrap justify-center p-4 mx-auto gap-4">
-            <div class="sm:w-1/2 md:w-1/3">
-                <input type="text" name="name" id="name" placeholder="Name" class="w-full border-2 mb-2 rounded-md p-2"
-                       required autofocus>
-                @error('name') <span class="text-danger text-sm mb-2">{{ $message }}</span> @enderror
+    <div class="w-full xl:w-1/2 mx-auto">
+        <div class="bg-white shadow-lg rounded-lg p-8">
+            {{-- Header --}}
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-heading text-gray-800 mb-2">Join Enchanted Quill</h1>
+                <p class="text-gray-600 font-serif">Begin your literary adventure today</p>
             </div>
 
-            <div class="sm:w-1/2 md:w-1/3">
-                <input type="email" name="email" id="email" placeholder="Email" class="w-full border-2 mb-2 rounded-md p-2"
-                       required>
-                @error('email') <span class="text-danger text-sm mb-2">{{ $message }}</span> @enderror
-            </div>
-            <div class="sm:w-1/2 md:w-1/3">
-                <input type="password" name="password" id="password" placeholder="Password"
-                       class="w-full border-2 mb-2 rounded-md p-2" required>
-                @error('password') <span class="text-danger text-sm mb-2">{{ $message }}</span> @enderror
-            </div>
-            <div class="sm:w-1/2 md:w-1/3">
-                <input type="password" name="password_confirmation" id="password_confirmation"
-                       placeholder="Confirm Password" class="w-full border-2 mb-2 rounded-md p-2" required>
-            </div>
-            <div class="w-full">
-                <input type="submit" value="Register"
-                       class="w-full max-w-md mx-auto mt-4 p-2 bg-primary text-white rounded-md text-2xl cursor-pointer">
-            </div>
-            <div class="w-full">
-                <a href="{{ route('login') }}" class="mt-4 text-primary hover:underline">Already registered?</a>
+            {{-- Registration Form --}}
+            <form action="/register" method="post">
+                @csrf
+
+                {{-- Name Field --}}
+                <div class="mb-4">
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value="{{ old('name') }}"
+                        placeholder="Enter your full name"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-md focus:border-primary focus:outline-none transition-colors"
+                        required
+                        autofocus
+                    >
+                    @error('name')
+                        <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                {{-- Email Field --}}
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value="{{ old('email') }}"
+                        placeholder="you@example.com"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-md focus:border-primary focus:outline-none transition-colors"
+                        required
+                    >
+                    @error('email')
+                        <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                {{-- Password Field --}}
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Create a strong password"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-md focus:border-primary focus:outline-none transition-colors"
+                        required
+                    >
+                    @error('password')
+                        <span class="text-red-600 text-sm mt-1 block">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                {{-- Password Confirmation Field --}}
+                <div class="mb-6">
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        id="password_confirmation"
+                        placeholder="Re-enter your password"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-md focus:border-primary focus:outline-none transition-colors"
+                        required
+                    >
+                </div>
+
+                {{-- Submit Button --}}
+                <button
+                    type="submit"
+                    class="w-full bg-primary hover:bg-primary/90 text-white font-serif text-lg py-3 rounded-md transition-colors duration-300"
+                >
+                    Create Account
+                </button>
+            </form>
+
+            {{-- Footer Links --}}
+            <div class="mt-6 text-center">
+                <p class="text-gray-600 text-sm">
+                    Already have an account?
+                    <a href="{{ route('login') }}" class="text-primary hover:text-secondary font-medium transition-colors">
+                        Sign in here
+                    </a>
+                </p>
             </div>
         </div>
+    </div>
 
-    </form>
-
-</x-Layouts.admin>
+</x-Layouts.auth>

@@ -87,4 +87,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Book::class);
     }
+
+    /**
+     * Get the bookmarks created by the user.
+     */
+    public function bookmarks(): hasMany
+    {
+        return $this->hasMany(Bookmark::class);
+    }
 }

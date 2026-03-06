@@ -8,7 +8,6 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -23,14 +22,13 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // If user is and admin, redirect to dashboard, if a user, redirct to portal
+        // If user is and admin, redirect to admin dashboard, otherwise redirect to portal
         $this->app->instance(LoginResponse::class, new class implements LoginResponse
         {
             public function toResponse($request): \Illuminate\Http\RedirectResponse
             {
                 $user = $request->user();
                 if ($user && $user->role === 'admin') {
-                    // Log::info("Redirect to admin");
                     return redirect()->route('admin.dashboard');
                 } else {
                     return redirect()->route('portal');

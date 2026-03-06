@@ -15,20 +15,40 @@ use App\Livewire\General\Pages\ChronicleList;
 use App\Livewire\General\Pages\ChronicleManager;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public Frontend Routes (no authentication required)
+Route::get('/', \App\Livewire\Public\Home::class)->name('home');
+Route::get('/books', \App\Livewire\Public\Books::class)->name('public.books');
+Route::get('/blog', \App\Livewire\Public\Blog::class)->name('public.blog');
+Route::get('/about', \App\Livewire\Public\About::class)->name('public.about');
+Route::get('/contact', \App\Livewire\Public\Contact::class)->name('public.contact');
+Route::get('/faq', \App\Livewire\Public\Faq::class)->name('public.faq');
+Route::get('/policies', \App\Livewire\Public\Policies::class)->name('public.policies');
 
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
 
-// Regular User Routes
+// Portal Routes (Public & Authenticated)
+Route::get('/portal', \App\Livewire\Portal\Dashboard::class)->name('portal');
+
+// Portal Routes (Authenticated Users)
 Route::middleware('auth')->group(function () {
     Route::post('/upload', [EditorUploadController::class, 'upload'])->name('ckeditor.upload');
     Route::post('/delete-image', [EditorUploadController::class, 'deleteImage'])->name('ckeditor.delete');
+
+    // Blog management for authors (existing routes - will update layout later)
     Route::get('/blogs', ChronicleList::class)->name('blogs');
     Route::get('/blog/{id?}', ChronicleManager::class)->name('blog.manage');
+
+    // Portal user routes
+    Route::get('/portal/library', \App\Livewire\Portal\Library::class)->name('portal.library');
+    Route::get('/portal/book/{id}', \App\Livewire\Portal\BookDetail::class)->name('portal.book.show');
+    Route::get('/portal/book/{bookId}/chapter/{chapterNumber}', \App\Livewire\Portal\ChapterReader::class)->name('portal.chapter.read');
+    Route::get('/portal/chronicles', \App\Livewire\Portal\Chronicles::class)->name('portal.chronicles');
+    Route::get('/portal/chronicle/{id}', \App\Livewire\Portal\ChronicleDetail::class)->name('portal.chronicle.show');
+    Route::get('/portal/profile/{id}', \App\Livewire\Portal\UserProfile::class)->name('portal.profile');
+    Route::get('/portal/settings', \App\Livewire\Portal\Settings::class)->name('portal.settings');
+    Route::get('/portal/author/dashboard', \App\Livewire\Portal\AuthorDashboard::class)->name('portal.author.dashboard')->can('admin-or-author-access');
 });
 
 // Authors and admins routes

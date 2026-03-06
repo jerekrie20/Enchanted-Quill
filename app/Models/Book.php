@@ -89,4 +89,13 @@ class Book extends Model
     {
         return $this->published_at !== null && $this->published_at <= now();
     }
+
+    /**
+     * Get the bookmarks for this book.
+     */
+    public function bookmarks(): HasMany
+    {
+        return $this->hasMany(Bookmark::class, 'bookmarkable_id')
+            ->where('bookmarkable_type', self::class);
+    }
 }

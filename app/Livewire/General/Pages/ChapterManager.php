@@ -12,8 +12,14 @@ use Livewire\Component;
 
 class ChapterManager extends Component
 {
-    #[Layout('components.Layouts.admin')]
     #[Title('Manage Chapters')]
+    public function getLayoutProperty(): string
+    {
+        // Use portal layout for authors, admin layout for admins
+        return auth()->user()->role === 'admin'
+            ? 'components.Layouts.admin'
+            : 'components.Layouts.portal';
+    }
 
     // Form fields
     public $title;
@@ -109,6 +115,6 @@ class ChapterManager extends Component
 
         return view('livewire.general.pages.chapter-manager', [
             'breadcrumbs' => $breadcrumbs,
-        ]);
+        ])->layout($this->getLayoutProperty());
     }
 }

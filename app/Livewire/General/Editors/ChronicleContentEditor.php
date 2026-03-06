@@ -20,6 +20,9 @@ class ChronicleContentEditor extends Component
 
     public function saveContent(): void
     {
+        // Ensure the user is authorized to update
+        $this->authorize('update', $this->blog);
+
         $this->validate([
             'content' => 'required|string',
         ]);

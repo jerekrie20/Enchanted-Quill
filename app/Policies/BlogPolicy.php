@@ -17,48 +17,55 @@ class BlogPolicy
         return $user->role === 'admin';
     }
 
-    public function view(User $user, Blog $blog): Response
+    public function view(?User $user, Blog $blog): Response
     {
-        //Admins can view all blogs
-        if ($user->role == 'admin'){
+        // Published blogs can be viewed by anyone (including guests)
+        if ($blog->status == Blog::STATUS_PUBLISHED && $blog->publish_at && $blog->publish_at <= now()) {
             return Response::allow();
         }
 
-        //Users can only view their own blog
-        return $user->id == $blog->id
+        // Guests cannot view non-published blogs
+        if (! $user) {
+            return Response::deny('You are not authorized to view this blog.');
+        }
+
+        // Admins can view all blogs
+        if ($user->role == 'admin') {
+            return Response::allow();
+        }
+
+        // Users can only view their own unpublished blogs
+        return $user->id == $blog->user_id
             ? Response::allow()
             : Response::deny('You are not authorized to view this blog.');
     }
 
-    public function create(User $user): Response
-    {
-
-    }
+    public function create(User $user): Response {}
 
     public function update(User $user, Blog $blog): Response
     {
-        //Admins can update all blogs
-        if ($user->role == 'admin'){
+        // Admins can update all blogs
+        if ($user->role == 'admin') {
             return Response::allow();
         }
 
-        //Users can only update their own blog
-        return $user->id == $blog->id
+        // Users can only update their own blog
+        return $user->id == $blog->user_id
             ? Response::allow()
             : Response::deny('You are not authorized to edit this blog.');
     }
 
     public function delete(User $user, Blog $blog): Response
     {
-        //Future: This will be a soft delete
+        // Future: This will be a soft delete
 
-        //Admins can delete all blogs
-        if ($user->role == 'admin'){
+        // Admins can delete all blogs
+        if ($user->role == 'admin') {
             return Response::allow();
         }
 
-        //Users can only delete their own blog
-        return $user->id == $blog->id
+        // Users can only delete their own blog
+        return $user->id == $blog->user_id
             ? Response::allow()
             : Response::deny('You are not authorized to delete this blog.');
 
@@ -66,11 +73,11 @@ class BlogPolicy
 
     public function restore(User $user, Blog $blog): bool
     {
-        //Future: Admins can restore any blogs while users can only restore their blog
+        // Future: Admins can restore any blogs while users can only restore their blog
     }
 
     public function forceDelete(User $user, Blog $blog): bool
     {
-        //Future: Only admins can forceDelete(Hard delete)
+        // Future: Only admins can forceDelete(Hard delete)
     }
 }

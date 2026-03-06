@@ -17,8 +17,14 @@ class BookManager extends Component
 {
     use WithFileUploads;
 
-    #[Layout('components.Layouts.admin')]
     #[Title('Manage Book')]
+    public function getLayoutProperty(): string
+    {
+        // Use portal layout for authors, admin layout for admins
+        return auth()->user()->role === 'admin'
+            ? 'components.Layouts.admin'
+            : 'components.Layouts.portal';
+    }
 
     // Form Fields
     public $title;
@@ -139,6 +145,6 @@ class BookManager extends Component
 
         return view('livewire.general.pages.book-manager', [
             'breadcrumbs' => $breadcrumbs,
-        ]);
+        ])->layout($this->getLayoutProperty());
     }
 }

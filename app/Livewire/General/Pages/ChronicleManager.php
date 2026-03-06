@@ -18,8 +18,15 @@ class ChronicleManager extends Component
 {
     use WithFileUploads;
 
-    #[Layout('components.Layouts.admin')]
     #[Title('Manage Blog')]
+    public function getLayoutProperty(): string
+    {
+        // Use portal layout for authors, admin layout for admins
+        return auth()->user()->role === 'admin'
+            ? 'components.Layouts.admin'
+            : 'components.Layouts.portal';
+    }
+
     // Form Fields
     public $title;
 
@@ -49,9 +56,11 @@ class ChronicleManager extends Component
 
     protected function rules()
     {
+        $blogId = $this->blog ? $this->blog->id : null;
+
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', Rule::unique('blogs')->ignore($this->blog->id ?? null), 'string'],
+            'slug' => ['required', Rule::unique('blogs')->ignore($blogId), 'string'],
             'status' => ['required', 'numeric', 'integer', 'min:0', 'max:3'],
             'category.*' => Rule::exists('categories', 'id'),
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2040'],
@@ -151,6 +160,6 @@ class ChronicleManager extends Component
 
         return view('livewire.general.pages.chronicle-manager', [
             'breadcrumbs' => $breadcrumbs,
-        ]);
+        ])->layout($this->getLayoutProperty());
     }
 }
