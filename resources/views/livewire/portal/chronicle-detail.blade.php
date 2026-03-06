@@ -51,13 +51,13 @@
     {{-- Featured Image --}}
     @if($chronicle->image)
         <section class="py-8 bg-gradient-to-b from-lightGray/10 to-transparent dark:from-accent/10" aria-label="Featured image">
-            <div class="max-w-4xl mx-auto px-4">
+            <div class="max-w-1/6 mx-auto px-4">
                 <div class="relative">
                     <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-purple-500/50"></div>
                     <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-purple-500/50"></div>
-                    <img src="{{ asset('storage/' . $chronicle->image) }}" alt="Featured image for {{ $chronicle->title }}" class="w-full rounded-none shadow-2xl border-2 border-purple-500/20">
+                    <img src="{{ asset('blogs/' . $chronicle->image) }}" alt="Featured image for {{ $chronicle->title }}" class="w-full rounded-none shadow-2xl border-2 border-purple-500/20">
                 </div>
             </div>
         </section>

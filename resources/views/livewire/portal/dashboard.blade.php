@@ -183,7 +183,7 @@
                             <a href="{{ route('portal.chronicle.show', $chronicle->id) }}" wire:navigate class="block">
                                 @if($chronicle->image)
                                     <div class="aspect-video overflow-hidden">
-                                        <img src="{{ asset('storage/' . $chronicle->image) }}"
+                                        <img src="{{ asset('blogs/' . $chronicle->image) }}"
                                              alt="Featured image for {{ $chronicle->title }}"
                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>

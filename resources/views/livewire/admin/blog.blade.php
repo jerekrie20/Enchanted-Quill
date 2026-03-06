@@ -106,7 +106,7 @@
                 </button>
 
                 <div @click.away="show = false" x-show="show" x-transition
-                     class="absolute left-0 right-0 mt-2 bg-white dark:bg-navbg border-2 border-secondary/20 rounded-sm shadow-xl z-50 max-h-64 overflow-y-auto">
+                     class=" mt-2 bg-white dark:bg-navbg border-2 border-secondary/20 rounded-sm shadow-xl z-50 max-h-64 overflow-y-auto">
                     <ul class="p-4 grid grid-cols-2 gap-3">
                         @foreach($categories as $category)
                             <li class="flex items-center gap-2">
