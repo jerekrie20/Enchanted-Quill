@@ -17,6 +17,8 @@ class BookFactory extends Factory
             'title' => $this->faker->sentence(3),
             'slug' => $this->faker->slug(),
             'description' => $this->faker->paragraphs(3, true),
+            'status' => Book::STATUS_PUBLISHED,
+            'is_public' => true,
             'published_at' => Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),

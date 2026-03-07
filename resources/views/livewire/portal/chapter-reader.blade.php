@@ -79,7 +79,7 @@
                                 </svg>
                                 <div class="text-left">
                                     <span class="text-sm text-text/60 font-serif block">Previous</span>
-                                    <span class="text-lg font-heading text-text group-hover:text-purple-600 dark:group-hover:text-violet-400 transition-colors">Chapter {{ $this->previousChapter->chapter_number }}: {{ $this->previousChapter->title }}</span>
+                                    <span class="text-lg font-heading text-text group-hover:text-purple-600 dark:group-hover:text-violet-400 transition-colors">Chapter {{ $this->previousChapter->chapter_number }}</span>
                                 </div>
                             </div>
                         </a>
@@ -94,7 +94,7 @@
                             <div class="flex items-center justify-end gap-4">
                                 <div class="text-right">
                                     <span class="text-sm text-text/60 font-serif block">Next</span>
-                                    <span class="text-lg font-heading text-text group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors">Chapter {{ $this->nextChapter->chapter_number }}: {{ $this->nextChapter->title }}</span>
+                                    <span class="text-lg font-heading text-text group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors">Chapter {{ $this->nextChapter->chapter_number }}</span>
                                 </div>
                                 <svg class="w-8 h-8 text-violet-400/50 group-hover:text-violet-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

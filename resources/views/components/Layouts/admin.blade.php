@@ -34,19 +34,40 @@
         document.addEventListener('livewire:navigated', () => {
             applyTheme();
             console.log('Theme re-applied after Livewire navigation');
+
+            // Close mobile menu on navigation
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+            const mobileMenuBtn = document.getElementById('mobileMenuToggle');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
         });
 
         // 3. Handle toggling using Event Delegation
         // Attaching the listener to 'document' ensures it works even after Livewire replaces the navbar button
         document.addEventListener('click', function(e) {
             const toggleButton = e.target.closest('#themeToggle');
-            if (!toggleButton) return;
+            if (toggleButton) {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme();
+                return;
+            }
 
-            localStorage.setItem('theme', newTheme);
-            applyTheme();
+            const mobileMenuBtn = e.target.closest('#mobileMenuToggle');
+            if (mobileMenuBtn) {
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu) {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', !mobileMenu.classList.contains('hidden'));
+                }
+                return;
+            }
         });
 
         console.log('Global theme script initialized');
@@ -83,8 +104,16 @@
             <span class="text-lg font-heading text-white hidden md:block">Enchanted Quill</span>
         </a>
 
+        {{-- Mobile menu button --}}
+        <button id="mobileMenuToggle" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-white rounded-lg md:hidden hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20" aria-controls="mobile-menu" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+            </svg>
+        </button>
+
         {{-- Navigation Actions --}}
-        <div class="flex items-center space-x-6 rtl:space-x-reverse">
+        <div class="hidden md:flex items-center space-x-6 rtl:space-x-reverse">
             <a href="{{route('admin.settings')}}"
                class="relative font-serif text-sm transition-colors duration-300 {{request()->routeIs('admin.settings') ? 'text-secondary' : 'text-white/80 hover:text-secondary'}}">
                 <span>Settings</span>
@@ -121,7 +150,7 @@
 {{-- Enchanted Quill Secondary Navigation --}}
 <nav class="bg-secondarynavbg relative border-b-2 border-primary/20">
     <div class="max-w-(--breakpoint-xl) px-4 py-4 mx-auto">
-        <div class="flex items-center justify-center">
+        <div class="hidden md:flex items-center justify-center">
             <ul class="flex flex-row font-serif mt-0 space-x-8 rtl:space-x-reverse text-sm">
                 <li class="relative">
                     <a href="{{ route('admin.dashboard') }}"
@@ -227,6 +256,48 @@
                             <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary"></span>
                         @endif
                     </a>
+                </li>
+            </ul>
+        </div>
+
+        {{-- Mobile Menu (Hidden by default) --}}
+        <div id="mobile-menu" class="hidden md:hidden">
+            <ul class="flex flex-col font-serif space-y-4 mt-4">
+                <li>
+                    <a href="{{ route('admin.dashboard') }}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Dashboard</a>
+                </li>
+                <li>
+                    <a href="{{route('admin.users')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Readers</a>
+                </li>
+                <li>
+                    <a href="{{route('admin.books')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Volumes</a>
+                </li>
+                <li>
+                    <a href="{{route('blogs')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Chronicles</a>
+                </li>
+                <li>
+                    <a href="{{route('admin.comments')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Comments</a>
+                </li>
+                <li>
+                    <a href="{{route('admin.reviews')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Reviews</a>
+                </li>
+                <li>
+                    <a href="{{route('admin.categories')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Categories</a>
+                </li>
+                <li>
+                    <a href="{{route('admin.contact-messages')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Messages</a>
+                </li>
+                <li class="border-t border-white/20 pt-4">
+                    <a href="{{route('admin.settings')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Settings</a>
+                </li>
+                <li>
+                    <a href="{{ route('portal') }}" class="block py-2 text-white/90 hover:text-secondary transition-colors">Portal</a>
+                </li>
+                <li>
+                    <form action="/logout" method="POST">
+                        @csrf
+                        <button type="submit" class="block py-2 text-white/90 hover:text-secondary transition-colors w-full text-left">Logout</button>
+                    </form>
                 </li>
             </ul>
         </div>

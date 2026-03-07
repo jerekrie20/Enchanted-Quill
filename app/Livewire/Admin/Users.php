@@ -198,7 +198,7 @@ class Users extends Component
     {
 
         $users = User::query()
-            ->withCount(['blogs', 'comments', 'reviews'])
+            ->withCount(['blogs', 'books', 'comments', 'reviews'])
             ->where(function ($query) {
                 $query->where('name', 'like', '%'.$this->search.'%')
                     ->orWhere('email', 'like', '%'.$this->search.'%');

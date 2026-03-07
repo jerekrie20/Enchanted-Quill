@@ -138,6 +138,10 @@
                                     <div class="text-lg font-heading font-bold text-secondary">{{ $user->blogs_count }}</div>
                                     <div class="text-xs text-text/60 font-serif">Blogs</div>
                                 </div>
+                                <div class="text-center p-2 bg-secondary/5 dark:bg-secondary/10 rounded-sm">
+                                    <div class="text-lg font-heading font-bold text-secondary">{{ $user->books_count }}</div>
+                                    <div class="text-xs text-text/60 font-serif">Books</div>
+                                </div>
                                 <div class="text-center p-2 bg-primary/5 dark:bg-primary/10 rounded-sm">
                                     <div class="text-lg font-heading font-bold text-primary">{{ $user->reviews_count }}</div>
                                     <div class="text-xs text-text/60 font-serif">Reviews</div>
@@ -181,7 +185,7 @@
     {{-- Edit User Modal --}}
     <div wire:key="edit-user-modal" class="{{ $displayModel ? 'block' : 'hidden' }}">
         <div class="fixed inset-0 bg-navbg/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-primary/30 shadow-2xl max-w-1/2 w-full max-h-[90vh] overflow-y-auto">
+            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-primary/30 shadow-2xl w-full md:max-w-1/2 max-h-[90vh] overflow-y-auto">
                 {{-- Modal ornaments --}}
                 <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary"></div>
                 <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-primary"></div>

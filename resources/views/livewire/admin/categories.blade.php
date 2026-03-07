@@ -175,7 +175,7 @@
     {{-- Create/Edit Category Modal --}}
     @if($displayModal)
         <div class="fixed inset-0 bg-navbg/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-primary/30 shadow-2xl max-w-lg w-full">
+            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-primary/30 shadow-2xl w-full md:max-w-1/2 ">
                 {{-- Modal ornaments --}}
                 <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary"></div>
                 <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-primary"></div>

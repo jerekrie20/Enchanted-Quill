@@ -34,19 +34,40 @@
         document.addEventListener('livewire:navigated', () => {
             applyTheme();
             console.log('Theme re-applied after Livewire navigation');
+
+            // Close mobile menu on navigation
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+            const mobileMenuBtn = document.getElementById('mobileMenuToggle');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
         });
 
         // 3. Handle toggling using Event Delegation
         // Attaching the listener to 'document' ensures it works even after Livewire replaces the navbar button
         document.addEventListener('click', function(e) {
             const toggleButton = e.target.closest('#themeToggle');
-            if (!toggleButton) return;
+            if (toggleButton) {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                applyTheme();
+                return;
+            }
 
-            localStorage.setItem('theme', newTheme);
-            applyTheme();
+            const mobileMenuBtn = e.target.closest('#mobileMenuToggle');
+            if (mobileMenuBtn) {
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu) {
+                    mobileMenu.classList.toggle('hidden');
+                    mobileMenuBtn.setAttribute('aria-expanded', !mobileMenu.classList.contains('hidden'));
+                }
+
+            }
         });
 
         console.log('Global theme script initialized');
