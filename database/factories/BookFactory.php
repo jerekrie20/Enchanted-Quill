@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class BookFactory extends Factory
 {
@@ -13,10 +14,14 @@ class BookFactory extends Factory
 
     public function definition(): array
     {
+        $covers = Storage::disk('public')->allFiles('books');
+        $covers = array_map(fn ($path) => str_replace('books/', '', $path), $covers);
+
         return [
             'title' => $this->faker->sentence(3),
             'slug' => $this->faker->slug(),
             'description' => $this->faker->paragraphs(3, true),
+            'cover' => count($covers) > 0 ? $this->faker->randomElement($covers) : null,
             'status' => Book::STATUS_PUBLISHED,
             'is_public' => true,
             'published_at' => Carbon::now(),

@@ -15,8 +15,8 @@ class ChapterFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(4),
-            'chapter_number' => $this->faker->randomNumber(),
-            'content' => $this->faker->paragraphs(5, true),
+            'chapter_number' => $this->faker->numberBetween(1, 10),
+            'content' => $this->faker->paragraphs(20, true),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
             'book_id' => Book::factory(),

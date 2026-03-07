@@ -74,6 +74,7 @@ class Categories extends Component
 
     protected function create(): void
     {
+
         $this->authorize('create', Category::class);
 
         $this->validate();

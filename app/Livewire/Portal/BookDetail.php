@@ -132,7 +132,7 @@ class BookDetail extends Component
     {
         $this->validate([
             'reviewRating' => ['required', 'numeric', 'min:1', 'max:5'],
-            'reviewContent' => ['required', 'string', 'min:10', 'max:1000', new NoProfanity],
+            'reviewContent' => ['required', 'string', 'min:10', 'max:1000', 'blasp_check', new NoProfanity],
         ]);
 
         $this->book->reviews()->updateOrCreate(

@@ -62,7 +62,7 @@
     @if($chronicle->image)
         <section class="py-8 bg-gradient-to-b from-lightGray/10 to-transparent dark:from-accent/10"
                  aria-label="Featured image">
-            <div class="max-w-1/6 mx-auto px-4">
+            <div class="max-w-full sm:max-w-1/2 lg:max-w-1/3 xl:max-w-1/4 mx-auto px-4">
                 <div class="relative">
                     <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-purple-500/50"></div>

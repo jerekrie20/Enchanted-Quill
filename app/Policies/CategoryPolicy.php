@@ -6,7 +6,7 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class CategoriesPolicy
+class CategoryPolicy
 {
     use HandlesAuthorization;
 
@@ -25,6 +25,7 @@ class CategoriesPolicy
     public function create(User $user): bool
     {
         // Only admins can create categories
+
         return $user->role === 'admin';
     }
 
