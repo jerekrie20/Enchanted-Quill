@@ -11,6 +11,20 @@ class BlogDetail extends Component
     #[Layout('components.Layouts.public')]
     public $blogId;
 
+    public function getBlogProperty()
+    {
+        return Blog::with(['user', 'categories'])
+            ->findOrFail($this->blogId);
+    }
+
+    public function getCommentsProperty()
+    {
+        return $this->blog->comments()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(5, pageName: 'reviews');
+    }
+
     public function mount($id): void
     {
         $this->blogId = $id;
@@ -21,16 +35,11 @@ class BlogDetail extends Component
         $this->authorize('view', $blog);
     }
 
-    public function getBlogProperty()
-    {
-        return Blog::with(['user', 'categories'])
-            ->findOrFail($this->blogId);
-    }
-
     public function render()
     {
         return view('livewire.public.blog-detail', [
             'blog' => $this->blog,
+            'comments' => $this->comments
         ])
             ->title($this->blog->title.' - Enchanted Quill');
     }

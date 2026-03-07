@@ -152,7 +152,7 @@
                             <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block">
                                 @if($blog->image)
                                     <div class="aspect-video overflow-hidden">
-                                        <img src="{{ asset('storage/' . $blog->image) }}"
+                                        <img src="{{ asset('blogs/' . $blog->image) }}"
                                              alt="Featured image for {{ $blog->title }}"
                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
