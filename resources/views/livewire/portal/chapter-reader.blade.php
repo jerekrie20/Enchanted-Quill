@@ -25,17 +25,25 @@
     </header>
 
     {{-- Chapter Content --}}
-    <main class="py-12">
+    <main class="py-12" x-data="{ sizeIndex: 1, sizes: ['prose-base', 'prose-lg', 'prose-xl', 'prose-2xl'] }">
         <div class="max-w-4xl mx-auto px-4">
             {{-- Reading Settings Bar --}}
             <div class="relative bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-purple-500/20 p-4 rounded-sm mb-8">
                 <div class="flex items-center justify-end gap-4">
-                    <button class="text-text/60 hover:text-purple-600 dark:hover:text-violet-400 transition-colors" title="Adjust font size" aria-label="Adjust font size">
+                    <button @click="sizeIndex = (sizeIndex + 1) % sizes.length" class="text-text/60 hover:text-purple-600 dark:hover:text-violet-400 transition-colors" title="Adjust font size" aria-label="Adjust font size">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
                     </button>
-                    <button class="text-text/60 hover:text-purple-600 dark:hover:text-violet-400 transition-colors" title="Toggle theme" aria-label="Toggle reading theme">
+
+                    <button @click="sizeIndex = (sizeIndex - 1) % sizes.length" class="text-text/60 hover:text-purple-600 dark:hover:text-violet-400 transition-colors" title="Adjust font size" aria-label="Adjust font size">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"></path>
+                        </svg>
+                    </button>
+
+
+                   <!-- <button class="text-text/60 hover:text-purple-600 dark:hover:text-violet-400 transition-colors" title="Toggle theme" aria-label="Toggle reading theme">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
                         </svg>
@@ -44,7 +52,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                         </svg>
-                    </button>
+                    </button>-->
                 </div>
             </div>
 
@@ -52,7 +60,8 @@
             <article class="relative bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-purple-500/20 p-8 lg:p-12 rounded-sm">
                 <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
                 <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
-                <div class="prose prose-lg max-w-none text-text/90 font-serif leading-relaxed" aria-labelledby="chapter-title">
+
+                <div :class="sizes[sizeIndex]" class="prose max-w-none text-text/90 font-serif leading-relaxed transition-all duration-300" aria-labelledby="chapter-title">
                     {!! $this->chapter->content !!}
                 </div>
             </article>
