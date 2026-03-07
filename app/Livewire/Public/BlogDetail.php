@@ -39,7 +39,7 @@ class BlogDetail extends Component
     {
         return view('livewire.public.blog-detail', [
             'blog' => $this->blog,
-            'comments' => $this->comments
+            'comments' => $this->comments,
         ])
             ->title($this->blog->title.' - Enchanted Quill');
     }

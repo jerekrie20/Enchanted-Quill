@@ -11,13 +11,32 @@ class Contact extends Model
         'email',
         'message',
         'status',
+        'user_id',
+        'parent_id',
+        'is_from_admin',
     ];
 
     protected function casts(): array
     {
         return [
             'status' => 'integer',
+            'is_from_admin' => 'boolean',
         ];
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Contact::class, 'parent_id');
+    }
+
+    public function replies()
+    {
+        return $this->hasMany(Contact::class, 'parent_id');
     }
 
     /**

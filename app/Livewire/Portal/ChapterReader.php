@@ -10,6 +10,7 @@ use Livewire\Component;
 class ChapterReader extends Component
 {
     public $link;
+
     public $bookLink;
 
     public function getLayoutProperty(): string
@@ -20,7 +21,6 @@ class ChapterReader extends Component
             : 'components.Layouts.public';
     }
 
-
     public $bookId;
 
     public $chapterNumber;
@@ -30,10 +30,10 @@ class ChapterReader extends Component
         $this->bookId = $bookId;
         $this->chapterNumber = $chapterNumber;
 
-        if(auth()->user()){
+        if (auth()->user()) {
             $this->link = 'portal.chapter.read';
             $this->bookLink = 'portal.book.show';
-        }else{
+        } else {
             $this->link = 'chapter.read';
             $this->bookLink = 'public.book.show';
         }
@@ -66,7 +66,6 @@ class ChapterReader extends Component
             ->orderBy('chapter_number', 'asc')
             ->first();
     }
-
 
     public function render()
     {

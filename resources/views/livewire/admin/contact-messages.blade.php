@@ -44,13 +44,18 @@
             <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary/50"></div>
             <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary/50"></div>
 
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-secondary/10 dark:bg-secondary/20 flex items-center justify-center">
+                        <svg class="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-heading text-text">Search & Filter Scrolls</h2>
                 </div>
-                <h2 class="text-xl font-heading text-text">Search & Filter Scrolls</h2>
+                <button wire:click="openComposeModal" class="px-4 py-2 bg-primary text-white rounded-sm font-serif text-sm hover:bg-primary/90 transition-colors">
+                    <i class="fa-solid fa-pen-nib mr-2"></i>Compose Message
+                </button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -185,7 +190,7 @@
     {{-- Message Detail Modal --}}
     @if($showMessageModal && $selectedMessage)
         <div class="fixed inset-0 bg-navbg/80 backdrop-blur-sm flex items-center justify-center z-50 p-4" wire:click.self="closeMessageModal">
-            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-primary/30 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-primary/30 shadow-2xl w-full md:max-w-1/2  max-h-[90vh] overflow-y-auto">
                 {{-- Modal ornaments --}}
                 <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-primary"></div>
                 <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-primary"></div>
@@ -225,13 +230,41 @@
 
                         <div>
                             <label class="block text-sm font-serif text-text/60 mb-2">Message:</label>
-                            <div class="bg-accent/10 dark:bg-accent/20 rounded-sm p-4 border border-text/10">
+                            <div class="bg-accent/10 dark:bg-accent/20 rounded-sm p-4 border border-text/10 mb-4">
                                 <p class="text-text font-serif leading-relaxed whitespace-pre-wrap">{{ $selectedMessage->message }}</p>
                             </div>
+                            <div class="text-xs text-text/50 font-serif mb-6">
+                                Received {{ $selectedMessage->created_at->format('F j, Y \a\t g:i A') }} ({{ $selectedMessage->created_at->diffForHumans() }})
+                            </div>
+
+                            @if($selectedMessage->replies && $selectedMessage->replies->count() > 0)
+                                <div class="mt-6 space-y-4">
+                                    <label class="block text-sm font-serif text-text/60 mb-2">Replies:</label>
+                                    @foreach($selectedMessage->replies as $reply)
+                                        <div class="p-4 rounded-sm border {{ $reply->is_from_admin ? 'bg-primary/5 border-primary/20 ml-8' : 'bg-secondary/5 border-secondary/20 mr-8' }}">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-heading text-sm font-bold {{ $reply->is_from_admin ? 'text-primary' : 'text-secondary' }}">
+                                                    {{ $reply->is_from_admin ? 'Admin (' . $reply->name . ')' : $reply->name }}
+                                                </span>
+                                                <span class="text-xs text-text/50">{{ $reply->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <p class="text-text font-serif text-sm whitespace-pre-wrap">{{ $reply->message }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
 
-                        <div class="text-xs text-text/50 font-serif">
-                            Received {{ $selectedMessage->created_at->format('F j, Y \a\t g:i A') }} ({{ $selectedMessage->created_at->diffForHumans() }})
+                        {{-- Reply Form --}}
+                        <div class="pt-6 border-t border-text/10 mt-6">
+                            <label class="block text-sm font-serif text-text/70 mb-2">Send a Reply:</label>
+                            <textarea wire:model="replyMessage" rows="3" class="w-full bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-primary dark:focus:border-secondary text-text px-4 py-2 font-serif transition-colors duration-300 mb-2" placeholder="Write your reply..."></textarea>
+                            @error('replyMessage') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <div class="flex justify-end">
+                                <button wire:click="sendReply" class="px-4 py-2 font-serif text-sm text-white bg-primary hover:bg-primary/90 rounded-sm transition-colors">
+                                    Send Reply {{ !$selectedMessage->user_id ? '(via Email)' : '' }}
+                                </button>
+                            </div>
                         </div>
 
                         {{-- Status Update --}}
@@ -263,6 +296,53 @@
                             <button type="button" wire:click="closeMessageModal"
                                     class="flex-1 px-6 py-3 font-serif text-sm text-text bg-white/50 dark:bg-navbg/50 hover:bg-white dark:hover:bg-navbg border-2 border-text/20 hover:border-text/40 rounded-sm transition-all duration-300">
                                 Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Compose Message Modal --}}
+    @if($showComposeModal)
+        <div class="fixed inset-0 bg-navbg/80 backdrop-blur-sm flex items-center justify-center z-50 p-4" wire:click.self="closeComposeModal">
+            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-primary/30 shadow-2xl w-full md:max-w-1/2  max-h-[90vh] overflow-y-auto">
+                <div class="p-8">
+                    <div class="text-center mb-8">
+                        <h2 class="font-heading text-text text-2xl">Send a Message</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-serif text-text/70 mb-1">Select User:</label>
+                            <select wire:model="composeUserId" class="w-full bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-primary text-text px-4 py-2 font-serif">
+                                <option value="">Select a user...</option>
+                                @foreach($users as $u)
+                                    <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->email }})</option>
+                                @endforeach
+                            </select>
+                            @error('composeUserId') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-serif text-text/70 mb-1">Subject:</label>
+                            <input type="text" wire:model="composeSubject" class="w-full bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-primary text-text px-4 py-2 font-serif" placeholder="Message subject...">
+                            @error('composeSubject') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-serif text-text/70 mb-1">Message:</label>
+                            <textarea wire:model="composeMessage" rows="5" class="w-full bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-primary text-text px-4 py-2 font-serif" placeholder="Write your message..."></textarea>
+                            @error('composeMessage') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="flex gap-4 pt-6 border-t border-text/10">
+                            <button wire:click="sendMessage" class="flex-1 px-6 py-3 font-serif text-sm text-white bg-primary hover:bg-primary/90 rounded-sm transition-all duration-300">
+                                Send Message
+                            </button>
+                            <button type="button" wire:click="closeComposeModal" class="flex-1 px-6 py-3 font-serif text-sm text-text bg-white/50 dark:bg-navbg/50 hover:bg-white border-2 border-text/20 rounded-sm transition-all duration-300">
+                                Cancel
                             </button>
                         </div>
                     </div>

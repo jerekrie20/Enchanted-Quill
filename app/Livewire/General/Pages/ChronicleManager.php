@@ -75,7 +75,6 @@ class ChronicleManager extends Component
     {
         $data = $this->validate();
 
-
         // Ensure the user is authorized to update
         if ($this->blogId) {
             $blog = Blog::findOrFail($this->blogId);

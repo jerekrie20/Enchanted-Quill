@@ -4,7 +4,6 @@ namespace App\Livewire\Portal;
 
 use App\Models\Blog;
 use App\Rules\NoProfanity;
-use JetBrains\PhpStorm\NoReturn;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -13,7 +12,6 @@ class ChronicleDetail extends Component
     public $chronicleId;
 
     public $reviewContent;
-
 
     public function getChronicleProperty()
     {
@@ -29,7 +27,7 @@ class ChronicleDetail extends Component
             ->paginate(5, pageName: 'reviews');
     }
 
-    //Leave a comment
+    // Leave a comment
 
     public function leaveComment()
     {
@@ -40,7 +38,7 @@ class ChronicleDetail extends Component
                 'min:10',
                 'max:1000',
                 'blasp_check',
-                new NoProfanity()
+                new NoProfanity,
             ],
         ]);
 
@@ -66,7 +64,6 @@ class ChronicleDetail extends Component
         $this->authorize('view', $blog);
     }
 
-
     public function render()
     {
         // Use public layout for guests, portal layout for authenticated users
@@ -77,6 +74,6 @@ class ChronicleDetail extends Component
             'comments' => $this->comments,
         ])
             ->layout($layout)
-            ->title($this->chronicle->title . ' - Enchanted Quill');
+            ->title($this->chronicle->title.' - Enchanted Quill');
     }
 }

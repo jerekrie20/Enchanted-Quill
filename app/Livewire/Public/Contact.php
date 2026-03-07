@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Public;
 
-use App\Models\ContactMessage;
+use App\Models\Contact as ContactModel;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -19,6 +19,14 @@ class Contact extends Component
 
     public $message = '';
 
+    public function mount()
+    {
+        if (auth()->check()) {
+            $this->name = auth()->user()->name;
+            $this->email = auth()->user()->email;
+        }
+    }
+
     public function submit(): void
     {
         $validated = $this->validate([
@@ -28,11 +36,27 @@ class Contact extends Component
             'message' => ['required', 'string', 'min:10'],
         ]);
 
-        ContactMessage::create($validated);
+        $contactData = array_merge($validated, [
+            'status' => ContactModel::STATUS_UNREAD,
+            'user_id' => auth()->id(),
+            'is_from_admin' => false,
+        ]);
+
+        // Let's prepend subject to the message.
+        $contactData['message'] = 'Subject: '.$validated['subject']."\n\n".$validated['message'];
+        unset($contactData['subject']);
+
+        ContactModel::create($contactData);
 
         session()->flash('success', 'Thank you for your message! We\'ll get back to you soon.');
 
-        $this->reset(['name', 'email', 'subject', 'message']);
+        $this->reset(['message']);
+
+        if (! auth()->check()) {
+            $this->reset(['name', 'email', 'subject']);
+        } else {
+            $this->reset(['subject']);
+        }
     }
 
     public function render()

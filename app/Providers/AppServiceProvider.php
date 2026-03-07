@@ -23,15 +23,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-//        $this->registerPolicies();
+        //        $this->registerPolicies();
 
         // Define a gate for admin access
         Gate::define('admin-access', function ($user) {
             return $user->role === 'admin'; //
         });
 
-        //Define a gate for Admin or Author access
-        Gate::define('admin-or-author-access', function ($user){
+        // Define a gate for Admin or Author access
+        Gate::define('admin-or-author-access', function ($user) {
             return $user->role === 'admin' || $user->role === 'author';
         });
 
@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                 $fiveMinutesAgo = now()->subMinutes(5);
 
                 if ($user->last_active === null || $user->last_active->lessThan($fiveMinutesAgo)) {
-                    //Log::info('Updating last_active timestamp.'); // Adding a log to see when updates happen
+                    // Log::info('Updating last_active timestamp.'); // Adding a log to see when updates happen
                     $user->update(['last_active' => now()]);
                 }
             }

@@ -18,6 +18,7 @@ use App\Livewire\Portal\ChapterReader;
 use App\Livewire\Portal\ChronicleDetail;
 use App\Livewire\Portal\Chronicles;
 use App\Livewire\Portal\Library;
+use App\Livewire\Portal\Messages;
 use App\Livewire\Portal\Settings;
 use App\Livewire\Portal\UserProfile;
 use App\Livewire\Public\About;
@@ -65,6 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/portal/book/{bookId}/chapter/{chapterNumber}', ChapterReader::class)->name('portal.chapter.read');
     Route::get('/portal/chronicles', Chronicles::class)->name('portal.chronicles');
     Route::get('/portal/chronicle/{id}', ChronicleDetail::class)->name('portal.chronicle.show');
+    Route::get('/portal/messages', Messages::class)->name('portal.messages');
     Route::get('/portal/profile/{id}', UserProfile::class)->name('portal.profile');
     Route::get('/portal/settings', Settings::class)->name('portal.settings');
     Route::get('/portal/author/dashboard', AuthorDashboard::class)->name('portal.author.dashboard')->can('admin-or-author-access');

@@ -30,6 +30,7 @@ class NoProfanity implements ValidationRule
             // Check if the blocked word exists anywhere in the string
             if (str_contains($valueLowercase, $word)) {
                 $fail('The comment contains inappropriate language and cannot be posted.');
+
                 return; // Stop checking after the first match
             }
         }

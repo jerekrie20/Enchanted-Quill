@@ -23,7 +23,7 @@ class BookDetail extends Component
         $book = Book::findOrFail($id);
 
         // Check if the book is public
-        if($book->is_public == 1){
+        if ($book->is_public == 1) {
             $this->isPublic = true;
         }
 

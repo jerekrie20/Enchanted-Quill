@@ -232,6 +232,21 @@
                         @endif
                     </a>
                 </li>
+                <li class="relative" role="none">
+                    <a href="{{route('portal.messages')}}"
+                       wire:navigate.hover
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('portal.messages') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}"
+                       role="menuitem"
+                       aria-current="{{request()->routeIs('portal.messages') ? 'page' : 'false'}}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                        <span>Messages</span>
+                        @if(request()->routeIs('portal.messages'))
+                            <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary" aria-hidden="true"></span>
+                        @endif
+                    </a>
+                </li>
                 @auth
                     @if(auth()->user()->role === 'author' || auth()->user()->role === 'admin')
                         <li class="relative" role="none">
@@ -278,6 +293,9 @@
                 </li>
                 <li role="none">
                     <a href="{{route('portal.chronicles')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">Chronicles</a>
+                </li>
+                <li role="none">
+                    <a href="{{route('portal.messages')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors" role="menuitem">Messages</a>
                 </li>
 
                 @auth
