@@ -65,8 +65,8 @@
                     {{-- Action Buttons --}}
                     @if($chapters->count() > 0)
                         <div class="flex flex-wrap gap-4" role="group" aria-label="Book actions">
-                            @auth
-                                <a href="{{ route('portal.chapter.read', ['bookId' => $book->id, 'chapterNumber' => 1]) }}" wire:navigate class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-3 rounded-sm transition-colors duration-300 inline-flex items-center gap-2 border-2 border-purple-500/50" aria-label="Start reading {{ $book->title }}">
+                            @if($isPublic)
+                                <a href="{{ route('chapter.read', ['bookId' => $book->id, 'chapterNumber' => 1]) }}" wire:navigate class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-3 rounded-sm transition-colors duration-300 inline-flex items-center gap-2 border-2 border-purple-500/50" aria-label="Start reading {{ $book->title }}">
                                     <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
                                     <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
                                     <i class="fa-solid fa-book-open" aria-hidden="true"></i> Start Reading
@@ -77,7 +77,7 @@
                                     <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
                                     <i class="fa-solid fa-sign-in-alt" aria-hidden="true"></i> Sign In to Read
                                 </a>
-                            @endauth
+                            @endif
                         </div>
                     @endif
                 </div>
@@ -114,8 +114,8 @@
                                 <div class="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-purple-500/50"></div>
                                 <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-purple-500/50"></div>
 
-                                @auth
-                                    <a href="{{ route('portal.chapter.read', ['bookId' => $book->id, 'chapterNumber' => $chapter->chapter_number]) }}" wire:navigate class="block p-4" aria-label="Chapter {{ $chapter->chapter_number }}: {{ $chapter->title }}">
+                                @if($isPublic)
+                                    <a href="{{ route('chapter.read', ['bookId' => $book->id, 'chapterNumber' => $chapter->chapter_number]) }}" wire:navigate class="block p-4" aria-label="Chapter {{ $chapter->chapter_number }}: {{ $chapter->title }}">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center gap-4">
                                                 <span class="text-3xl font-heading text-purple-500/50 group-hover:text-purple-500 transition-colors" aria-hidden="true">{{ $chapter->chapter_number }}</span>
@@ -142,7 +142,7 @@
                                             <a href="{{ route('login') }}" class="text-sm text-purple-600 dark:text-violet-400 hover:text-purple-700 dark:hover:text-violet-300 transition-colors">Sign in to read</a>
                                         </div>
                                     </div>
-                                @endauth
+                                @endif
                             </li>
                         @endforeach
                     </ul>

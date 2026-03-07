@@ -13,18 +13,35 @@ use App\Livewire\General\Pages\ChapterManager;
 use App\Livewire\General\Pages\ChaptersList;
 use App\Livewire\General\Pages\ChronicleList;
 use App\Livewire\General\Pages\ChronicleManager;
+use App\Livewire\Portal\AuthorDashboard;
+use App\Livewire\Portal\ChapterReader;
+use App\Livewire\Portal\ChronicleDetail;
+use App\Livewire\Portal\Chronicles;
+use App\Livewire\Portal\Library;
+use App\Livewire\Portal\Settings;
+use App\Livewire\Portal\UserProfile;
+use App\Livewire\Public\About;
+use App\Livewire\Public\Blog;
+use App\Livewire\Public\BlogDetail;
+use App\Livewire\Public\BookDetail;
+use App\Livewire\Public\Contact;
+use App\Livewire\Public\Faq;
+use App\Livewire\Public\Home;
+use App\Livewire\Public\Policies;
 use Illuminate\Support\Facades\Route;
 
 // Public Frontend Routes (no authentication required)
-Route::get('/', \App\Livewire\Public\Home::class)->name('home');
+Route::get('/', Home::class)->name('home');
 Route::get('/books', \App\Livewire\Public\Books::class)->name('books');
-Route::get('/book/{id}', \App\Livewire\Public\BookDetail::class)->name('public.book.show');
-Route::get('/blog', \App\Livewire\Public\Blog::class)->name('blog');
-Route::get('/blog/{id}', \App\Livewire\Public\BlogDetail::class)->name('public.blog.show');
-Route::get('/about', \App\Livewire\Public\About::class)->name('public.about');
-Route::get('/contact', \App\Livewire\Public\Contact::class)->name('public.contact');
-Route::get('/faq', \App\Livewire\Public\Faq::class)->name('public.faq');
-Route::get('/policies', \App\Livewire\Public\Policies::class)->name('public.policies');
+Route::get('/book/{id}', BookDetail::class)->name('public.book.show');
+Route::get('/book/{bookId}/chapter/{chapterNumber}', ChapterReader::class)->name('chapter.read');
+
+Route::get('/blog', Blog::class)->name('blog');
+Route::get('/blog/{id}', BlogDetail::class)->name('public.blog.show');
+Route::get('/about', About::class)->name('public.about');
+Route::get('/contact', Contact::class)->name('public.contact');
+Route::get('/faq', Faq::class)->name('public.faq');
+Route::get('/policies', Policies::class)->name('public.policies');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -43,14 +60,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/blog/{id}/edit', ChronicleManager::class)->name('blog.manage');
 
     // Portal user routes
-    Route::get('/portal/library', \App\Livewire\Portal\Library::class)->name('portal.library');
+    Route::get('/portal/library', Library::class)->name('portal.library');
     Route::get('/portal/book/{id}', \App\Livewire\Portal\BookDetail::class)->name('portal.book.show');
-    Route::get('/portal/book/{bookId}/chapter/{chapterNumber}', \App\Livewire\Portal\ChapterReader::class)->name('portal.chapter.read');
-    Route::get('/portal/chronicles', \App\Livewire\Portal\Chronicles::class)->name('portal.chronicles');
-    Route::get('/portal/chronicle/{id}', \App\Livewire\Portal\ChronicleDetail::class)->name('portal.chronicle.show');
-    Route::get('/portal/profile/{id}', \App\Livewire\Portal\UserProfile::class)->name('portal.profile');
-    Route::get('/portal/settings', \App\Livewire\Portal\Settings::class)->name('portal.settings');
-    Route::get('/portal/author/dashboard', \App\Livewire\Portal\AuthorDashboard::class)->name('portal.author.dashboard')->can('admin-or-author-access');
+    Route::get('/portal/book/{bookId}/chapter/{chapterNumber}', ChapterReader::class)->name('portal.chapter.read');
+    Route::get('/portal/chronicles', Chronicles::class)->name('portal.chronicles');
+    Route::get('/portal/chronicle/{id}', ChronicleDetail::class)->name('portal.chronicle.show');
+    Route::get('/portal/profile/{id}', UserProfile::class)->name('portal.profile');
+    Route::get('/portal/settings', Settings::class)->name('portal.settings');
+    Route::get('/portal/author/dashboard', AuthorDashboard::class)->name('portal.author.dashboard')->can('admin-or-author-access');
 });
 
 // Authors and admins routes

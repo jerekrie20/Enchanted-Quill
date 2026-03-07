@@ -9,7 +9,18 @@ use Livewire\Component;
 
 class ChapterReader extends Component
 {
-    #[Layout('components.Layouts.portal')]
+    public $link;
+    public $bookLink;
+
+    public function getLayoutProperty(): string
+    {
+        // Use portal layout for authors, admin, readers, and public layout for others
+        return auth()->user()
+            ? 'components.Layouts.portal'
+            : 'components.Layouts.public';
+    }
+
+
     public $bookId;
 
     public $chapterNumber;
@@ -18,6 +29,14 @@ class ChapterReader extends Component
     {
         $this->bookId = $bookId;
         $this->chapterNumber = $chapterNumber;
+
+        if(auth()->user()){
+            $this->link = 'portal.chapter.read';
+            $this->bookLink = 'portal.book.show';
+        }else{
+            $this->link = 'chapter.read';
+            $this->bookLink = 'public.book.show';
+        }
     }
 
     public function getBookProperty()
@@ -48,9 +67,11 @@ class ChapterReader extends Component
             ->first();
     }
 
+
     public function render()
     {
         return view('livewire.portal.chapter-reader')
-            ->title($this->chapter->title.' - '.$this->book->title.' - Enchanted Quill');
+            ->title($this->chapter->title.' - '.$this->book->title.' - Enchanted Quill')
+            ->layout($this->getLayoutProperty());
     }
 }

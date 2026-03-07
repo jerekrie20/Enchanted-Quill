@@ -14,11 +14,18 @@ class BookDetail extends Component
     #[Layout('components.Layouts.public')]
     public $bookId;
 
+    public $isPublic = false;
+
     public function mount($id): void
     {
         $this->bookId = $id;
 
         $book = Book::findOrFail($id);
+
+        // Check if the book is public
+        if($book->is_public == 1){
+            $this->isPublic = true;
+        }
 
         // Check if user can view this book (guests can view public published books)
         $this->authorize('view', $book);
