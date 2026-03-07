@@ -26,7 +26,7 @@
                     @endif
 
                     @if($this->user->bio)
-                        <p class="text-white/80 font-serif text-lg max-w-2xl">{{ $this->user->bio }}</p>
+                        <p class="text-white/80 font-serif text-lg">{{ $this->user->bio }}</p>
                     @endif
 
                     {{-- Stats --}}
@@ -199,7 +199,7 @@
     @endif
 
     {{-- Empty State --}}
-    @if($this->publishedBooks->count() === 0 && $this->publishedChronicles->count() === 0)
+    @if($this->publishedBooks->count() === 0 && $this->publishedChronicles->count() === 0 && $this->user->role !== 'reader')
         <section class="py-12" aria-labelledby="empty-state-heading">
             <div class="max-w-(--breakpoint-xl) mx-auto px-4">
                 <div class="text-center py-16 bg-white/60 dark:bg-accent/20 backdrop-blur-sm rounded-sm border-2 border-purple-500/20" role="status" aria-live="polite">

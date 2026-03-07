@@ -1,99 +1,143 @@
-<div class="space-y-8">
-    <header class="relative mb-8 overflow-hidden bg-gradient-to-r from-purple-600/10 via-violet-600/10 to-purple-600/10 border-b-2 border-purple-500/20">
+<div class="min-h-screen bg-gradient-to-b from-bg via-bg to-lightGray/20 dark:from-navbg dark:via-navbg dark:to-accent/10">
+    {{-- Decorative Header --}}
+    <header class="relative mb-12 lg:mb-16 overflow-hidden">
         <div class="absolute top-0 left-0 right-0 h-1 bg-purple-500/20"></div>
-        <div class="max-w-7xl mx-auto px-4 py-8">
-            <h1 class="text-3xl font-heading text-white">My Messages</h1>
-            <p class="text-white/70 font-serif mt-2">View your support tickets and messages from admins.</p>
+        <div class="absolute top-1 left-0 right-0 h-px bg-violet-400/30"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+            <div class="text-center space-y-4">
+                <div class="flex items-center justify-center gap-4 mb-4">
+                    <div class="h-px w-16 lg:w-32 bg-violet-400/40"></div>
+                    <svg class="w-8 h-8 text-purple-500 dark:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <div class="h-px w-16 lg:w-32 bg-violet-400/40"></div>
+                </div>
+
+                <h1 class="text-text font-heading text-4xl lg:text-5xl">My Messages</h1>
+                <p class="text-base lg:text-lg text-text/70 font-serif italic mx-auto">
+                    "View your support tickets and messages from admins."
+                </p>
+
+                <div class="flex items-center justify-center gap-2 mt-6">
+                    <div class="h-px w-8 bg-purple-500/30"></div>
+                    <div class="w-1.5 h-1.5 rotate-45 bg-violet-400/50"></div>
+                    <div class="h-px w-8 bg-purple-500/30"></div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div class="max-w-5xl mx-auto px-4">
+    {{-- Main Content --}}
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-8">
         @if (session()->has('success'))
-            <div class="mb-6 bg-green-500/10 border border-green-500/50 text-green-400 px-4 py-3 rounded-sm font-serif">
-                {{ session('success') }}
+            <div class="mb-6 relative bg-green-50 dark:bg-green-900/20 border-2 border-green-500/50 p-4 rounded-sm" role="alert">
+                <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-green-500/70"></div>
+                <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-green-500/70"></div>
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-check-circle text-green-600 dark:text-green-400 text-xl"></i>
+                    <p class="text-green-800 dark:text-green-200 font-serif">{{ session('success') }}</p>
+                </div>
             </div>
         @endif
 
-        <div class="bg-navbg/40 border border-white/10 rounded-sm overflow-hidden backdrop-blur-sm">
-            @forelse($messages as $message)
-                <div class="p-6 border-b border-white/10 hover:bg-white/5 transition-colors duration-300">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <div class="flex items-center gap-3 mb-2">
-                                <h3 class="text-xl text-white font-heading">
-                                    {{ Str::limit(explode("\n\n", $message->message)[0], 50) }}
-                                </h3>
-                                <span class="px-2 py-1 text-xs rounded-sm
-                                    @if($message->status === 0) bg-primary/20 text-primary
-                                    @elseif($message->status === 1) bg-secondary/20 text-secondary
-                                    @elseif($message->status === 2) bg-green-500/20 text-green-400
-                                    @else bg-gray-500/20 text-gray-400 @endif font-serif">
-                                    {{ $message->status_label }}
-                                </span>
+        <div class="relative bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-purple-500/20 dark:border-purple-400/10 rounded-sm">
+            <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
+            <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
+            <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-purple-500/50"></div>
+            <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-purple-500/50"></div>
+
+            <div class="divide-y divide-purple-500/10 dark:divide-purple-400/10">
+                @forelse($messages as $message)
+                    <div class="p-6 hover:bg-purple-500/5 dark:hover:bg-purple-400/5 transition-colors duration-300">
+                        <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-xl text-text font-heading">
+                                        {{ Str::limit(explode("\n\n", $message->message)[0], 50) }}
+                                    </h3>
+                                    <span class="px-2 py-1 text-xs rounded-sm
+                                        @if($message->status === 0) bg-primary/20 text-primary
+                                        @elseif($message->status === 1) bg-secondary/20 text-secondary
+                                        @elseif($message->status === 2) bg-green-500/20 text-green-600 dark:text-green-400
+                                        @else bg-gray-500/20 text-text/70 @endif font-serif font-semibold">
+                                        {{ $message->status_label }}
+                                    </span>
+                                </div>
+                                <p class="text-text/70 font-serif text-sm line-clamp-2">{{ $message->message }}</p>
+                                <div class="mt-3 text-xs text-text/50 font-serif flex items-center gap-4">
+                                    <span><i class="fa-regular fa-clock mr-1"></i> {{ $message->updated_at->diffForHumans() }}</span>
+                                    <span><i class="fa-regular fa-comments mr-1"></i> {{ $message->replies_count }} Replies</span>
+                                </div>
                             </div>
-                            <p class="text-white/60 font-serif text-sm line-clamp-2">{{ $message->message }}</p>
-                            <div class="mt-3 text-xs text-white/40 font-serif flex items-center gap-4">
-                                <span><i class="fa-regular fa-clock mr-1"></i> {{ $message->updated_at->diffForHumans() }}</span>
-                                <span><i class="fa-regular fa-comments mr-1"></i> {{ $message->replies_count }} Replies</span>
-                            </div>
+                            <button wire:click="viewMessage({{ $message->id }})" class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-2 rounded-sm transition-colors duration-300 inline-flex items-center gap-2 border border-purple-500/50 whitespace-nowrap">
+                                View Thread
+                            </button>
                         </div>
-                        <button wire:click="viewMessage({{ $message->id }})" class="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-sm font-serif text-sm transition-colors border border-violet-500/50 whitespace-nowrap">
-                            View Thread
-                        </button>
                     </div>
-                </div>
-            @empty
-                <div class="p-12 text-center">
-                    <i class="fa-regular fa-envelope-open text-4xl text-white/20 mb-4 block"></i>
-                    <p class="text-white/60 font-serif">You have no messages.</p>
-                    <a href="{{ route('public.contact') }}" wire:navigate class="inline-block mt-4 text-violet-400 hover:text-violet-300 transition-colors font-serif text-sm underline">Contact Support</a>
-                </div>
-            @endforelse
+                @empty
+                    <div class="p-12 text-center">
+                        <i class="fa-regular fa-envelope-open text-4xl text-text/30 mb-4 block"></i>
+                        <p class="text-text/60 font-serif mb-4">You have no messages.</p>
+                        <a href="{{ route('public.contact') }}" wire:navigate class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-2 rounded-sm transition-colors duration-300 inline-flex items-center gap-2 border border-purple-500/50">
+                            Contact Support
+                        </a>
+                    </div>
+                @endforelse
+            </div>
         </div>
-        <div class="mt-4">
-            {{ $messages->links() }}
-        </div>
-    </div>
+
+        @if($messages->hasPages())
+            <div class="mt-8 flex justify-center">
+                {{ $messages->links() }}
+            </div>
+        @endif
+    </main>
 
     @if($selectedMessage)
-        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4" wire:click.self="closeMessageModal">
-            <div class="bg-navbg border border-violet-500/30 rounded-sm shadow-2xl w-full md:max-w-1/2  max-h-[90vh] flex flex-col">
-                <div class="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
-                    <h2 class="text-2xl font-heading text-white">Message Thread</h2>
-                    <button wire:click="closeMessageModal" class="text-white/50 hover:text-white transition-colors">
+        <div class="fixed inset-0 bg-navbg/80 backdrop-blur-sm flex items-center justify-center z-50 p-4" wire:click.self="closeMessageModal">
+            <div class="relative bg-white dark:bg-accent/95 rounded-sm border-2 border-purple-500/30 shadow-2xl w-full md:max-w-1/2  max-h-[90vh] flex flex-col">
+                <div class="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-purple-500/50"></div>
+                <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-purple-500/50"></div>
+                <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-purple-500/50"></div>
+                <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-purple-500/50"></div>
+
+                <div class="p-6 border-b border-text/10 flex justify-between items-center bg-white/5">
+                    <h2 class="text-2xl font-heading text-text">Message Thread</h2>
+                    <button wire:click="closeMessageModal" class="text-text/50 hover:text-text transition-colors">
                         <i class="fa-solid fa-times text-xl"></i>
                     </button>
                 </div>
 
                 <div class="p-6 overflow-y-auto flex-1 space-y-6">
                     {{-- Original Message --}}
-                    <div class="bg-white/5 border border-white/10 p-4 rounded-sm">
+                    <div class="bg-accent/5 dark:bg-accent/20 border border-text/10 p-4 rounded-sm">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="font-heading text-sm text-white/80">You</span>
-                            <span class="text-xs text-white/40 font-serif">{{ $selectedMessage->created_at->format('M j, Y g:i A') }}</span>
+                            <span class="font-heading text-sm text-text/80">You</span>
+                            <span class="text-xs text-text/50 font-serif">{{ $selectedMessage->created_at->format('M j, Y g:i A') }}</span>
                         </div>
-                        <p class="text-white/90 font-serif whitespace-pre-wrap">{{ $selectedMessage->message }}</p>
+                        <p class="text-text/90 font-serif whitespace-pre-wrap">{{ $selectedMessage->message }}</p>
                     </div>
 
                     {{-- Replies --}}
                     @foreach($selectedMessage->replies as $reply)
-                        <div class="border p-4 rounded-sm {{ $reply->is_from_admin ? 'bg-primary/10 border-primary/30 ml-8' : 'bg-white/5 border-white/10 mr-8' }}">
+                        <div class="border p-4 rounded-sm {{ $reply->is_from_admin ? 'bg-primary/5 dark:bg-primary/10 border-primary/20 ml-8' : 'bg-accent/5 dark:bg-accent/20 border-text/10 mr-8' }}">
                             <div class="flex justify-between items-center mb-2">
-                                <span class="font-heading text-sm font-bold {{ $reply->is_from_admin ? 'text-primary' : 'text-white/80' }}">
+                                <span class="font-heading text-sm font-bold {{ $reply->is_from_admin ? 'text-primary' : 'text-text/80' }}">
                                     {{ $reply->is_from_admin ? 'Admin Support' : 'You' }}
                                 </span>
-                                <span class="text-xs text-white/40 font-serif">{{ $reply->created_at->format('M j, Y g:i A') }}</span>
+                                <span class="text-xs text-text/50 font-serif">{{ $reply->created_at->format('M j, Y g:i A') }}</span>
                             </div>
-                            <p class="text-white/90 font-serif whitespace-pre-wrap">{{ $reply->message }}</p>
+                            <p class="text-text/90 font-serif whitespace-pre-wrap">{{ $reply->message }}</p>
                         </div>
                     @endforeach
                 </div>
 
-                <div class="p-6 border-t border-white/10 bg-white/5">
-                    <textarea wire:model="replyMessage" rows="3" class="w-full bg-black/40 border border-white/20 rounded-sm text-white px-4 py-3 font-serif focus:border-violet-500 transition-colors" placeholder="Type your reply..."></textarea>
-                    @error('replyMessage') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
+                <div class="p-6 border-t border-text/10 bg-white/5">
+                    <textarea wire:model="replyMessage" rows="3" class="w-full px-4 py-3 bg-white dark:bg-navbg/40 rounded-sm border-2 border-text/10 focus:border-purple-500 dark:focus:border-violet-400 text-text transition-colors duration-300 font-serif resize-y" placeholder="Type your reply..."></textarea>
+                    @error('replyMessage') <span class="text-red-500 dark:text-red-400 text-xs mt-1 block font-serif">{{ $message }}</span> @enderror
                     <div class="flex justify-end mt-3">
-                        <button wire:click="sendReply" class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-sm font-serif transition-colors border border-violet-500/50">
+                        <button wire:click="sendReply" class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-2 rounded-sm transition-colors duration-300 border border-purple-500/50">
                             Send Reply
                         </button>
                     </div>

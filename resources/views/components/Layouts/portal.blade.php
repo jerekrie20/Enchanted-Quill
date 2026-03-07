@@ -148,13 +148,6 @@
                     My Profile
                 </a>
 
-                <a href="#"
-                   class="relative group"
-                   role="menuitem"
-                   aria-label="Notifications">
-                    <x-icons.bell/>
-                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-secondary rounded-full animate-pulse" aria-hidden="true"></span>
-                </a>
             @else
                 <a href="{{ route('login') }}"
                    class="text-white/80 hover:text-secondary font-serif text-sm transition-colors duration-300"

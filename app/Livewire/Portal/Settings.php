@@ -47,9 +47,10 @@ class Settings extends Component
     public function updateProfile(): void
     {
         $this->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|blasp_check',
             'email' => 'required|email|max:255|unique:users,email,'.Auth::id(),
-            'bio' => 'nullable|string|max:500',
+            'bio' => 'nullable|string|max:500|blasp_check',
+
         ]);
 
         $user = Auth::user();

@@ -32,7 +32,7 @@ class Messages extends Component
     public function sendReply()
     {
         $this->validate([
-            'replyMessage' => 'required|string|min:2',
+            'replyMessage' => 'required|string|min:2|blasp_check',
         ]);
 
         Contact::create([
