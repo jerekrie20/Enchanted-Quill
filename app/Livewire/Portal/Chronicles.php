@@ -41,9 +41,7 @@ class Chronicles extends Component
     public function render()
     {
         $query = Blog::with(['user', 'categories'])
-            ->where('status', Blog::STATUS_PUBLISHED)
-            ->whereNotNull('publish_at')
-            ->where('publish_at', '<=', now());
+            ->where('status', Blog::STATUS_PUBLISHED);
 
         // Apply search filter
         if ($this->search) {
@@ -63,10 +61,10 @@ class Chronicles extends Component
         // Apply sorting
         switch ($this->sortBy) {
             case 'latest':
-                $query->latest('publish_at');
+                $query->latest('updated_at');
                 break;
             case 'oldest':
-                $query->oldest('publish_at');
+                $query->oldest('updated_at');
                 break;
             case 'title':
                 $query->orderBy('title', 'asc');

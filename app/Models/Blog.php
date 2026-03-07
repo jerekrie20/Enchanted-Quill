@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
@@ -60,6 +61,14 @@ class Blog extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'blog_categories')->withTimestamps();
+    }
+
+    /**
+     * A blog has to many comments.
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 
     protected function casts(): array

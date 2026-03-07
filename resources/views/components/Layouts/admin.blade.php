@@ -1,14 +1,57 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <script>
-        // Apply theme immediately to prevent flash
-        (function() {
+        // Define the theme logic globally
+        function applyTheme() {
             const theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.className = theme;
-            document.documentElement.setAttribute('data-theme', theme);
-        })();
+            const html = document.documentElement;
+
+            // Apply theme to HTML tag
+            html.className = theme;
+            html.setAttribute('data-theme', theme);
+
+            // Update icons if they exist in the new DOM
+            const sunIcon = document.querySelector('#themeToggle .sun-icon');
+            const moonIcon = document.querySelector('#themeToggle .moon-icon');
+
+            if (sunIcon && moonIcon) {
+                if (theme === 'light') {
+                    moonIcon.style.display = 'inline-block';
+                    sunIcon.style.display = 'none';
+                } else {
+                    moonIcon.style.display = 'none';
+                    sunIcon.style.display = 'inline-block';
+                }
+            }
+        }
+
+        // 1. Apply immediately on first load to prevent flash
+        applyTheme();
+
+        // 2. Re-apply after Livewire navigates
+        // (Because Livewire morphs the DOM and might overwrite the <html> tag with the server's default state)
+        document.addEventListener('livewire:navigated', () => {
+            applyTheme();
+            console.log('Theme re-applied after Livewire navigation');
+        });
+
+        // 3. Handle toggling using Event Delegation
+        // Attaching the listener to 'document' ensures it works even after Livewire replaces the navbar button
+        document.addEventListener('click', function(e) {
+            const toggleButton = e.target.closest('#themeToggle');
+            if (!toggleButton) return;
+
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            localStorage.setItem('theme', newTheme);
+            applyTheme();
+        });
+
+        console.log('Global theme script initialized');
     </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireScripts
@@ -233,54 +276,6 @@
     </div>
 </footer>
 
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggleButton = document.getElementById('themeToggle');
-        const sunIcon = document.querySelector('#themeToggle .sun-icon');
-        const moonIcon = document.querySelector('#themeToggle .moon-icon');
-
-        // Check and initialize theme
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        const html = document.documentElement;
-
-        // Apply both data-theme attribute and class for compatibility
-        html.setAttribute('data-theme', currentTheme);
-        html.className = currentTheme;
-
-        // Set the initial icon visibility based on the current theme
-        if (currentTheme === 'light') {
-            moonIcon.style.display = 'inline-block';
-            sunIcon.style.display = 'none';
-        } else {
-            moonIcon.style.display = 'none';
-            sunIcon.style.display = 'inline-block';
-        }
-
-        // Add event listener to toggle theme
-        toggleButton.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-
-            // Update theme on <html> element and save to localStorage
-            html.setAttribute('data-theme', newTheme);
-            html.className = newTheme;
-            localStorage.setItem('theme', newTheme);
-
-            // Toggle the visibility of the icons
-            if (newTheme === 'light') {
-                moonIcon.style.display = 'inline-block';
-                sunIcon.style.display = 'none';
-            } else {
-                moonIcon.style.display = 'none';
-                sunIcon.style.display = 'inline-block';
-            }
-        });
-    });
-
-</script>
-
-@vite('resources/js/ckeditor5.js')
 </body>
 </html>
 

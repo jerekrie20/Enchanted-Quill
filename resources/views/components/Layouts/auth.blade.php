@@ -1,6 +1,57 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <script>
+        // Define the theme logic globally
+        function applyTheme() {
+            const theme = localStorage.getItem('theme') || 'light';
+            const html = document.documentElement;
+
+            // Apply theme to HTML tag
+            html.className = theme;
+            html.setAttribute('data-theme', theme);
+
+            // Update icons if they exist in the new DOM
+            const sunIcon = document.querySelector('#themeToggle .sun-icon');
+            const moonIcon = document.querySelector('#themeToggle .moon-icon');
+
+            if (sunIcon && moonIcon) {
+                if (theme === 'light') {
+                    moonIcon.style.display = 'inline-block';
+                    sunIcon.style.display = 'none';
+                } else {
+                    moonIcon.style.display = 'none';
+                    sunIcon.style.display = 'inline-block';
+                }
+            }
+        }
+
+        // 1. Apply immediately on first load to prevent flash
+        applyTheme();
+
+        // 2. Re-apply after Livewire navigates
+        // (Because Livewire morphs the DOM and might overwrite the <html> tag with the server's default state)
+        document.addEventListener('livewire:navigated', () => {
+            applyTheme();
+            console.log('Theme re-applied after Livewire navigation');
+        });
+
+        // 3. Handle toggling using Event Delegation
+        // Attaching the listener to 'document' ensures it works even after Livewire replaces the navbar button
+        document.addEventListener('click', function(e) {
+            const toggleButton = e.target.closest('#themeToggle');
+            if (!toggleButton) return;
+
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            localStorage.setItem('theme', newTheme);
+            applyTheme();
+        });
+
+        console.log('Global theme script initialized');
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <meta charset="utf-8">
@@ -60,14 +111,6 @@
         </div>
     </div>
 </footer>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initialize theme on auth pages
-        const currentTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
-    });
-</script>
 
 </body>
 </html>

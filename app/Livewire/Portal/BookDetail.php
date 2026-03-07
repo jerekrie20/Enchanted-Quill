@@ -4,6 +4,7 @@ namespace App\Livewire\Portal;
 
 use App\Models\Book;
 use App\Models\Bookmark;
+use App\Rules\NoProfanity;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -132,6 +133,8 @@ class BookDetail extends Component
         $this->validate([
             'reviewRating' => 'required|numeric|min:1|max:5',
             'reviewContent' => 'required|string|min:10|max:1000',
+            'blasp_check',
+            new NoProfanity()
         ]);
 
         $this->book->reviews()->updateOrCreate(
