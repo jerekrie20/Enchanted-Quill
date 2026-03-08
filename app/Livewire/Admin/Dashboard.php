@@ -51,11 +51,11 @@ class Dashboard extends Component
 
     public function mount()
     {
-        // All-time totals (cached for 15 minutes)
-        $this->totalUsers = cache()->remember('stats.total_users', 900, fn () => User::count());
-        $this->totalBooks = cache()->remember('stats.total_books', 900, fn () => Book::count());
-        $this->totalBlogs = cache()->remember('stats.total_blogs', 900, fn () => Blog::count());
-        $this->totalComments = cache()->remember('stats.total_comments', 900, fn () => Comment::count());
+        // All-time totals
+        $this->totalUsers = User::count();
+        $this->totalBooks = Book::count();
+        $this->totalBlogs = Blog::count();
+        $this->totalComments = Comment::count();
 
         // Weekly stats (last 7 days)
         $weekStart = now()->subDays(7);

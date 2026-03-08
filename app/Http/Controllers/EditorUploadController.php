@@ -13,7 +13,7 @@ class EditorUploadController extends Controller
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'upload' => 'required|image|max:40960',
+            'upload' => 'required|image|max:10240',
         ]);
 
         // Determine the folder based on the request or default to 'blogs'

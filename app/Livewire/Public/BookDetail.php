@@ -3,6 +3,7 @@
 namespace App\Livewire\Public;
 
 use App\Models\Book;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,11 +17,39 @@ class BookDetail extends Component
 
     public $isPublic = false;
 
+    #[Computed]
+    public function book()
+    {
+        return Book::with(['author', 'categories'])
+            ->withCount(['reviews', 'chapters'])
+            ->withAvg('reviews', 'stars')
+            ->findOrFail($this->bookId);
+    }
+
+    #[Computed]
+    public function chapters()
+    {
+        return $this->book->chapters()
+            ->orderBy('chapter_number', 'asc')
+            ->paginate(20);
+    }
+
+    #[Computed]
+    public function averageRating()
+    {
+        if ($this->book->reviews_count === 0) {
+            return 0;
+        }
+
+        return round($this->book->reviews_avg_stars ?? 0, 1);
+    }
+
     public function mount($id): void
     {
         $this->bookId = $id;
 
-        $book = Book::findOrFail($id);
+        // Use the computed property to avoid querying the book twice
+        $book = $this->book;
 
         // Check if the book is public
         if ($book->is_public == 1) {
@@ -29,29 +58,6 @@ class BookDetail extends Component
 
         // Check if user can view this book (guests can view public published books)
         $this->authorize('view', $book);
-    }
-
-    public function getBookProperty()
-    {
-        return Book::with(['author', 'categories'])
-            ->withCount(['reviews', 'chapters'])
-            ->findOrFail($this->bookId);
-    }
-
-    public function getChaptersProperty()
-    {
-        return $this->book->chapters()
-            ->orderBy('chapter_number', 'asc')
-            ->paginate(20);
-    }
-
-    public function getAverageRatingProperty()
-    {
-        if ($this->book->reviews_count === 0) {
-            return 0;
-        }
-
-        return round($this->book->reviews()->avg('stars'), 1);
     }
 
     public function render()
