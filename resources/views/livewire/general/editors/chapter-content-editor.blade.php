@@ -14,7 +14,7 @@
                 </label>
             </div>
 
-            <div class="bg-white dark:bg-navbg/40 border-2 border-text/10 focus-within:border-primary dark:focus-within:border-secondary rounded-sm transition-colors duration-300 overflow-hidden">
+            <div class="bg-white dark:bg-navbg/40 border-2 border-text/10 focus-within:border-primary dark:focus-within:border-secondary rounded-sm transition-colors duration-300 overflow-hidden" wire:ignore>
                 <div id="chapter-editor" class="min-h-96 prose dark:prose-invert max-w-none p-4">
                     {!! $content !!}
                 </div>
@@ -55,6 +55,8 @@
             const hiddenInput = document.querySelector('#chapter-editor-content');
 
             if (!editorElement) return;
+            if (editorElement.hasAttribute('data-editor-initialized')) return;
+            editorElement.setAttribute('data-editor-initialized', 'true');
 
             // Destroy existing editor
             if (chapterEditorInstance) {
@@ -77,13 +79,6 @@
         }
 
         initChapterEditor();
-
-        Livewire.hook('morphed', ({ el, component }) => {
-            const editorElement = document.querySelector('#chapter-editor');
-            if (editorElement) {
-                initChapterEditor();
-            }
-        });
     </script>
     @endscript
 </div>

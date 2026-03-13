@@ -15,7 +15,7 @@ class BookDetail extends Component
     #[Layout('components.Layouts.public')]
     public $bookId;
 
-    public $isPublic = false;
+    public $canRead = false;
 
     #[Computed]
     public function book()
@@ -51,9 +51,9 @@ class BookDetail extends Component
         // Use the computed property to avoid querying the book twice
         $book = $this->book;
 
-        // Check if the book is public
-        if ($book->is_public == 1) {
-            $this->isPublic = true;
+        // Check if the user can read the content
+        if ($book->status == 1 || auth()->check()) {
+            $this->canRead = true;
         }
 
         // Check if user can view this book (guests can view public published books)

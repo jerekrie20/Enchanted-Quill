@@ -30,6 +30,13 @@ class ChapterReader extends Component
         $this->bookId = $bookId;
         $this->chapterNumber = $chapterNumber;
 
+        // Check if the user is authorized to view the book (this will also check if the book is public)
+        $this->authorize('view', $this->book);
+
+        if ($this->book->status == 2 && ! auth()->check()) {
+            abort(403, 'You must be logged in to read this book.');
+        }
+
         if (auth()->user()) {
             $this->link = 'portal.chapter.read';
             $this->bookLink = 'portal.book.show';

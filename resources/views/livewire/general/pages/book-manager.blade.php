@@ -100,9 +100,9 @@
                         <x-forms.input-select name="Status" :data="$statusData" wire:model.live.debounce.500ms="status"/>
                     </div>
 
-                    @if($status == 2)
+                    @if($status == 3)
                         <div>
-                            <x-forms.input-date-time name="Publish Later" modal="publish_at" wire:model="publish_at"/>
+                            <x-forms.input-date-time name="Publish Later" modal="published_at" wire:model="published_at"/>
                         </div>
                     @endif
 

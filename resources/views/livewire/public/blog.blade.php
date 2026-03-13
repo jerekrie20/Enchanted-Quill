@@ -149,7 +149,28 @@
                             <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-violet-400/50"></div>
                             <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-violet-400/50"></div>
 
-                            <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block">
+                            @if($blog->status == 2)
+                                <div class="absolute top-2 right-2 z-20 bg-violet-600 text-white text-xs font-bold px-2 py-1 rounded-sm shadow-md flex items-center gap-1 border border-violet-400">
+                                    <i class="fa-solid fa-lock text-[10px]"></i> Members Only
+                                </div>
+                            @endif
+
+                            @php
+                                $canClick = $blog->status == 1 || auth()->check();
+                            @endphp
+
+                            @if($canClick)
+                                <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block h-full">
+                            @else
+                                <div class="block h-full opacity-75 relative">
+                                    <div class="absolute inset-0 z-10 bg-navbg/10 flex items-center justify-center backdrop-blur-[1px]">
+                                        <div class="bg-violet-600 text-white px-4 py-2 rounded-sm text-sm font-serif shadow-lg border border-violet-400 flex items-center gap-2">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            Login to Read
+                                        </div>
+                                    </div>
+                            @endif
+
                                 @if($blog->image)
                                     <div class="aspect-video overflow-hidden">
                                         <img src="{{ asset('blogs/' . $blog->image) }}"
@@ -186,7 +207,12 @@
                                         </div>
                                     @endif
                                 </div>
-                            </a>
+
+                            @if($canClick)
+                                </a>
+                            @else
+                                </div>
+                            @endif
                         </article>
                     @endforeach
                 </div>

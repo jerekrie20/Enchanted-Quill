@@ -28,7 +28,6 @@ class Blog extends Model
         'content',
         'user_id',
         'status',
-        'is_public',
         'publish_at',
     ];
 
@@ -74,7 +73,6 @@ class Blog extends Model
     protected function casts(): array
     {
         return [
-            'is_public' => 'boolean',
             'publish_at' => 'datetime',
         ];
     }

@@ -10,12 +10,43 @@ class Chapter extends Model
 {
     use HasFactory;
 
+    const STATUS_DRAFT = 0;
+
+    const STATUS_PUBLISHED = 1;
+
+    const STATUS_PRIVATE = 2;
+
+    const STATUS_PUBLISHED_Later = 3;
+
+    const STATUS_ARCHIVED = 4;
+
     protected $fillable = [
         'book_id',
         'chapter_number',
         'title',
         'content',
+        'status',
+        'published_at',
     ];
+
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
+
+    /**
+     * Get the human-readable status label for the chapter.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            self::STATUS_DRAFT => 'Draft',
+            self::STATUS_PUBLISHED => 'Published',
+            self::STATUS_PRIVATE => 'Private',
+            self::STATUS_PUBLISHED_Later => 'Publish Later',
+            self::STATUS_ARCHIVED => 'Archived',
+            default => 'Unknown',
+        };
+    }
 
     /**
      * A chapter belongs to a book.

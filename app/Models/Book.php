@@ -18,9 +18,11 @@ class Book extends Model
 
     const STATUS_PUBLISHED = 1;
 
-    const STATUS_PUBLISHED_Later = 2;
+    const STATUS_PRIVATE = 2;
 
-    const STATUS_ARCHIVED = 3;
+    const STATUS_PUBLISHED_Later = 3;
+
+    const STATUS_ARCHIVED = 4;
 
     /**
      * Get the human-readable status label for the book.
@@ -30,7 +32,8 @@ class Book extends Model
         return match ($this->status) {
             self::STATUS_DRAFT => 'Draft',
             self::STATUS_PUBLISHED => 'Published',
-            self::STATUS_PUBLISHED_Later => 'Published At',
+            self::STATUS_PRIVATE => 'Private',
+            self::STATUS_PUBLISHED_Later => 'Publish Later',
             self::STATUS_ARCHIVED => 'Archived',
             default => 'Unknown',
         };
@@ -43,13 +46,11 @@ class Book extends Model
         'cover',
         'user_id',
         'status',
-        'is_public',
         'published_at',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
-        'is_public' => 'boolean',
     ];
 
     /**

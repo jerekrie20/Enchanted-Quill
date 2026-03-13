@@ -7,31 +7,14 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Log;
-use /**
- * Class Image
- *
- * The Intervention Image facade provides an interface for manipulating images in the Laravel application.
- * This facade allows the use of the Image library functions to edit and adjust images such as resizing,
- * cropping, and applying filters.
- *
- * The Image class integrates with the Laravel ecosystem and can be used across the Enchanted_Quill
- * application leveraging its services, such as queues or jobs.
- *
- * @mixin \Intervention\Image\ImageManager
- *
- * @see \Intervention\Image\ImageManager
- */
-Intervention\Image\Laravel\Facades\Image;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 /**
  * Handles image operations such as saving, deleting, and bulk actions.
  */
 class ImageService
 {
-    /**
-     * Create a new class instance.
-     */
-
     /**
      * $image: Current Image saving/uploading
      * $current: The current image that was already uploading, Used to delete an existing image
@@ -45,56 +28,36 @@ class ImageService
             $img = Image::read($image->getRealPath());
             // Resize the image to 300x300
             $img->cover(300, 300, 'center');
-            // Generate a new filename
-            $filename = $base.'_'.rand(1000, 9999).'.'.$image->getClientOriginalExtension();
 
-            // Check if the folder exists and create it if it doesn't
-            if (! file_exists(storage_path('app/public/'.$folder))) {
-                mkdir(storage_path('app/public/'.$folder), 0755, true);
-            }
-            // Check if there's a current year subfolder, if not create it
-            if (! file_exists(storage_path('app/public/'.$folder.'/'.date('Y')))) {
-                mkdir(storage_path('app/public/'.$folder.'/'.date('Y')), 0755, true);
-            }
+            $extension = $image->getClientOriginalExtension() ?: 'jpg';
 
-            // Check if there's a current month subfolder, if not create it
-            if (! file_exists(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m')))) {
-                mkdir(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m')), 0755, true);
-            }
+            $year = date('Y');
+            $month = date('m');
+            $day = date('d');
+            $pathPrefix = "{$folder}/{$year}/{$month}/{$day}";
 
-            // Check if there's a current day subfolder, if not create it
-            if (! file_exists(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m').'/'.date('d')))) {
-                mkdir(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m').'/'.date('d')), 0755, true);
-            }
+            // Create the directory if it doesn't exist
+            Storage::disk('public')->makeDirectory($pathPrefix);
 
-            // Check if filename exists in the current day folder
-            while (file_exists(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m').'/'.date('d').'/'.$filename)) == true) {
-                $filename = 'img_'.rand(1000, 9999).'.'.$image->getClientOriginalExtension();
-            }
-
-            // add current year/month/day to the filename
-            $filename = date('Y').'/'.date('m').'/'.date('d').'/'.$filename;
+            // Generate a unique filename
+            do {
+                $filename = $base.'_'.rand(1000, 9999).'.'.$extension;
+                $fullPath = "{$pathPrefix}/{$filename}";
+            } while (Storage::disk('public')->exists($fullPath));
 
             // Delete the old image if it exists
-
-            // Check if the current image is not empty
             if (! empty($current)) {
-                $currentPath = storage_path('app/public/'.$folder.'/'.$current);
-                $publicPath = realpath(storage_path('app/public'));
-                $resolvedPath = realpath($currentPath);
-
-                if ($resolvedPath && str_starts_with($resolvedPath, $publicPath) && file_exists($resolvedPath)) {
-                    unlink($resolvedPath);
+                $currentPath = "{$folder}/{$current}";
+                if (Storage::disk('public')->exists($currentPath)) {
+                    Storage::disk('public')->delete($currentPath);
                 }
             }
 
-            // Save the image to the main folder/year/month/day directory
+            // Save the image
+            $img->save(Storage::disk('public')->path($fullPath));
 
-            $img->save(storage_path('app/public/'.$folder.'/'.$filename));
-
-            // Return the new filename
-
-            return $filename;
+            // Return the new filename with date path
+            return "{$year}/{$month}/{$day}/{$filename}";
         }
 
         return null;
@@ -102,39 +65,34 @@ class ImageService
 
     /**
      * $image: Current Image saving/uploading
-     *  $folder: The high level folder where the image needs to be in.
-     *  $subfolder: The folder that will group all the bulk images, can use blog name, book name, etc.
+     * $folder: The high level folder where the image needs to be in.
+     * $subfolder: The folder that will group all the bulk images, can use blog name, book name, etc.
      * $base: The base name for the image: Example: user_1234, blog_1234, book_1234, etc
      */
     public function saveBulkImages($images, $folder, $subfolder, $base = 'img')
     {
         $filenames = [];
         if (! empty($images)) {
+            $pathPrefix = "{$folder}/{$subfolder}";
+
+            // Create the directory if it doesn't exist
+            Storage::disk('public')->makeDirectory($pathPrefix);
+
             foreach ($images as $image) {
                 // Read the uploaded image file
                 $img = Image::read($image->getRealPath());
                 // Resize the image to 300x300
                 $img->cover(300, 300, 'center');
-                // Generate a new filename
-                $filename = $base.'_'.rand(1000, 9999).'.'.$image->getClientOriginalExtension();
 
-                // Check if the folder exists and create it if it doesn't
-                if (! file_exists(storage_path('app/public/'.$folder))) {
-                    mkdir(storage_path('app/public/'.$folder), 0755, true);
-                }
-                // Check if subfolder exists, if not create it
-                if (! file_exists(storage_path('app/public/'.$folder.'/'.$subfolder))) {
-                    mkdir(storage_path('app/public/'.$folder.'/'.$subfolder), 0755, true);
-                }
+                $extension = $image->getClientOriginalExtension() ?: 'jpg';
+                $filename = $base.'_'.rand(1000, 9999).'.'.$extension;
+                $fullPath = "{$pathPrefix}/{$filename}";
 
-                // Update the filename with the subfolder
-                $filename = $subfolder.'/'.$filename;
-
-                // Save the image to the main folder/subfolder directory
-                $img->save(storage_path('app/public/'.$folder.'/'.$filename));
+                // Save the image
+                $img->save(Storage::disk('public')->path($fullPath));
 
                 // Add the filename to the array
-                $filenames[] = $filename;
+                $filenames[] = "{$subfolder}/{$filename}";
             }
 
             // Return the array of filenames
@@ -146,58 +104,79 @@ class ImageService
 
     public function deleteImage($image, $folder = null)
     {
-        if ($folder) {
-            $fullPath = storage_path('app/public/'.$folder.'/'.$image);
-        } else {
-            $fullPath = storage_path('app/public/'.$image);
-        }
+        $path = $folder ? "{$folder}/{$image}" : $image;
 
-        $publicPath = realpath(storage_path('app/public'));
-        $resolvedPath = realpath($fullPath);
-
-        if ($resolvedPath && str_starts_with($resolvedPath, $publicPath) && file_exists($resolvedPath)) {
-            unlink($resolvedPath);
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
         } else {
-            Log::warning("File not found or invalid path: $fullPath");
+            Log::warning("File not found or invalid path: {$path}");
         }
     }
 
     public function deleteBulkImages($images, $folder)
     {
-        // Decode the images
-        $images = json_decode($images);
+        if (empty($images)) {
+            return;
+        }
+
+        // Decode the images if it's a JSON string
+        if (is_string($images)) {
+            $decoded = json_decode($images, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $images = $decoded;
+            } else {
+                Log::warning('Invalid JSON passed to deleteBulkImages');
+
+                return;
+            }
+        }
+
+        if (! is_array($images) || empty($images)) {
+            return;
+        }
+
         // flatten the array
         if ($this->isArrayOfArrays($images)) {
             $images = array_reduce($images, 'array_merge', []);
         }
 
+        // Filter out null or non-string values
+        $images = array_filter($images, 'is_string');
+
         if (! empty($images)) {
-            // Loop through the images and delete the images, delete the subfolder at the end
             // Get the subfolder
-            $subfolder = explode('/', $images[0])[0];
-            $publicPath = realpath(storage_path('app/public'));
+            $firstImageParts = explode('/', array_values($images)[0]);
+            $subfolder = count($firstImageParts) > 1 ? $firstImageParts[0] : null;
+            $disk = Storage::disk('public');
 
             foreach ($images as $image) {
-                $fullPath = storage_path('app/public/'.$folder.'/'.$image);
-                $resolvedPath = realpath($fullPath);
-
-                if ($resolvedPath && str_starts_with($resolvedPath, $publicPath) && file_exists($resolvedPath)) {
-                    unlink($resolvedPath);
+                $fullPath = "{$folder}/{$image}";
+                if ($disk->exists($fullPath)) {
+                    $disk->delete($fullPath);
                 }
             }
 
-            // Check if the subfolder exists
-            $subfolderPath = storage_path('app/public/'.$folder.'/'.$subfolder);
-            $resolvedSubfolder = realpath($subfolderPath);
+            // Check if the subfolder exists and is empty
+            if ($subfolder) {
+                $subfolderPath = "{$folder}/{$subfolder}";
+                if ($disk->exists($subfolderPath)) {
+                    $files = $disk->files($subfolderPath);
+                    $directories = $disk->directories($subfolderPath);
 
-            if ($resolvedSubfolder && str_starts_with($resolvedSubfolder, $publicPath) && file_exists($resolvedSubfolder) && is_dir($resolvedSubfolder)) {
-                rmdir($resolvedSubfolder);
+                    if (empty($files) && empty($directories)) {
+                        $disk->deleteDirectory($subfolderPath);
+                    }
+                }
             }
         }
     }
 
     public function isArrayOfArrays(array $array): bool
     {
+        if (empty($array)) {
+            return false;
+        }
+
         foreach ($array as $element) {
             if (! is_array($element)) {
                 return false;

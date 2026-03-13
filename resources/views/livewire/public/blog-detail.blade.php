@@ -14,7 +14,14 @@
 
             {{-- Blog Title and Meta --}}
             <div class="text-center">
-                <h1 id="blog-title" class="text-3xl md:text-4xl font-heading text-white mb-4">{{ $blog->title }}</h1>
+                <div class="flex flex-wrap items-center justify-center gap-4 mb-4">
+                    <h1 id="blog-title" class="text-3xl md:text-4xl font-heading text-white">{{ $blog->title }}</h1>
+                    @if($blog->status == 2)
+                        <span class="bg-violet-600 text-white text-sm font-bold px-3 py-1 rounded-sm flex items-center gap-2 border border-violet-400 shadow-lg">
+                            <i class="fa-solid fa-lock"></i> Members Only
+                        </span>
+                    @endif
+                </div>
 
                 <div class="flex items-center justify-center gap-6 text-white/80 font-serif text-sm" role="contentinfo" aria-label="Article metadata">
                     <div class="flex items-center gap-2">

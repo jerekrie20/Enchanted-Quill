@@ -19,16 +19,15 @@ class BlogPolicy
 
     public function view(?User $user, Blog $blog): Response
     {
-        // Published and public blogs can be viewed by anyone (including guests)
-        if ($blog->is_public && $blog->status == Blog::STATUS_PUBLISHED) {
+        // If the blog is published or private, guests can view it in listings/details (interaction is gated)
+        if ($blog->status == Blog::STATUS_PUBLISHED || $blog->status == Blog::STATUS_PRIVATE) {
             return Response::allow();
         }
 
-        // Guests cannot view non-public or non-published blogs
+        // For unpublished blogs, guests are denied
         if (! $user) {
             return Response::deny('You must be logged in to view this blog.');
         }
-
         // Admins can view all blogs
         if ($user->role == 'admin') {
             return Response::allow();

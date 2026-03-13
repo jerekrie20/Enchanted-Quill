@@ -61,6 +61,8 @@
             if (!editorElement) {
                 return;
             }
+            if (editorElement.hasAttribute('data-editor-initialized')) return;
+            editorElement.setAttribute('data-editor-initialized', 'true');
 
             // Destroy existing editor
             if (chronicleEditorInstance) {

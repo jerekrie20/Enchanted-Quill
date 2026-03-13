@@ -2,7 +2,6 @@
 
 namespace App\Livewire\General\Pages;
 
-use App\Jobs\ProcessBlog;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Services\ImageService;
@@ -106,7 +105,7 @@ class ChronicleManager extends Component
 
             // Schedule the job if status is "Publish Later"
             if ($this->status == 3 && ! empty($data['publish_at'])) {
-                ProcessBlog::dispatch($blog->id)->delay($data['publish_at']);
+                \App\Jobs\PublishContentJob::dispatch($blog)->delay($data['publish_at']);
             }
 
             $blog->categories()->attach($this->category);
@@ -122,7 +121,7 @@ class ChronicleManager extends Component
 
         // Schedule the job if status is "Publish Later"
         if ($this->status == 3 && ! empty($data['publish_at'])) {
-            ProcessBlog::dispatch($blog->id)->delay($data['publish_at']);
+            \App\Jobs\PublishContentJob::dispatch($blog)->delay($data['publish_at']);
         }
 
         session()->flash('success', 'Blog updated successfully!');

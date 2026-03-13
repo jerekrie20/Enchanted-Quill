@@ -19,12 +19,12 @@ class BookPolicy
 
     public function view(?User $user, Book $book): Response
     {
-        // Allow guests to view public published books
-        if ($book->is_public && $book->status === Book::STATUS_PUBLISHED) {
+        // If the book is published, anyone can view its detail page
+        if ($book->status === Book::STATUS_PUBLISHED || $book->status === Book::STATUS_PRIVATE) {
             return Response::allow();
         }
 
-        // Guests cannot view non-public books
+        // For unpublished books, guests are denied
         if (! $user) {
             return Response::deny('You must be logged in to view this book.');
         }

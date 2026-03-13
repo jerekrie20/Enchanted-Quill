@@ -28,6 +28,18 @@ class ChapterManager extends Component
 
     public $bookName;
 
+    public $status = 0;
+
+    public $published_at;
+
+    public $statusData = [
+        0 => 'Draft',
+        1 => 'Published',
+        2 => 'Private',
+        3 => 'Publish Later',
+        4 => 'Archived',
+    ];
+
     #[Locked]
     public $bookId;
 
@@ -46,6 +58,8 @@ class ChapterManager extends Component
                     ->where('book_id', $this->bookId)
                     ->ignore($this->chapterId),
             ],
+            'status' => ['required', 'integer', Rule::in([0, 1, 2, 3, 4])],
+            'published_at' => ['nullable', 'date', 'after_or_equal:today'],
         ];
     }
 
@@ -61,7 +75,7 @@ class ChapterManager extends Component
 
     public function saveDetails(): null
     {
-        $this->validate();
+        $data = $this->validate();
 
         $chapter = $this->chapterId
             ? Chapter::findOrFail($this->chapterId)
@@ -71,10 +85,16 @@ class ChapterManager extends Component
             'book_id' => $this->bookId,
             'title' => $this->title,
             'chapter_number' => $this->chapterNumber,
+            'status' => $this->status,
+            'published_at' => ! empty($this->published_at) ? \Illuminate\Support\Carbon::parse($this->published_at) : null,
             'content' => $chapter->content ?? '',
         ]);
 
         $chapter->save();
+
+        if ($chapter->status == 3 && $chapter->published_at) {
+            \App\Jobs\PublishContentJob::dispatch($chapter)->delay($chapter->published_at);
+        }
 
         $isNewChapter = ! $this->chapterId;
 
@@ -100,6 +120,11 @@ class ChapterManager extends Component
             $this->chapterId = $chapter->id;
             $this->title = $chapter->title;
             $this->chapterNumber = (string) $chapter->chapter_number;
+            $this->status = in_array($chapter->status, [0, 1, 2, 3, 4]) ? $chapter->status : 0;
+            $this->published_at = $chapter->published_at;
+        } else {
+            $this->status = 0;
+            $this->published_at = null;
         }
 
     }

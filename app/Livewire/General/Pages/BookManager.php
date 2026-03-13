@@ -33,7 +33,7 @@ class BookManager extends Component
 
     public $status;
 
-    public $publish_at;
+    public $published_at;
 
     public $cover;
 
@@ -49,8 +49,9 @@ class BookManager extends Component
     public $statusData = [
         '0' => 'Draft',
         '1' => 'Published',
-        '2' => 'Publish Later',
-        '3' => 'Archived',
+        '2' => 'Private',
+        '3' => 'Publish Later',
+        '4' => 'Archived',
     ];
 
     protected function rules()
@@ -58,10 +59,10 @@ class BookManager extends Component
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', Rule::unique('books')->ignore($this->book->id ?? null), 'string'],
-            'status' => ['required', 'numeric', 'integer', 'min:0', 'max:3'],
+            'status' => ['required', 'numeric', 'integer', 'min:0', 'max:4'],
             'category.*' => Rule::exists('categories', 'id'),
             'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2040'],
-            'publish_at' => ['nullable', 'date', 'after_or_equal:today'],
+            'published_at' => ['nullable', 'date', 'after_or_equal:today'],
         ];
     }
 
@@ -89,9 +90,11 @@ class BookManager extends Component
             $data['cover'] = $this->currentCover;
         }
 
-        // Convert publish_at if it's set
-        if (! empty($data['publish_at'])) {
-            $data['publish_at'] = Carbon::parse($data['publish_at']);
+        // Convert published_at if it's set
+        if (! empty($data['published_at'])) {
+            $data['published_at'] = Carbon::parse($data['published_at']);
+        } else {
+            $data['published_at'] = null;
         }
 
         if (! $this->book) {
@@ -99,6 +102,12 @@ class BookManager extends Component
             $data['user_id'] = auth()->id();
             $this->book = Book::create($data);
             $this->book->categories()->attach($this->category);
+
+            // Schedule the job if status is "Publish Later"
+            if ($this->status == 3 && ! empty($data['published_at'])) {
+                \App\Jobs\PublishContentJob::dispatch($this->book)->delay($data['published_at']);
+            }
+
             session()->flash('success', 'Book created successfully!');
 
             return;
@@ -108,6 +117,11 @@ class BookManager extends Component
 
         $this->book->update($data);
         $this->book->categories()->sync($this->category);
+
+        // Schedule the job if status is "Publish Later"
+        if ($this->status == 3 && ! empty($data['published_at'])) {
+            \App\Jobs\PublishContentJob::dispatch($this->book)->delay($data['published_at']);
+        }
 
         session()->flash('success', 'Book updated successfully!');
     }
@@ -124,14 +138,14 @@ class BookManager extends Component
             $this->category = $book->categories->pluck('id')->toArray();
             $this->status = $book->status;
             $this->currentCover = $book->cover;
-            $this->publish_at = $book->publish_at;
+            $this->published_at = $book->published_at;
         } else {
             $this->book = false;
             $this->title = '';
             $this->slug = '';
             $this->status = 0; // default to draft
             $this->currentCover = null;
-            $this->publish_at = null;
+            $this->published_at = null;
         }
 
     }

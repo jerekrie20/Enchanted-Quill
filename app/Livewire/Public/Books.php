@@ -44,8 +44,7 @@ class Books extends Component
     public function render()
     {
         $query = Book::with(['author', 'categories'])
-            ->where('status', Book::STATUS_PUBLISHED)
-            ->where('is_public', true)
+            ->whereIn('status', [Book::STATUS_PUBLISHED, Book::STATUS_PRIVATE])
             ->where(function ($q) {
                 $q->whereNull('published_at')
                     ->orWhere('published_at', '<=', now());

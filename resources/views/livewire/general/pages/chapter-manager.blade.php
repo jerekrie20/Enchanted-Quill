@@ -66,7 +66,15 @@
                     <div>
                         <x-forms.input-text name="Book Name" readonly wire:model="bookName"/>
                     </div>
-                </div>
+                    <div>
+                        <x-forms.input-select name="Status" :data="$statusData" wire:model.live.debounce.500ms="status"/>
+                    </div>
+
+                    @if($status == 3)
+                        <div>
+                            <x-forms.input-date-time name="Publish Later" modal="published_at" wire:model="published_at"/>
+                        </div>
+                    @endif                </div>
 
                 <div class="flex justify-center pt-4">
                     <x-forms.input-submit/>
