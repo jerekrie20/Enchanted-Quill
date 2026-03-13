@@ -30,10 +30,10 @@ class Contact extends Component
     public function submit(): void
     {
         $validated = $this->validate([
-            'name' => ['required', 'string', 'max:255','blasp_check'],
+            'name' => ['required', 'string', 'max:255', 'blasp_check'],
             'email' => ['required', 'email', 'max:255'],
-            'subject' => ['required', 'string', 'max:255','blasp_check'],
-            'message' => ['required', 'string', 'min:10','blasp_check'],
+            'subject' => ['required', 'string', 'max:255', 'blasp_check'],
+            'message' => ['required', 'string', 'min:10', 'blasp_check'],
         ]);
 
         $contactData = array_merge($validated, [

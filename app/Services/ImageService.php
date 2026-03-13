@@ -50,21 +50,21 @@ class ImageService
 
             // Check if the folder exists and create it if it doesn't
             if (! file_exists(storage_path('app/public/'.$folder))) {
-                mkdir(storage_path('app/public/'.$folder), 0777, true);
+                mkdir(storage_path('app/public/'.$folder), 0755, true);
             }
             // Check if there's a current year subfolder, if not create it
             if (! file_exists(storage_path('app/public/'.$folder.'/'.date('Y')))) {
-                mkdir(storage_path('app/public/'.$folder.'/'.date('Y')), 0777, true);
+                mkdir(storage_path('app/public/'.$folder.'/'.date('Y')), 0755, true);
             }
 
             // Check if there's a current month subfolder, if not create it
             if (! file_exists(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m')))) {
-                mkdir(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m')), 0777, true);
+                mkdir(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m')), 0755, true);
             }
 
             // Check if there's a current day subfolder, if not create it
             if (! file_exists(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m').'/'.date('d')))) {
-                mkdir(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m').'/'.date('d')), 0777, true);
+                mkdir(storage_path('app/public/'.$folder.'/'.date('Y').'/'.date('m').'/'.date('d')), 0755, true);
             }
 
             // Check if filename exists in the current day folder
@@ -79,10 +79,12 @@ class ImageService
 
             // Check if the current image is not empty
             if (! empty($current)) {
-                // Check if the file exists
-                if (file_exists(storage_path('app/public/'.$folder.'/'.$current))) {
-                    // Delete the file
-                    unlink(storage_path('app/public/'.$folder.'/'.$current));
+                $currentPath = storage_path('app/public/'.$folder.'/'.$current);
+                $publicPath = realpath(storage_path('app/public'));
+                $resolvedPath = realpath($currentPath);
+
+                if ($resolvedPath && str_starts_with($resolvedPath, $publicPath) && file_exists($resolvedPath)) {
+                    unlink($resolvedPath);
                 }
             }
 
@@ -118,11 +120,11 @@ class ImageService
 
                 // Check if the folder exists and create it if it doesn't
                 if (! file_exists(storage_path('app/public/'.$folder))) {
-                    mkdir(storage_path('app/public/'.$folder), 0777, true);
+                    mkdir(storage_path('app/public/'.$folder), 0755, true);
                 }
                 // Check if subfolder exists, if not create it
                 if (! file_exists(storage_path('app/public/'.$folder.'/'.$subfolder))) {
-                    mkdir(storage_path('app/public/'.$folder.'/'.$subfolder), 0777, true);
+                    mkdir(storage_path('app/public/'.$folder.'/'.$subfolder), 0755, true);
                 }
 
                 // Update the filename with the subfolder
@@ -149,13 +151,14 @@ class ImageService
         } else {
             $fullPath = storage_path('app/public/'.$image);
         }
-        // Log::info("Attempting to delete: $fullPath");
 
-        if (file_exists($fullPath)) {
-            unlink($fullPath);
-            // Log::info("File deleted successfully: $fullPath");
+        $publicPath = realpath(storage_path('app/public'));
+        $resolvedPath = realpath($fullPath);
+
+        if ($resolvedPath && str_starts_with($resolvedPath, $publicPath) && file_exists($resolvedPath)) {
+            unlink($resolvedPath);
         } else {
-            Log::warning("File not found: $fullPath");
+            Log::warning("File not found or invalid path: $fullPath");
         }
     }
 
@@ -172,19 +175,23 @@ class ImageService
             // Loop through the images and delete the images, delete the subfolder at the end
             // Get the subfolder
             $subfolder = explode('/', $images[0])[0];
+            $publicPath = realpath(storage_path('app/public'));
 
             foreach ($images as $image) {
-                // Check if the file exists
-                if (file_exists(storage_path('app/public/'.$folder.'/'.$image))) {
-                    // Delete the file
-                    unlink(storage_path('app/public/'.$folder.'/'.$image));
+                $fullPath = storage_path('app/public/'.$folder.'/'.$image);
+                $resolvedPath = realpath($fullPath);
+
+                if ($resolvedPath && str_starts_with($resolvedPath, $publicPath) && file_exists($resolvedPath)) {
+                    unlink($resolvedPath);
                 }
             }
 
             // Check if the subfolder exists
-            if (file_exists(storage_path('app/public/'.$folder.'/'.$subfolder))) {
-                // Delete the subfolder
-                rmdir(storage_path('app/public/'.$folder.'/'.$subfolder));
+            $subfolderPath = storage_path('app/public/'.$folder.'/'.$subfolder);
+            $resolvedSubfolder = realpath($subfolderPath);
+
+            if ($resolvedSubfolder && str_starts_with($resolvedSubfolder, $publicPath) && file_exists($resolvedSubfolder) && is_dir($resolvedSubfolder)) {
+                rmdir($resolvedSubfolder);
             }
         }
     }

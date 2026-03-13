@@ -18,6 +18,11 @@ class EditorUploadController extends Controller
 
         // Determine the folder based on the request or default to 'blogs'
         $folder = $request->input('folder', 'blogs');
+
+        if (! in_array($folder, ['blogs', 'chapters', 'books'])) {
+            $folder = 'blogs';
+        }
+
         $baseName = match ($folder) {
             'chapters' => 'chapter_image',
             'books' => 'book_image',

@@ -53,9 +53,6 @@ Route::get('/portal', \App\Livewire\Portal\Dashboard::class)->name('portal');
 
 // Portal Routes (Authenticated Users)
 Route::middleware('auth')->group(function () {
-    Route::post('/upload', [EditorUploadController::class, 'upload'])->name('ckeditor.upload');
-    Route::post('/delete-image', [EditorUploadController::class, 'deleteImage'])->name('ckeditor.delete');
-
     // Blog management for authors (existing routes - will update layout later)
     Route::get('/blogs', ChronicleList::class)->name('blogs');
     Route::get('/blog/{id}/edit', ChronicleManager::class)->name('blog.manage');
@@ -74,6 +71,9 @@ Route::middleware('auth')->group(function () {
 
 // Authors and admins routes
 Route::middleware(['auth', 'can:admin-or-author-access'])->group(function () {
+    Route::post('/upload', [EditorUploadController::class, 'upload'])->name('ckeditor.upload');
+    Route::post('/delete-image', [EditorUploadController::class, 'deleteImage'])->name('ckeditor.delete');
+
     Route::get('/admin/books', Books::class)->name('admin.books');
     Route::get('/manage/book/{id?}', BookManager::class)->name('book.manage');
     Route::get('/chapters/{id}', ChaptersList::class)->name('chapters.list');
