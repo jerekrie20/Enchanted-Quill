@@ -35,23 +35,21 @@ class ContentPublishedNotification extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail(object $notifiable): \Illuminate\Mail\Mailable
     {
         $type = class_basename($this->content);
-        $title = $this->content->title;
 
-        $url = url('/');
         if ($type === 'Book') {
-            $url = route('public.book.show', ['id' => $this->content->id]);
+            return (new \App\Mail\BookPublished($this->content))
+                ->to($notifiable->email)
+                ->mailer('mailgun');
         } elseif ($type === 'Blog') {
-            $url = route('public.blog.show', ['id' => $this->content->id]);
+            return (new \App\Mail\BlogPublished($this->content))
+                ->to($notifiable->email)
+                ->mailer('mailgun');
         }
 
-        return (new MailMessage)
-            ->subject("Your {$type} has been published!")
-            ->line("Good news! Your {$type} \"{$title}\" has reached its scheduled publication time and is now live.")
-            ->action('View Content', $url)
-            ->line('Thank you for sharing your work on our platform!');
+        throw new \InvalidArgumentException("Unknown content type: {$type}");
     }
 
     /**

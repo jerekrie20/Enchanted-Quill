@@ -23,7 +23,6 @@ class BookFactory extends Factory
             'description' => $this->faker->paragraphs(3, true),
             'cover' => count($covers) > 0 ? $this->faker->randomElement($covers) : null,
             'status' => Book::STATUS_PUBLISHED,
-            'is_public' => true,
             'published_at' => Carbon::now(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
