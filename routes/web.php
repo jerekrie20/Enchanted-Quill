@@ -43,6 +43,7 @@ Route::get('/about', About::class)->name('public.about');
 Route::get('/contact', Contact::class)->name('public.contact');
 Route::get('/faq', Faq::class)->name('public.faq');
 Route::get('/policies', Policies::class)->name('public.policies');
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap');
 
 Route::get('/login', function () {
     return view('auth.login');

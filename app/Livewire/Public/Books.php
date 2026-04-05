@@ -78,6 +78,8 @@ class Books extends Component
         return view('livewire.public.books', [
             'books' => $books,
             'categories' => $categories,
+        ])->layoutData([
+            'description' => 'Browse our extensive collection of original books and stories. Find your next favorite read from our community of writers.',
         ]);
     }
 }

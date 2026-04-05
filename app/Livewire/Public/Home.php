@@ -31,6 +31,9 @@ class Home extends Component
         return view('livewire.public.home', [
             'featuredBooks' => $featuredBooks,
             'recentBlogs' => $recentBlogs,
+        ])->layoutData([
+            'description' => 'Enchanted Quill - Where Words Weave Magic. Discover original stories, poems, and blog posts from a community of talented writers.',
+            'image' => asset('graphic/quill.webp'),
         ]);
     }
 }

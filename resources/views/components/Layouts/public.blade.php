@@ -81,6 +81,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta name="description" content="{{ $description ?? 'Enchanted Quill - Where Words Weave Magic. Discover original stories, poems, and blog posts from a community of talented writers.' }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $title ?? 'Enchanted Quill - Where Words Weave Magic' }}">
+    <meta property="og:description" content="{{ $description ?? 'Enchanted Quill - Where Words Weave Magic. Discover original stories, poems, and blog posts from a community of talented writers.' }}">
+    <meta property="og:image" content="{{ $image ?? asset('graphic/quill.webp') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $title ?? 'Enchanted Quill - Where Words Weave Magic' }}">
+    <meta property="twitter:description" content="{{ $description ?? 'Enchanted Quill - Where Words Weave Magic. Discover original stories, poems, and blog posts from a community of talented writers.' }}">
+    <meta property="twitter:image" content="{{ $image ?? asset('graphic/quill.webp') }}">
+
     <title>{{ $title ?? 'Enchanted Quill - Where Words Weave Magic' }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://kit.fontawesome.com/9a1bef43f6.js" crossorigin="anonymous"></script>

@@ -77,6 +77,8 @@ class Blog extends Component
         return view('livewire.public.blog', [
             'blogs' => $blogs,
             'categories' => $categories,
+        ])->layoutData([
+            'description' => 'Read our latest blog posts about writing, literature, and the Enchanted Quill community.',
         ]);
     }
 }

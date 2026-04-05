@@ -140,15 +140,16 @@ class BookDetailTest extends TestCase
                 'chapter_number' => $i,
                 'title' => "Chapter {$i}",
                 'content' => 'Chapter content',
+                'status' => 1, // Status Published
             ]);
         }
 
         $component = Livewire::test(BookDetail::class, ['id' => $book->id])
             ->assertStatus(200);
 
-        // Should show 20 chapters on first page
+        // Should show 10 chapters on first page (based on component's paginate(10))
         $chapters = $component->get('chapters');
-        $this->assertEquals(20, $chapters->count());
+        $this->assertEquals(10, $chapters->count());
         $this->assertTrue($chapters->hasPages());
     }
 

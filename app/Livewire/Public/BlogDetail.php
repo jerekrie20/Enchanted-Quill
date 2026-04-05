@@ -41,6 +41,10 @@ class BlogDetail extends Component
             'blog' => $this->blog,
             'comments' => $this->comments,
         ])
-            ->title($this->blog->title.' - Enchanted Quill');
+            ->title($this->blog->title.' - Enchanted Quill')
+            ->layoutData([
+                'description' => substr(strip_tags($this->blog->content), 0, 160),
+                'image' => $this->blog->image ? asset('storage/'.$this->blog->image) : asset('graphic/quill.webp'),
+            ]);
     }
 }
