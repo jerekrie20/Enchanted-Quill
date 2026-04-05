@@ -5,7 +5,6 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class ContentPublishedNotification extends Notification implements ShouldQueue
@@ -41,12 +40,13 @@ class ContentPublishedNotification extends Notification implements ShouldQueue
 
         if ($type === 'Book') {
             return (new \App\Mail\BookPublished($this->content))
-                ->to($notifiable->email)
-                ->mailer('mailgun');
+                ->to($notifiable->email);
         } elseif ($type === 'Blog') {
             return (new \App\Mail\BlogPublished($this->content))
-                ->to($notifiable->email)
-                ->mailer('mailgun');
+                ->to($notifiable->email);
+        } elseif ($type === 'Chapter') {
+            return (new \App\Mail\ChapterPublished($this->content))
+                ->to($notifiable->email);
         }
 
         throw new \InvalidArgumentException("Unknown content type: {$type}");

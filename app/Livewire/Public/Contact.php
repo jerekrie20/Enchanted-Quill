@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Public;
 
+use App\Mail\AdminContactNotification;
 use App\Models\Contact as ContactModel;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -46,7 +49,13 @@ class Contact extends Component
         $contactData['message'] = 'Subject: '.$validated['subject']."\n\n".$validated['message'];
         unset($contactData['subject']);
 
-        ContactModel::create($contactData);
+        $contact = ContactModel::create($contactData);
+
+        // Send email to admin
+        $admin = User::where('role', 'admin')->first();
+        $adminEmail = $admin ? $admin->email : config('mail.from.address');
+
+        Mail::to($adminEmail)->send(new AdminContactNotification($contact));
 
         session()->flash('success', 'Thank you for your message! We\'ll get back to you soon.');
 

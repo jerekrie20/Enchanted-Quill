@@ -3,12 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\ContentPublished;
-use App\Mail\BlogPublished;
-use App\Mail\BookPublished;
 use App\Notifications\ContentPublishedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\Mail;
 
 class SendContentPublishedNotification implements ShouldQueue
 {
@@ -32,20 +29,10 @@ class SendContentPublishedNotification implements ShouldQueue
 
         if (class_basename($content) === 'Book') {
             $author = $content->author;
-
-            if ($author) {
-                Mail::to($author)->send(new BookPublished($content));
-            }
-
-            return;
         } elseif (class_basename($content) === 'Blog') {
             $author = $content->user;
-
-            if ($author) {
-                Mail::to($author)->send(new BlogPublished($content));
-            }
-
-            return;
+        } elseif (class_basename($content) === 'Chapter') {
+            $author = $content->book?->author;
         }
 
         if ($author) {

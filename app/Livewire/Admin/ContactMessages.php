@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Admin;
 
+use App\Mail\NewInternalMessage;
 use App\Models\Contact;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -78,7 +80,7 @@ class ContactMessages extends Component
 
         $user = \App\Models\User::find($this->composeUserId);
 
-        Contact::create([
+        $message = Contact::create([
             'user_id' => $user->id,
             'name' => auth()->user()->name,
             'email' => auth()->user()->email,
@@ -86,6 +88,8 @@ class ContactMessages extends Component
             'status' => Contact::STATUS_UNREAD,
             'is_from_admin' => true,
         ]);
+
+        Mail::to($user)->send(new NewInternalMessage($message));
 
         $this->closeComposeModal();
         session()->flash('success', 'Message sent to user successfully!');
@@ -100,7 +104,7 @@ class ContactMessages extends Component
         $this->authorize('update', $this->selectedMessage);
 
         // Create the reply
-        Contact::create([
+        $reply = Contact::create([
             'parent_id' => $this->selectedMessage->id,
             'user_id' => $this->selectedMessage->user_id,
             'name' => auth()->user()->name,
@@ -113,10 +117,16 @@ class ContactMessages extends Component
         // Update the main message status
         $this->selectedMessage->update(['status' => Contact::STATUS_REPLIED]);
 
-        // If guest, we would ideally send an email here.
-        // if (!$this->selectedMessage->user_id) {
-        //     Mail::to($this->selectedMessage->email)->send(new ReplyMail(...));
-        // }
+        // Notify the user if it's an internal user
+        if ($this->selectedMessage->user_id) {
+            $user = \App\Models\User::find($this->selectedMessage->user_id);
+            if ($user) {
+                Mail::to($user)->send(new NewInternalMessage($reply));
+            }
+        } else {
+            // Guest notification could be added here
+            Mail::to($this->selectedMessage->email)->send(new NewInternalMessage($reply));
+        }
 
         $this->selectedMessage = $this->selectedMessage->fresh(['replies', 'user']);
         $this->replyMessage = '';

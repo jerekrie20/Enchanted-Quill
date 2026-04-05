@@ -2,7 +2,10 @@
 
 namespace App\Livewire\Portal;
 
+use App\Mail\AdminContactNotification;
 use App\Models\Contact;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -35,7 +38,7 @@ class Messages extends Component
             'replyMessage' => 'required|string|min:2|blasp_check',
         ]);
 
-        Contact::create([
+        $reply = Contact::create([
             'parent_id' => $this->selectedMessage->id,
             'user_id' => auth()->id(),
             'name' => auth()->user()->name,
@@ -47,6 +50,12 @@ class Messages extends Component
 
         // Set the main ticket back to unread so admins know there is a new reply
         $this->selectedMessage->update(['status' => Contact::STATUS_UNREAD]);
+
+        // Notify admin of new reply
+        $admin = User::where('role', 'admin')->first();
+        $adminEmail = $admin ? $admin->email : config('mail.from.address');
+
+        Mail::to($adminEmail)->send(new AdminContactNotification($reply));
 
         $this->selectedMessage = $this->selectedMessage->fresh('replies');
         $this->replyMessage = '';
