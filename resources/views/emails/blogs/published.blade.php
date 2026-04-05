@@ -9,6 +9,6 @@ Your blog post **"{{ $blog->title }}"** has reached its scheduled publication ti
 View Your Blog Post
 </x-mail::button>
 
-Thank you for sharing your wonderful stories with us!<br>
-{{ config('app.name') }}
+Where words weave magic,<br>
+The Enchanted Quill Team
 </x-mail::message>

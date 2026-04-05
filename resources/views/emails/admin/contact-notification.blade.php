@@ -6,12 +6,15 @@ You have received a @if($contact->parent_id) reply @else new message @endif from
 **From:** {{ $contact->name }} ({{ $contact->email }})
 
 **Message:**
+
+<x-mail::panel>
 {{ $contact->message }}
+</x-mail::panel>
 
 <x-mail::button :url="$url">
 View @if($contact->parent_id) Reply @else Message @endif in Admin Panel
 </x-mail::button>
 
-Thanks,<br>
-{{ config('app.name') }}
+Where words weave magic,<br>
+The Enchanted Quill Team
 </x-mail::message>

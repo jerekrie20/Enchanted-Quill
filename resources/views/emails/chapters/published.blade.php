@@ -9,6 +9,6 @@ Your chapter **"{{ $chapter->title }}"** from the book **"{{ $chapter->book->tit
 View Your Chapter
 </x-mail::button>
 
-Thank you for sharing your wonderful stories with us!<br>
-{{ config('app.name') }}
+Where words weave magic,<br>
+The Enchanted Quill Team
 </x-mail::message>

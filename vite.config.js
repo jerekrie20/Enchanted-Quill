@@ -15,6 +15,7 @@ export default defineConfig({
         },
         watch: {
             usePolling: true,
+            ignored: ['**/.junie/**'],
         },
     },
 

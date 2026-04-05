@@ -9,6 +9,6 @@ Your book **"{{ $book->title }}"** has reached its scheduled publication time an
 View Your Book
 </x-mail::button>
 
-Thank you for sharing your wonderful stories with us!<br>
-{{ config('app.name') }}
+Where words weave magic,<br>
+The Enchanted Quill Team
 </x-mail::message>
