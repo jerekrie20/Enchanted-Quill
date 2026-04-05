@@ -279,10 +279,13 @@
                                     <button type="button" wire:click="closeReviewModal" class="px-4 py-2 border-2 border-purple-500/30 text-text font-serif rounded-sm hover:bg-purple-500/10 transition-colors">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="relative px-6 py-2 bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif rounded-sm border-2 border-purple-500/50 transition-colors">
+                                    <button type="submit" wire:loading.attr="disabled" class="relative px-6 py-2 bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif rounded-sm border-2 border-purple-500/50 transition-colors">
                                         <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
                                         <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
-                                        {{ $this->userReview ? 'Update Review' : 'Submit Review' }}
+                                        <span wire:loading.remove wire:target="submitReview">{{ $this->userReview ? 'Update Review' : 'Submit Review' }}</span>
+                                        <span wire:loading wire:target="submitReview">
+                                            <i class="fa-solid fa-spinner fa-spin mr-2"></i>Submitting...
+                                        </span>
                                     </button>
                                 </div>
                             </form>

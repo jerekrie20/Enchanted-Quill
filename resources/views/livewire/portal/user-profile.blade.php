@@ -202,11 +202,11 @@
     @if($this->publishedBooks->count() === 0 && $this->publishedChronicles->count() === 0 && $this->user->role !== 'reader')
         <section class="py-12" aria-labelledby="empty-state-heading">
             <div class="max-w-(--breakpoint-xl) mx-auto px-4">
-                <div class="text-center py-16 bg-white/60 dark:bg-accent/20 backdrop-blur-sm rounded-sm border-2 border-purple-500/20" role="status" aria-live="polite">
-                    <i class="fa-solid fa-book-open text-6xl text-purple-500/20 mb-4" aria-hidden="true"></i>
-                    <p id="empty-state-heading" class="text-text font-heading text-xl mb-2">No published content yet</p>
-                    <p class="text-text/60 font-serif">Check back soon for updates!</p>
-                </div>
+                <x-general.empty-state
+                    icon="fa-feather-pointed"
+                    title="The Pen is Currently Resting"
+                    message="This author hasn't published any volumes or chronicles yet. Check back soon for their first masterpiece!"
+                />
             </div>
         </section>
     @endif

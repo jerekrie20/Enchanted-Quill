@@ -41,6 +41,12 @@ class Blog extends Component
         $this->resetPage();
     }
 
+    public function clearFilters(): void
+    {
+        $this->reset(['search', 'category']);
+        $this->resetPage();
+    }
+
     public function render()
     {
         $query = BlogModel::with(['user', 'categories'])

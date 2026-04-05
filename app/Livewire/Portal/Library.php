@@ -38,6 +38,12 @@ class Library extends Component
         $this->resetPage();
     }
 
+    public function clearFilters(): void
+    {
+        $this->reset(['search', 'selectedCategories']);
+        $this->resetPage();
+    }
+
     public function render()
     {
         $query = Book::with(['author', 'categories'])

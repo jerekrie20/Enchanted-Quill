@@ -170,9 +170,12 @@
                         </button>
 
                         <button wire:click="bulkDelete"
+                                wire:loading.attr="disabled"
+                                wire:target="bulkDelete"
                                 wire:confirm="Are you sure you want to delete {{ count($selectedBooks) }} book(s)?"
                                 class="px-4 py-2 font-serif text-sm text-white bg-danger hover:bg-danger/90 border border-danger/50 rounded-sm transition-all duration-300">
-                            Delete Selected
+                            <span wire:loading.remove wire:target="bulkDelete">Delete Selected</span>
+                            <span wire:loading wire:target="bulkDelete"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Deleting...</span>
                         </button>
 
                         <button wire:click="$set('selectedBooks', []); $set('selectAll', false)"
@@ -192,8 +195,13 @@
                         <option value="3">Archived</option>
                     </select>
                     <button wire:click="bulkUpdateStatus"
+                            wire:loading.attr="disabled"
+                            wire:target="bulkUpdateStatus"
                             class="px-4 py-2 font-serif text-sm text-white bg-white/30 hover:bg-white/40 border border-white/50 rounded-sm transition-all duration-300">
-                        Apply Status
+                        <span wire:loading.remove wire:target="bulkUpdateStatus">Apply Status</span>
+                        <span wire:loading wire:target="bulkUpdateStatus">
+                            <i class="fa-solid fa-spinner fa-spin mr-1"></i> Applying...
+                        </span>
                     </button>
                 </div>
             </div>

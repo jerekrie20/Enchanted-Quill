@@ -108,12 +108,13 @@
                     </a>
                 </div>
             @else
-                <div class="text-center py-16 bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-purple-500/20 rounded-sm">
-                    <svg class="w-16 h-16 text-purple-500/20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                    </svg>
-                    <p class="text-text/60 font-serif text-lg">No books available yet. Check back soon!</p>
-                </div>
+                <x-general.empty-state
+                    icon="fa-book"
+                    title="The Library is Currently Quiet"
+                    message="No books have been recently featured. Our scribes are busy gathering new tales from across the realm!"
+                    action-text="Browse All Books"
+                    :action-url="route('books')"
+                />
             @endif
         </section>
 
@@ -182,12 +183,14 @@
                         </a>
                     </div>
                 @else
-                    <div class="text-center py-12 bg-white dark:bg-navbg/40 border border-violet-400/20">
-                        <svg class="w-16 h-16 text-violet-400/20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <p class="text-text/60 font-serif">No blog posts available yet. Check back soon!</p>
-                    </div>
+                    <x-general.empty-state
+                        icon="fa-feather"
+                        title="Quiet Chronicles"
+                        message="No recent blog posts found. Check back soon for the latest news and insights!"
+                        action-text="Visit Full Blog"
+                        :action-url="route('blog')"
+                        class="bg-transparent border-none shadow-none"
+                    />
                 @endif
             </div>
         </section>

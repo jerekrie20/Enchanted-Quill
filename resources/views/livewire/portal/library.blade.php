@@ -179,13 +179,13 @@
                     {{ $books->links() }}
                 </nav>
             @else
-                <div class="text-center py-16 bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-purple-500/20 rounded-sm">
-                    <svg class="w-16 h-16 text-purple-500/20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <p class="text-text font-heading text-xl mb-2">No volumes found</p>
-                    <p class="text-text/60 font-serif">Try adjusting your filters or search terms</p>
-                </div>
+                <x-general.empty-state
+                    icon="fa-magnifying-glass"
+                    title="No Volumes Found"
+                    message="The library is vast, but it seems this specific scroll has not been written yet. Try adjusting your filters or search terms!"
+                    :action-text="$search || !empty($selectedCategories) ? 'Clear All Filters' : null"
+                    action-wire-click="clearFilters"
+                />
             @endif
         </section>
 

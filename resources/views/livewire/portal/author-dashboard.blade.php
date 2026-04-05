@@ -154,16 +154,13 @@
                     </a>
                 </div>
             @else
-                <div class="text-center py-12 bg-white/60 dark:bg-accent/20 backdrop-blur-sm rounded-sm border-2 border-purple-500/20" role="region" aria-label="Empty state for volumes">
-                    <i class="fa-solid fa-book text-6xl text-purple-500/20 mb-4" aria-hidden="true"></i>
-                    <p class="text-text font-heading text-lg mb-2">No volumes yet</p>
-                    <p class="text-text/60 font-serif mb-4">Start your writing journey today!</p>
-                    <a href="{{ route('book.manage', 'create') }}" wire:navigate class="relative bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-3 rounded-sm transition-colors duration-300 inline-flex items-center gap-2 border border-violet-500/50" aria-label="Create your first volume">
-                        <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
-                        <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
-                        <i class="fa-solid fa-plus" aria-hidden="true"></i> Create Your First Volume
-                    </a>
-                </div>
+                <x-general.empty-state
+                    icon="fa-book"
+                    title="No Volumes Yet"
+                    message="Your personal library is waiting for its first masterpiece. Start your writing journey today!"
+                    action-text="Inscribe Your First Volume"
+                    :action-url="route('book.manage', 'create')"
+                />
             @endif
         </div>
     </section>
@@ -224,16 +221,13 @@
                     </a>
                 </div>
             @else
-                <div class="text-center py-12 bg-white/60 dark:bg-accent/20 backdrop-blur-sm rounded-sm border-2 border-purple-500/20" role="region" aria-label="Empty state for chronicles">
-                    <i class="fa-solid fa-scroll text-6xl text-purple-500/20 mb-4" aria-hidden="true"></i>
-                    <p class="text-text font-heading text-lg mb-2">No chronicles yet</p>
-                    <p class="text-text/60 font-serif mb-4">Share your thoughts with the world!</p>
-                    <a href="{{ route('blog.manage', 'create') }}" wire:navigate class="relative bg-violet-600 hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-3 rounded-sm transition-colors duration-300 inline-flex items-center gap-2 border border-violet-500/50" aria-label="Create your first chronicle">
-                        <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
-                        <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
-                        <i class="fa-solid fa-plus" aria-hidden="true"></i> Create Your First Chronicle
-                    </a>
-                </div>
+                <x-general.empty-state
+                    icon="fa-scroll"
+                    title="No Chronicles Yet"
+                    message="The world is waiting for your insights and tales. Share your first chronicle today!"
+                    action-text="Inscribe Your First Chronicle"
+                    :action-url="route('blog.manage', 'create')"
+                />
             @endif
         </div>
     </section>

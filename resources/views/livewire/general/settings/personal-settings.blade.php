@@ -25,7 +25,15 @@
                     @endif
                 </div>
                 <p class="text-danger text-center italic">Image is cropped to 300x300, centered</p>
-                <input wire:model.live="avatar" accept="image/*" class="block w-full mt-2 text-sm text-white rounded-lg cursor-pointer bg-text focus:outline-hidden" aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                <div class="relative group mt-2">
+                    <input wire:model.live="avatar" accept="image/*" class="block w-full text-sm text-white rounded-lg cursor-pointer bg-text focus:outline-hidden" aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                    <div wire:loading wire:target="avatar" class="absolute inset-0 bg-bg/80 backdrop-blur-sm flex items-center justify-center rounded-lg border-2 border-primary/30">
+                        <span class="text-sm font-serif text-primary animate-pulse flex items-center gap-2">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            Inscribing portrait...
+                        </span>
+                    </div>
+                </div>
                 <div>
                     @error('avatar') <span class="text-danger">{{ $message }}</span> @enderror
                 </div>

@@ -159,17 +159,18 @@
                                 $canClick = $blog->status == 1 || auth()->check();
                             @endphp
 
-                            @if($canClick)
-                                <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block h-full">
-                            @else
-                                <div class="block h-full opacity-75 relative">
-                                    <div class="absolute inset-0 z-10 bg-navbg/10 flex items-center justify-center backdrop-blur-[1px]">
-                                        <div class="bg-violet-600 text-white px-4 py-2 rounded-sm text-sm font-serif shadow-lg border border-violet-400 flex items-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                                            Login to Read
+                            <div class="h-full">
+                                @if($canClick)
+                                    <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block h-full">
+                                @else
+                                    <div class="block h-full opacity-75 relative">
+                                        <div class="absolute inset-0 z-10 bg-navbg/10 flex items-center justify-center backdrop-blur-[1px]">
+                                            <div class="bg-violet-600 text-white px-4 py-2 rounded-sm text-sm font-serif shadow-lg border border-violet-400 flex items-center gap-2">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                                Login to Read
+                                            </div>
                                         </div>
-                                    </div>
-                            @endif
+                                @endif
 
                                 @if($blog->image)
                                     <div class="aspect-video overflow-hidden">
@@ -208,11 +209,12 @@
                                     @endif
                                 </div>
 
-                            @if($canClick)
-                                </a>
-                            @else
-                                </div>
-                            @endif
+                                @if($canClick)
+                                    </a>
+                                @else
+                                    </div>
+                                @endif
+                            </div>
                         </article>
                     @endforeach
                 </div>
@@ -222,19 +224,13 @@
                     {{ $blogs->links() }}
                 </nav>
             @else
-                <div class="text-center py-20 bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-violet-400/20 rounded-sm">
-                    <svg class="w-20 h-20 text-violet-400/20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <p class="text-text font-heading text-2xl mb-2">No Posts Found</p>
-                    <p class="text-text/60 font-serif text-lg mb-4">We couldn't find any blog posts matching your criteria</p>
-                    @if($search || $category)
-                        <button wire:click="$set('search', ''); $set('category', '')"
-                                class="text-violet-600 dark:text-purple-400 hover:text-violet-700 dark:hover:text-purple-300 font-serif transition-colors">
-                            Clear filters and view all posts
-                        </button>
-                    @endif
-                </div>
+                <x-general.empty-state
+                    icon="fa-feather"
+                    title="No Chronicles Found"
+                    message="We couldn't find any blog posts matching your search. Perhaps the scribes are still writing those chapters!"
+                    :action-text="$search || $category ? 'Clear All Filters' : null"
+                    action-wire-click="clearFilters"
+                />
             @endif
         </section>
 

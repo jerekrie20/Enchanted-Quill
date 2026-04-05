@@ -195,19 +195,13 @@
                     {{ $books->links() }}
                 </nav>
             @else
-                <div class="text-center py-20 bg-white/60 dark:bg-accent/20 backdrop-blur-sm border-2 border-purple-500/20 rounded-sm">
-                    <svg class="w-20 h-20 text-purple-500/20 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <p class="text-text font-heading text-2xl mb-2">No Books Found</p>
-                    <p class="text-text/60 font-serif text-lg mb-4">We couldn't find any books matching your criteria</p>
-                    @if($search || $category)
-                        <button wire:click="$set('search', ''); $set('category', '')"
-                                class="text-purple-600 dark:text-violet-400 hover:text-purple-700 dark:hover:text-violet-300 font-serif transition-colors">
-                            Clear filters and view all books
-                        </button>
-                    @endif
-                </div>
+                <x-general.empty-state
+                    icon="fa-magnifying-glass"
+                    title="No Books Found"
+                    message="We couldn't find any books matching your criteria. Try adjusting your filters or searching for something else!"
+                    :action-text="$search || $category ? 'Clear All Filters' : null"
+                    action-wire-click="clearFilters"
+                />
             @endif
         </section>
 
