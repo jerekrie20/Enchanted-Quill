@@ -46,20 +46,29 @@ class BookManager extends Component
     #[Locked]
     public $book;
 
-    public $statusData = [
-        '0' => 'Draft',
-        '1' => 'Published',
-        '2' => 'Private',
-        '3' => 'Publish Later',
-        '4' => 'Archived',
-    ];
+    public function getStatusDataProperty(): array
+    {
+        return [
+            Book::STATUS_DRAFT => 'Draft',
+            Book::STATUS_PUBLISHED => 'Published',
+            Book::STATUS_PRIVATE => 'Private',
+            Book::STATUS_SCHEDULED => 'Publish Later',
+            Book::STATUS_ARCHIVED => 'Archived',
+        ];
+    }
 
     protected function rules()
     {
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', Rule::unique('books')->ignore($this->book->id ?? null), 'string'],
-            'status' => ['required', 'numeric', 'integer', 'min:0', 'max:4'],
+            'status' => ['required', 'integer', Rule::in([
+                Book::STATUS_DRAFT,
+                Book::STATUS_PUBLISHED,
+                Book::STATUS_PRIVATE,
+                Book::STATUS_SCHEDULED,
+                Book::STATUS_ARCHIVED,
+            ])],
             'category.*' => Rule::exists('categories', 'id'),
             'cover' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2040'],
             'published_at' => ['nullable', 'date', 'after_or_equal:today'],
@@ -104,7 +113,7 @@ class BookManager extends Component
             $this->book->categories()->attach($this->category);
 
             // Schedule the job if status is "Publish Later"
-            if ($this->status == 3 && ! empty($data['published_at'])) {
+            if ($this->status == Book::STATUS_SCHEDULED && ! empty($data['published_at'])) {
                 \App\Jobs\PublishContentJob::dispatch($this->book)->delay($data['published_at']);
             }
 
@@ -119,7 +128,7 @@ class BookManager extends Component
         $this->book->categories()->sync($this->category);
 
         // Schedule the job if status is "Publish Later"
-        if ($this->status == 3 && ! empty($data['published_at'])) {
+        if ($this->status == Book::STATUS_SCHEDULED && ! empty($data['published_at'])) {
             \App\Jobs\PublishContentJob::dispatch($this->book)->delay($data['published_at']);
         }
 
@@ -143,7 +152,7 @@ class BookManager extends Component
             $this->book = false;
             $this->title = '';
             $this->slug = '';
-            $this->status = 0; // default to draft
+            $this->status = Book::STATUS_DRAFT; // default to draft
             $this->currentCover = null;
             $this->published_at = null;
         }

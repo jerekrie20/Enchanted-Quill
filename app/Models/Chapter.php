@@ -16,7 +16,7 @@ class Chapter extends Model
 
     const STATUS_PRIVATE = 2;
 
-    const STATUS_PUBLISHED_Later = 3;
+    const STATUS_SCHEDULED = 3;
 
     const STATUS_ARCHIVED = 4;
 
@@ -42,7 +42,7 @@ class Chapter extends Model
             self::STATUS_DRAFT => 'Draft',
             self::STATUS_PUBLISHED => 'Published',
             self::STATUS_PRIVATE => 'Private',
-            self::STATUS_PUBLISHED_Later => 'Publish Later',
+            self::STATUS_SCHEDULED => 'Publish Later',
             self::STATUS_ARCHIVED => 'Archived',
             default => 'Unknown',
         };

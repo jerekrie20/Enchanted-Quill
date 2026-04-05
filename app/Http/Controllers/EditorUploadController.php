@@ -13,7 +13,7 @@ class EditorUploadController extends Controller
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'upload' => 'required|image|max:10240',
+            'upload' => 'required|image|max:2048',
         ]);
 
         // Determine the folder based on the request or default to 'blogs'
@@ -43,7 +43,17 @@ class EditorUploadController extends Controller
 
     public function deleteImage(Request $request): JsonResponse
     {
+        $request->validate([
+            'imagePath' => 'required|string',
+        ]);
+
         $filePath = $request->input('imagePath');
+
+        // Security check: prevent path traversal and ensure it's in allowed folders
+        if (str_contains($filePath, '..') || ! preg_match('/^(blogs|chapters|books)\//', $filePath)) {
+            return response()->json(['error' => 'Invalid image path'], 403);
+        }
+
         $this->imageService->deleteImage($filePath);
 
         return response()->json(['success' => true]);

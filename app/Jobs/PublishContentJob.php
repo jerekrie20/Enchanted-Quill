@@ -40,17 +40,17 @@ class PublishContentJob implements ShouldQueue
         }
 
         if (class_basename($model) === 'Book') {
-            if ($model->status != Book::STATUS_PUBLISHED_Later || $model->published_at > now()) {
+            if ($model->status != Book::STATUS_SCHEDULED || $model->published_at > now()) {
                 return;
             }
             $model->update(['status' => Book::STATUS_PUBLISHED]);
         } elseif (class_basename($model) === 'Blog') {
-            if ($model->status != Blog::STATUS_Publish_later || $model->publish_at > now()) {
+            if ($model->status != Blog::STATUS_SCHEDULED || $model->publish_at > now()) {
                 return;
             }
             $model->update(['status' => Blog::STATUS_PUBLISHED]);
         } elseif (class_basename($model) === 'Chapter') {
-            if ($model->status != Chapter::STATUS_PUBLISHED_Later || $model->published_at > now()) {
+            if ($model->status != Chapter::STATUS_SCHEDULED || $model->published_at > now()) {
                 return;
             }
             $model->update(['status' => Chapter::STATUS_PUBLISHED]);

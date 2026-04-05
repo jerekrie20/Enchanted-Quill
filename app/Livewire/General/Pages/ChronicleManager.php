@@ -46,19 +46,27 @@ class ChronicleManager extends Component
     #[Locked]
     public $blogId;
 
-    public $statusData = [
-        0 => 'Draft',
-        1 => 'Published',
-        2 => 'Private',
-        3 => 'Publish Later',
-    ];
+    public function getStatusDataProperty(): array
+    {
+        return [
+            Blog::STATUS_DRAFT => 'Draft',
+            Blog::STATUS_PUBLISHED => 'Published',
+            Blog::STATUS_PRIVATE => 'Private',
+            Blog::STATUS_SCHEDULED => 'Publish Later',
+        ];
+    }
 
     protected function rules(): array
     {
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', Rule::unique('blogs')->ignore($this->blogId), 'string'],
-            'status' => ['required', 'integer', Rule::in([0, 1, 2, 3])],
+            'status' => ['required', 'integer', Rule::in([
+                Blog::STATUS_DRAFT,
+                Blog::STATUS_PUBLISHED,
+                Blog::STATUS_PRIVATE,
+                Blog::STATUS_SCHEDULED,
+            ])],
             'category.*' => Rule::exists('categories', 'id'),
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2040'],
             'publish_at' => ['nullable', 'date', 'after_or_equal:today'],
@@ -104,7 +112,7 @@ class ChronicleManager extends Component
             $blog = Blog::create($data);
 
             // Schedule the job if status is "Publish Later"
-            if ($this->status == 3 && ! empty($data['publish_at'])) {
+            if ($this->status == Blog::STATUS_SCHEDULED && ! empty($data['publish_at'])) {
                 \App\Jobs\PublishContentJob::dispatch($blog)->delay($data['publish_at']);
             }
 
@@ -120,7 +128,7 @@ class ChronicleManager extends Component
         $blog->categories()->sync($this->category);
 
         // Schedule the job if status is "Publish Later"
-        if ($this->status == 3 && ! empty($data['publish_at'])) {
+        if ($this->status == Blog::STATUS_SCHEDULED && ! empty($data['publish_at'])) {
             \App\Jobs\PublishContentJob::dispatch($blog)->delay($data['publish_at']);
         }
 
@@ -137,15 +145,19 @@ class ChronicleManager extends Component
             $this->title = $blog->title;
             $this->slug = $blog->slug;
             $this->category = $blog->categories->pluck('id')->toArray();
-            // Ensure status is valid (0-3), default to 0 if invalid
-            $this->status = in_array($blog->status, [0, 1, 2, 3]) ? $blog->status : 0;
+            $this->status = in_array($blog->status, [
+                Blog::STATUS_DRAFT,
+                Blog::STATUS_PUBLISHED,
+                Blog::STATUS_PRIVATE,
+                Blog::STATUS_SCHEDULED,
+            ]) ? $blog->status : Blog::STATUS_DRAFT;
             $this->currentImage = $blog->image;
             $this->publish_at = $blog->publish_at;
         } else {
             $this->blogId = null;
             $this->title = '';
             $this->slug = '';
-            $this->status = 0; // default to draft
+            $this->status = Blog::STATUS_DRAFT; // default to draft
             $this->currentImage = null;
             $this->publish_at = null;
         }

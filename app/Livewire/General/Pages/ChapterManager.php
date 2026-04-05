@@ -32,13 +32,16 @@ class ChapterManager extends Component
 
     public $published_at;
 
-    public $statusData = [
-        0 => 'Draft',
-        1 => 'Published',
-        2 => 'Private',
-        3 => 'Publish Later',
-        4 => 'Archived',
-    ];
+    public function getStatusDataProperty(): array
+    {
+        return [
+            Chapter::STATUS_DRAFT => 'Draft',
+            Chapter::STATUS_PUBLISHED => 'Published',
+            Chapter::STATUS_PRIVATE => 'Private',
+            Chapter::STATUS_SCHEDULED => 'Publish Later',
+            Chapter::STATUS_ARCHIVED => 'Archived',
+        ];
+    }
 
     #[Locked]
     public $bookId;
@@ -58,7 +61,13 @@ class ChapterManager extends Component
                     ->where('book_id', $this->bookId)
                     ->ignore($this->chapterId),
             ],
-            'status' => ['required', 'integer', Rule::in([0, 1, 2, 3, 4])],
+            'status' => ['required', 'integer', Rule::in([
+                Chapter::STATUS_DRAFT,
+                Chapter::STATUS_PUBLISHED,
+                Chapter::STATUS_PRIVATE,
+                Chapter::STATUS_SCHEDULED,
+                Chapter::STATUS_ARCHIVED,
+            ])],
             'published_at' => ['nullable', 'date', 'after_or_equal:today'],
         ];
     }
@@ -92,7 +101,7 @@ class ChapterManager extends Component
 
         $chapter->save();
 
-        if ($chapter->status == 3 && $chapter->published_at) {
+        if ($chapter->status == Chapter::STATUS_SCHEDULED && $chapter->published_at) {
             \App\Jobs\PublishContentJob::dispatch($chapter)->delay($chapter->published_at);
         }
 
@@ -120,10 +129,16 @@ class ChapterManager extends Component
             $this->chapterId = $chapter->id;
             $this->title = $chapter->title;
             $this->chapterNumber = (string) $chapter->chapter_number;
-            $this->status = in_array($chapter->status, [0, 1, 2, 3, 4]) ? $chapter->status : 0;
+            $this->status = in_array($chapter->status, [
+                Chapter::STATUS_DRAFT,
+                Chapter::STATUS_PUBLISHED,
+                Chapter::STATUS_PRIVATE,
+                Chapter::STATUS_SCHEDULED,
+                Chapter::STATUS_ARCHIVED,
+            ]) ? $chapter->status : Chapter::STATUS_DRAFT;
             $this->published_at = $chapter->published_at;
         } else {
-            $this->status = 0;
+            $this->status = Chapter::STATUS_DRAFT;
             $this->published_at = null;
         }
 
