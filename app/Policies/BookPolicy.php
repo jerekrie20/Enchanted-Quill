@@ -20,7 +20,7 @@ class BookPolicy
     public function view(?User $user, Book $book): Response
     {
         // If the book is published, anyone can view its detail page
-        if ($book->status === Book::STATUS_PUBLISHED || $book->status === Book::STATUS_PRIVATE) {
+        if ($book->isPublished()) {
             return Response::allow();
         }
 

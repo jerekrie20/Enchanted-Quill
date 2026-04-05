@@ -41,7 +41,7 @@ class Chronicles extends Component
     public function render()
     {
         $query = Blog::with(['user', 'categories'])
-            ->where('status', Blog::STATUS_PUBLISHED);
+            ->published();
 
         // Apply search filter
         if ($this->search) {

@@ -90,7 +90,23 @@ class Book extends Model
      */
     public function isPublished(): bool
     {
-        return $this->published_at === null || $this->published_at <= now();
+        return in_array($this->status, [self::STATUS_PUBLISHED, self::STATUS_PRIVATE])
+            && ($this->published_at === null || $this->published_at <= now());
+    }
+
+    /**
+     * Scope a query to only include published books.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePublished($query)
+    {
+        return $query->whereIn('status', [self::STATUS_PUBLISHED, self::STATUS_PRIVATE])
+            ->where(function ($q) {
+                $q->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            });
     }
 
     /**

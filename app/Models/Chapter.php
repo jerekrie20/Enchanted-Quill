@@ -57,6 +57,27 @@ class Chapter extends Model
     }
 
     /**
+     * Check if the chapter is published.
+     */
+    public function isPublished(): bool
+    {
+        return in_array($this->status, [self::STATUS_PUBLISHED, self::STATUS_PRIVATE])
+            && ($this->published_at === null || $this->published_at <= now());
+    }
+
+    /**
+     * Scope a query to only include published chapters.
+     */
+    public function scopePublished($query)
+    {
+        return $query->whereIn('status', [self::STATUS_PUBLISHED, self::STATUS_PRIVATE])
+            ->where(function ($q) {
+                $q->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            });
+    }
+
+    /**
      * Scope to find chapters by book and chapter number.
      */
     public function scopeByBookAndNumber($query, $bookId, $chapterNumber)

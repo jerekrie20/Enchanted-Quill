@@ -16,14 +16,14 @@ class Home extends Component
     {
         // Get featured books (recently published and public)
         $featuredBooks = Book::with(['author', 'categories'])
-            ->whereIn('status', [Book::STATUS_PUBLISHED, Book::STATUS_PRIVATE])
+            ->published()
             ->latest('updated_at')
             ->limit(6)
             ->get();
 
         // Get recent blog posts (published and public)
         $recentBlogs = Blog::with(['user', 'categories'])
-            ->whereIn('status', [Blog::STATUS_PUBLISHED, Blog::STATUS_PRIVATE])
+            ->published()
             ->latest('updated_at')
             ->limit(3)
             ->get();

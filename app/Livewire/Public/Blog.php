@@ -44,11 +44,7 @@ class Blog extends Component
     public function render()
     {
         $query = BlogModel::with(['user', 'categories'])
-            ->whereIn('status', [BlogModel::STATUS_PUBLISHED, BlogModel::STATUS_PRIVATE])
-            ->where(function ($q) {
-                $q->whereNull('publish_at')
-                    ->orWhere('publish_at', '<=', now());
-            });
+            ->published();
 
         // Apply search filter
         if ($this->search) {

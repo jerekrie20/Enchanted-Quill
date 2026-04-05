@@ -41,9 +41,7 @@ class Library extends Component
     public function render()
     {
         $query = Book::with(['author', 'categories'])
-            ->where('status', Book::STATUS_PUBLISHED)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
+            ->published();
 
         // Apply search filter
         if ($this->search) {

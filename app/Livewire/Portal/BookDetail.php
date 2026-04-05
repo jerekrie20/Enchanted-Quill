@@ -4,7 +4,6 @@ namespace App\Livewire\Portal;
 
 use App\Models\Book;
 use App\Models\Bookmark;
-use App\Models\Chapter;
 use App\Rules\NoProfanity;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
@@ -43,7 +42,7 @@ class BookDetail extends Component
     public function getChaptersProperty()
     {
         return $this->book->chapters()
-            ->where('status', Chapter::STATUS_PUBLISHED)
+            ->published()
             ->orderBy('chapter_number', 'asc')
             ->paginate(10);
     }

@@ -16,14 +16,14 @@ class Dashboard extends Component
     {
         // Get recently updated books (published only)
         $recentBooks = Book::with(['author', 'categories'])
-            ->where('status', Book::STATUS_PUBLISHED)
+            ->published()
             ->latest('updated_at')
             ->limit(6)
             ->get();
 
         // Get popular books (most reviewed)
         $popularBooks = Book::with(['author', 'categories'])
-            ->where('status', Book::STATUS_PUBLISHED)
+            ->published()
             ->withCount('reviews')
             ->orderByDesc('reviews_count')
             ->limit(6)
@@ -31,7 +31,7 @@ class Dashboard extends Component
 
         // Get recent blogs/chronicles
         $recentChronicles = Blog::with(['user', 'categories'])
-            ->where('status', Blog::STATUS_PUBLISHED)
+            ->published()
             ->latest('publish_at')
             ->limit(6)
             ->get();

@@ -70,6 +70,27 @@ class Blog extends Model
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * Check if the blog is published.
+     */
+    public function isPublished(): bool
+    {
+        return in_array($this->status, [self::STATUS_PUBLISHED, self::STATUS_PRIVATE])
+            && ($this->publish_at === null || $this->publish_at <= now());
+    }
+
+    /**
+     * Scope a query to only include published blogs.
+     */
+    public function scopePublished($query)
+    {
+        return $query->whereIn('status', [self::STATUS_PUBLISHED, self::STATUS_PRIVATE])
+            ->where(function ($q) {
+                $q->whereNull('publish_at')
+                    ->orWhere('publish_at', '<=', now());
+            });
+    }
+
     protected function casts(): array
     {
         return [

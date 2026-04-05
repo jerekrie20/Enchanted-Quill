@@ -19,7 +19,7 @@ class AuthorDashboard extends Component
         // Get author's books stats
         $booksCount = Book::where('user_id', $userId)->count();
         $publishedBooks = Book::where('user_id', $userId)
-            ->where('status', Book::STATUS_PUBLISHED)
+            ->published()
             ->count();
         $draftBooks = Book::where('user_id', $userId)
             ->where('status', Book::STATUS_DRAFT)
@@ -35,7 +35,7 @@ class AuthorDashboard extends Component
         // Get author's blogs stats
         $blogsCount = Blog::where('user_id', $userId)->count();
         $publishedBlogs = Blog::where('user_id', $userId)
-            ->where('status', Blog::STATUS_PUBLISHED)
+            ->published()
             ->count();
         $draftBlogs = Blog::where('user_id', $userId)
             ->where('status', Blog::STATUS_DRAFT)

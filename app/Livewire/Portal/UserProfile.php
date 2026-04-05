@@ -26,9 +26,7 @@ class UserProfile extends Component
     public function getPublishedBooksProperty()
     {
         return Book::where('user_id', $this->userId)
-            ->where('status', Book::STATUS_PUBLISHED)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now())
+            ->published()
             ->withCount(['chapters', 'reviews'])
             ->latest('published_at')
             ->get();
@@ -37,9 +35,7 @@ class UserProfile extends Component
     public function getPublishedChroniclesProperty()
     {
         return Blog::where('user_id', $this->userId)
-            ->where('status', Blog::STATUS_PUBLISHED)
-            ->whereNotNull('publish_at')
-            ->where('publish_at', '<=', now())
+            ->published()
             ->latest('publish_at')
             ->limit(6)
             ->get();
@@ -50,9 +46,7 @@ class UserProfile extends Component
         return Book::whereHas('bookmarks', function ($query) {
             $query->where('user_id', $this->userId);
         })
-            ->where('status', Book::STATUS_PUBLISHED)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now())
+            ->published()
             ->withCount(['chapters', 'reviews'])
             ->with(['bookmarks' => function ($query) {
                 $query->where('user_id', $this->userId);

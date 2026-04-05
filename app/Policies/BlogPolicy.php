@@ -20,7 +20,7 @@ class BlogPolicy
     public function view(?User $user, Blog $blog): Response
     {
         // If the blog is published or private, guests can view it in listings/details (interaction is gated)
-        if ($blog->status == Blog::STATUS_PUBLISHED || $blog->status == Blog::STATUS_PRIVATE) {
+        if ($blog->isPublished()) {
             return Response::allow();
         }
 
@@ -39,7 +39,12 @@ class BlogPolicy
             : Response::deny('You are not authorized to view this blog.');
     }
 
-    public function create(User $user): Response {}
+    public function create(User $user): Response
+    {
+        return in_array($user->role, ['admin', 'author'])
+            ? Response::allow()
+            : Response::deny('You are not authorized to create a blog post.');
+    }
 
     public function update(User $user, Blog $blog): Response
     {
@@ -72,11 +77,13 @@ class BlogPolicy
 
     public function restore(User $user, Blog $blog): bool
     {
-        // Future: Admins can restore any blogs while users can only restore their blog
+        // Admins can restore any blogs
+        return $user->role === 'admin';
     }
 
     public function forceDelete(User $user, Blog $blog): bool
     {
-        // Future: Only admins can forceDelete(Hard delete)
+        // Only admins can hard delete
+        return $user->role === 'admin';
     }
 }
