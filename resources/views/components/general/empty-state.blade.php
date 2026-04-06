@@ -19,7 +19,7 @@
         </div>
 
         <h3 class="text-2xl font-heading text-text mb-2">{{ $title }}</h3>
-        <p class="text-lg text-text/60 font-serif max-w-md mx-auto mb-8">
+        <p class="text-lg text-text/60 font-serif max-w-3xl mx-auto mb-8">
             {{ $message }}
         </p>
 
