@@ -20,7 +20,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if ($this->app->environment('local')) {
+            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
+        }
     }
 
     /**
@@ -49,6 +52,8 @@ class AppServiceProvider extends ServiceProvider
             return $user->role === 'admin' || $user->role === 'author';
         });
 
+
+
         // Update the last_active timestamp for the authenticated user
         View::composer('*', function ($view) {
             if (Auth::check()) {
@@ -61,5 +66,7 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
+
+
     }
 }
