@@ -2,6 +2,7 @@
 
 namespace App\Livewire\General\Pages;
 
+use App\Events\ContentPublished;
 use App\Models\Book;
 use App\Models\Chapter;
 use Illuminate\Validation\Rule;
@@ -92,6 +93,8 @@ class ChapterManager extends Component
             ? Chapter::findOrFail($this->chapterId)
             : new Chapter;
 
+        $oldStatus = $chapter->status;
+
         $chapter->fill([
             'book_id' => $this->bookId,
             'title' => $this->title,
@@ -102,6 +105,11 @@ class ChapterManager extends Component
         ]);
 
         $chapter->save();
+
+        // Fire the event if status changed to published (or new chapter is published)
+        if (($oldStatus != Chapter::STATUS_PUBLISHED || ! $this->chapterId) && $chapter->status == Chapter::STATUS_PUBLISHED) {
+            event(new ContentPublished($chapter));
+        }
 
         if ($chapter->status == Chapter::STATUS_SCHEDULED && $chapter->published_at) {
             \App\Jobs\PublishContentJob::dispatch($chapter)->delay($chapter->published_at);

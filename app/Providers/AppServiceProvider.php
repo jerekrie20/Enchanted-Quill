@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\ContentPublished;
+use App\Listeners\NotifyAdminsOfNewRegistration;
+use App\Listeners\SendContentPublishedNotification;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
@@ -23,7 +28,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //        $this->registerPolicies();
+        // Register events and listeners
+        Event::listen(
+            Registered::class,
+            NotifyAdminsOfNewRegistration::class,
+        );
+
+        Event::listen(
+            ContentPublished::class,
+            SendContentPublishedNotification::class,
+        );
 
         // Define a gate for admin access
         Gate::define('admin-access', function ($user) {

@@ -24,7 +24,6 @@ use App\Livewire\Portal\UserProfile;
 use App\Livewire\Public\About;
 use App\Livewire\Public\Blog;
 use App\Livewire\Public\BlogDetail;
-use App\Livewire\Public\BookDetail;
 use App\Livewire\Public\Contact;
 use App\Livewire\Public\Faq;
 use App\Livewire\Public\Home;
@@ -34,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 // Public Frontend Routes (no authentication required)
 Route::get('/', Home::class)->name('home');
 Route::get('/books', \App\Livewire\Public\Books::class)->name('books');
-Route::get('/book/{id}', BookDetail::class)->name('public.book.show');
+Route::get('/book/{id}', \App\Livewire\Portal\BookDetail::class)->name('public.book.show');
 Route::get('/book/{bookId}/chapter/{chapterNumber}', ChapterReader::class)->name('chapter.read');
 
 Route::get('/blog', Blog::class)->name('blog');
@@ -64,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/portal/book/{bookId}/chapter/{chapterNumber}', ChapterReader::class)->name('portal.chapter.read');
     Route::get('/portal/chronicles', Chronicles::class)->name('portal.chronicles');
     Route::get('/portal/chronicle/{id}', ChronicleDetail::class)->name('portal.chronicle.show');
+    Route::get('/portal/following', \App\Livewire\Portal\Following::class)->name('portal.following');
     Route::get('/portal/messages', Messages::class)->name('portal.messages');
     Route::get('/portal/profile/{id}', UserProfile::class)->name('portal.profile');
     Route::get('/portal/settings', Settings::class)->name('portal.settings');

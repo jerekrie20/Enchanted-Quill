@@ -2,6 +2,7 @@
 
 namespace App\Livewire\General\Pages;
 
+use App\Events\ContentPublished;
 use App\Models\Book;
 use App\Models\Category;
 use App\Services\ImageService;
@@ -114,6 +115,11 @@ class BookManager extends Component
             $this->book = Book::create($data);
             $this->book->categories()->attach($this->category);
 
+            // Fire the event if published immediately
+            if ($this->status == Book::STATUS_PUBLISHED) {
+                event(new ContentPublished($this->book));
+            }
+
             // Schedule the job if status is "Publish Later"
             if ($this->status == Book::STATUS_SCHEDULED && ! empty($data['published_at'])) {
                 \App\Jobs\PublishContentJob::dispatch($this->book)->delay($data['published_at']);
@@ -126,8 +132,14 @@ class BookManager extends Component
 
         // Update existing book
 
+        $oldStatus = $this->book->status;
         $this->book->update($data);
         $this->book->categories()->sync($this->category);
+
+        // Fire the event if status changed to published
+        if ($oldStatus != Book::STATUS_PUBLISHED && $this->status == Book::STATUS_PUBLISHED) {
+            event(new ContentPublished($this->book));
+        }
 
         // Schedule the job if status is "Publish Later"
         if ($this->status == Book::STATUS_SCHEDULED && ! empty($data['published_at'])) {

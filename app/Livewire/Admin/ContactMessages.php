@@ -89,7 +89,10 @@ class ContactMessages extends Component
             'is_from_admin' => true,
         ]);
 
-        Mail::to($user)->send(new NewInternalMessage($message));
+        // Send an email notification if the user has that setting enabled
+        if ($user->notify_messages) {
+            Mail::to($user)->send(new NewInternalMessage($message));
+        }
 
         $this->closeComposeModal();
         session()->flash('success', 'Message sent to user successfully!');
@@ -117,14 +120,15 @@ class ContactMessages extends Component
         // Update the main message status
         $this->selectedMessage->update(['status' => Contact::STATUS_REPLIED]);
 
-        // Notify the user if requested
+        // Notify the user if requested (and they have notifications enabled if they are a registered user)
         if ($sendEmail) {
             if ($this->selectedMessage->user_id) {
                 $user = \App\Models\User::find($this->selectedMessage->user_id);
-                if ($user) {
+                if ($user && $user->notify_messages) {
                     Mail::to($user)->send(new NewInternalMessage($reply));
                 }
             } else {
+                // For guests, always send if requested
                 Mail::to($this->selectedMessage->email)->send(new NewInternalMessage($reply));
             }
         }

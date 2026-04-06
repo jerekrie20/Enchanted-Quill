@@ -1,4 +1,5 @@
 <div>
+    <x-alerts.success/>
     <form wire:submit.prevent="saveContent" id="chronicle-form" class="space-y-6">
         @csrf
 
@@ -18,6 +19,7 @@
                     {!! $content !!}
                 </div>
             </div>
+            @error('content') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
 
             {{-- Decorative flourish --}}
             <div class="flex items-center gap-2 mt-4">

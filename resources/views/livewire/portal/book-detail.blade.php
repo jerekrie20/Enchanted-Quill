@@ -31,7 +31,14 @@
 
                 {{-- Book Info --}}
                 <div class="md:col-span-2 text-white">
-                    <h1 id="book-title" class="text-4xl md:text-5xl font-heading mb-4">{{ $this->book->title }}</h1>
+                    <div class="flex flex-wrap items-center gap-4 mb-4">
+                        <h1 id="book-title" class="text-4xl md:text-5xl font-heading">{{ $this->book->title }}</h1>
+                        @if($this->book->status == 2)
+                            <span class="bg-purple-600 text-white text-sm font-bold px-3 py-1 rounded-sm flex items-center gap-2 border border-purple-400 shadow-lg">
+                                <i class="fa-solid fa-lock"></i> Members Only
+                            </span>
+                        @endif
+                    </div>
                     <p class="text-xl font-serif text-white/80 mb-4">by <a href="{{ route('portal.profile', $this->book->author->id) }}" wire:navigate class="text-violet-400 hover:text-violet-300 transition-colors" aria-label="View author profile for {{ $this->book->author->name }}">{{ $this->book->author->name }}</a></p>
 
                     {{-- Categories --}}
@@ -73,25 +80,25 @@
                     </div>
 
                     {{-- Action Buttons --}}
-                    @if($this->chapters->count() > 0)
-                        <div class="flex flex-wrap gap-4" role="group" aria-label="Book actions">
+                    <div class="flex flex-wrap gap-4" role="group" aria-label="Book actions">
+                        @if($this->chapters->count() > 0)
                             <a href="{{ route('portal.chapter.read', ['bookId' => $this->book->id, 'chapterNumber' => 1]) }}" wire:navigate class="relative bg-purple-600 hover:bg-purple-700 dark:bg-violet-600 dark:hover:bg-violet-700 text-white font-serif px-6 py-3 rounded-sm transition-colors duration-300 inline-flex items-center gap-2 border-2 border-purple-500/50" aria-label="Start reading {{ $this->book->title }}">
                                 <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
                                 <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
                                 <i class="fa-solid fa-book-open" aria-hidden="true"></i> Start Reading
                             </a>
-                            @auth
-                                <button wire:click="toggleBookmark" wire:loading.attr="disabled" class="relative bg-white/10 hover:bg-white/20 text-white font-serif px-6 py-3 rounded-sm border-2 border-purple-500/30 transition-colors duration-300 inline-flex items-center gap-2" aria-label="{{ $this->isBookmarked ? 'Remove from' : 'Add to' }} your library">
-                                    <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
-                                    <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
-                                    <i class="fa-solid fa-bookmark {{ $this->isBookmarked ? 'text-yellow-400' : '' }}" aria-hidden="true" wire:loading.remove wire:target="toggleBookmark"></i>
-                                    <i class="fa-solid fa-spinner fa-spin" aria-hidden="true" wire:loading wire:target="toggleBookmark"></i>
-                                    <span wire:loading.remove wire:target="toggleBookmark">{{ $this->isBookmarked ? 'In Library' : 'Add to Library' }}</span>
-                                    <span wire:loading wire:target="toggleBookmark">Processing...</span>
-                                </button>
-                            @endauth
-                        </div>
-                    @endif
+                        @endif
+                        @auth
+                            <button wire:click="toggleBookmark" wire:loading.attr="disabled" class="relative bg-white/10 hover:bg-white/20 text-white font-serif px-6 py-3 rounded-sm border-2 border-purple-500/30 transition-colors duration-300 inline-flex items-center gap-2" aria-label="{{ $this->isBookmarked ? 'Remove from' : 'Add to' }} your library">
+                                <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
+                                <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
+                                <i class="fa-solid fa-bookmark {{ $this->isBookmarked ? 'text-yellow-400' : '' }}" aria-hidden="true" wire:loading.remove wire:target="toggleBookmark"></i>
+                                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true" wire:loading wire:target="toggleBookmark"></i>
+                                <span wire:loading.remove wire:target="toggleBookmark">{{ $this->isBookmarked ? 'In Library' : 'Add to Library' }}</span>
+                                <span wire:loading wire:target="toggleBookmark">Processing...</span>
+                            </button>
+                        @endauth
+                    </div>
                 </div>
             </article>
         </div>

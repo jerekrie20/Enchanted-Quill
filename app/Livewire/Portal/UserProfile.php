@@ -55,6 +55,33 @@ class UserProfile extends Component
             ->get();
     }
 
+    public function toggleFollow(): void
+    {
+        if (! auth()->check()) {
+            $this->redirect(route('login'), navigate: true);
+
+            return;
+        }
+
+        $author = $this->user;
+
+        // Can't follow yourself
+        if (auth()->id() === $author->id) {
+            return;
+        }
+
+        if (auth()->user()->isFollowing($author)) {
+            auth()->user()->following()->detach($author->id);
+        } else {
+            auth()->user()->following()->attach($author->id);
+
+            // Notify author if they have new user/follower notifications enabled
+            if ($author->notify_new_users) {
+                $author->notify(new \App\Notifications\NewFollowerNotification(auth()->user()));
+            }
+        }
+    }
+
     public function render()
     {
         return view('livewire.portal.user-profile')

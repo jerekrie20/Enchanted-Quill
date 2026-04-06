@@ -41,6 +41,11 @@
                             <span class="text-sm">{{ str('Chronicle')->plural($this->publishedChronicles->count()) }}</span>
                         </div>
                         <div class="w-px h-8 bg-white/20" aria-hidden="true"></div>
+                        <div role="listitem" aria-label="{{ $this->user->followers()->count() }} followers">
+                            <span class="text-2xl font-heading text-white block">{{ $this->user->followers()->count() }}</span>
+                            <span class="text-sm">{{ str('Follower')->plural($this->user->followers()->count()) }}</span>
+                        </div>
+                        <div class="w-px h-8 bg-white/20" aria-hidden="true"></div>
                         <div role="listitem" aria-label="Member since {{ $this->user->created_at->format('Y') }}">
                             <span class="text-2xl font-heading text-white block">{{ $this->user->created_at->format('Y') }}</span>
                             <span class="text-sm">Member Since</span>
@@ -53,6 +58,23 @@
                                 <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
                                 <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
                                 <i class="fa-solid fa-cog" aria-hidden="true"></i> Edit Profile
+                            </a>
+                        </div>
+                    @elseif(auth()->check() && ($this->user->role === 'author' || $this->user->role === 'admin'))
+                        <div class="mt-6">
+                            <button wire:click="toggleFollow" class="relative {{ auth()->user()->isFollowing($this->user) ? 'bg-transparent border-violet-400 text-violet-300' : 'bg-violet-600 hover:bg-violet-700 text-white' }} font-serif px-8 py-2 rounded-sm transition-all duration-300 inline-flex items-center gap-2 border-2" aria-label="{{ auth()->user()->isFollowing($this->user) ? 'Unfollow author' : 'Follow author' }}">
+                                <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
+                                <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
+                                <i class="fa-solid {{ auth()->user()->isFollowing($this->user) ? 'fa-user-minus' : 'fa-user-plus' }}" aria-hidden="true"></i>
+                                {{ auth()->user()->isFollowing($this->user) ? 'Release Pact (Unfollow)' : 'Bind Pact (Follow)' }}
+                            </button>
+                        </div>
+                    @elseif(!auth()->check() && ($this->user->role === 'author' || $this->user->role === 'admin'))
+                        <div class="mt-6">
+                            <a href="{{ route('login') }}" wire:navigate class="relative bg-violet-600 hover:bg-violet-700 text-white font-serif px-8 py-2 rounded-sm transition-all duration-300 inline-flex items-center gap-2 border-2 border-violet-500/50">
+                                <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/30"></span>
+                                <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30"></span>
+                                <i class="fa-solid fa-user-plus" aria-hidden="true"></i> Bind Pact (Follow)
                             </a>
                         </div>
                     @endif

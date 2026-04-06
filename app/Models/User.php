@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -53,6 +54,30 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    /**
+     * Get the authors that this user is following.
+     */
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'user_id', 'author_id')->withTimestamps();
+    }
+
+    /**
+     * Get the followers of this user (if they are an author).
+     */
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'follows', 'author_id', 'user_id')->withTimestamps();
+    }
+
+    /**
+     * Check if this user is following another user (author).
+     */
+    public function isFollowing(User $author): bool
+    {
+        return $this->following()->where('author_id', $author->id)->exists();
+    }
+
     protected function casts(): array
     {
         return [

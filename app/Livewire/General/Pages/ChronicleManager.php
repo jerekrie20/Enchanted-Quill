@@ -2,6 +2,7 @@
 
 namespace App\Livewire\General\Pages;
 
+use App\Events\ContentPublished;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Services\ImageService;
@@ -113,6 +114,13 @@ class ChronicleManager extends Component
             $data['user_id'] = auth()->id();
             $blog = Blog::create($data);
 
+            $this->blogId = $blog->id; // Update blogId so content editor shows
+
+            // Fire the event if published immediately
+            if ($this->status == Blog::STATUS_PUBLISHED) {
+                event(new ContentPublished($blog));
+            }
+
             // Schedule the job if status is "Publish Later"
             if ($this->status == Blog::STATUS_SCHEDULED && ! empty($data['publish_at'])) {
                 \App\Jobs\PublishContentJob::dispatch($blog)->delay($data['publish_at']);
@@ -126,8 +134,14 @@ class ChronicleManager extends Component
 
         // Update existing blog
         $blog = Blog::findOrFail($this->blogId);
+        $oldStatus = $blog->status;
         $blog->update($data);
         $blog->categories()->sync($this->category);
+
+        // Fire the event if status changed to published
+        if ($oldStatus != Blog::STATUS_PUBLISHED && $this->status == Blog::STATUS_PUBLISHED) {
+            event(new ContentPublished($blog));
+        }
 
         // Schedule the job if status is "Publish Later"
         if ($this->status == Blog::STATUS_SCHEDULED && ! empty($data['publish_at'])) {
@@ -137,7 +151,7 @@ class ChronicleManager extends Component
         session()->flash('success', 'Blog updated successfully!');
     }
 
-    public function mount($id)
+    public function mount($id = null)
     {
         $this->categories = Category::all();
 

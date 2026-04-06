@@ -168,6 +168,10 @@ class BookDetail extends Component
             'reviews' => $reviews,
         ])
             ->layout($layout)
-            ->title($this->book->title.' - Enchanted Quill');
+            ->title($this->book->title.' - Enchanted Quill')
+            ->layoutData([
+                'description' => substr(strip_tags($this->book->description), 0, 160),
+                'image' => $this->book->cover ? asset('books/'.$this->book->cover) : asset('graphic/quill.webp'),
+            ]);
     }
 }
