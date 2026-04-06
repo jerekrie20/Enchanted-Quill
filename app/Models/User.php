@@ -30,6 +30,12 @@ class User extends Authenticatable
         'last_name',
         'bio',
         'profile_image',
+        'notify_messages',
+        'notify_book_updates',
+        'notify_publication',
+        'notify_author_actions',
+        'notify_new_users',
+        'notify_payments',
     ];
 
     /**
@@ -53,6 +59,12 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'last_active' => 'datetime',
+            'notify_messages' => 'boolean',
+            'notify_book_updates' => 'boolean',
+            'notify_publication' => 'boolean',
+            'notify_author_actions' => 'boolean',
+            'notify_new_users' => 'boolean',
+            'notify_payments' => 'boolean',
         ];
     }
 

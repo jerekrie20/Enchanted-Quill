@@ -30,6 +30,12 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'role' => 'reader',
             'remember_token' => Str::random(10),
+            'notify_messages' => true,
+            'notify_book_updates' => true,
+            'notify_publication' => true,
+            'notify_author_actions' => true,
+            'notify_new_users' => true,
+            'notify_payments' => true,
         ];
     }
 

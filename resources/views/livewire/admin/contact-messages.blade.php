@@ -262,7 +262,7 @@
                             @error('replyMessage') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             <div class="flex justify-end">
                                 <button wire:click="sendReply" class="px-4 py-2 font-serif text-sm text-white bg-primary hover:bg-primary/90 rounded-sm transition-colors">
-                                    Send Reply {{ !$selectedMessage->user_id ? '(via Email)' : '' }}
+                                    Send Reply
                                 </button>
                             </div>
                         </div>
@@ -288,14 +288,9 @@
 
                         {{-- Actions --}}
                         <div class="flex gap-4 pt-6 border-t border-text/10">
-                            <a href="mailto:{{ $selectedMessage->email }}"
-                               class="flex-1 text-center px-6 py-3 font-serif text-sm text-white bg-primary hover:bg-primary/90 dark:bg-secondary dark:hover:bg-secondary/90 border-2 border-primary/50 dark:border-secondary/50 rounded-sm transition-all duration-300">
-                                Reply via Email
-                            </a>
-
                             <button type="button" wire:click="closeMessageModal"
                                     class="flex-1 px-6 py-3 font-serif text-sm text-text bg-white/50 dark:bg-navbg/50 hover:bg-white dark:hover:bg-navbg border-2 border-text/20 hover:border-text/40 rounded-sm transition-all duration-300">
-                                Close
+                                Close Message
                             </button>
                         </div>
                     </div>

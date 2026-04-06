@@ -128,7 +128,7 @@
                             <a href="{{ route('portal.chronicle.show', $chronicle->id) }}" wire:navigate class="block" aria-label="View {{ $chronicle->title }}">
                                 @if($chronicle->image)
                                     <div class="aspect-video overflow-hidden">
-                                        <img src="{{ asset('storage/' . $chronicle->image) }}" alt="Featured image for {{ $chronicle->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        <img src="{{ asset('blogs/' . $chronicle->image) }}" alt="Featured image for {{ $chronicle->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
                                 @else
                                     <div class="aspect-video bg-purple-500/10 flex items-center justify-center" role="img" aria-label="No featured image available for {{ $chronicle->title }}">

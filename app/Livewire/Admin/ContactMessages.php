@@ -95,7 +95,7 @@ class ContactMessages extends Component
         session()->flash('success', 'Message sent to user successfully!');
     }
 
-    public function sendReply(): void
+    public function sendReply(bool $sendEmail = true): void
     {
         $this->validate([
             'replyMessage' => 'required|string|min:2',
@@ -117,21 +117,22 @@ class ContactMessages extends Component
         // Update the main message status
         $this->selectedMessage->update(['status' => Contact::STATUS_REPLIED]);
 
-        // Notify the user if it's an internal user
-        if ($this->selectedMessage->user_id) {
-            $user = \App\Models\User::find($this->selectedMessage->user_id);
-            if ($user) {
-                Mail::to($user)->send(new NewInternalMessage($reply));
+        // Notify the user if requested
+        if ($sendEmail) {
+            if ($this->selectedMessage->user_id) {
+                $user = \App\Models\User::find($this->selectedMessage->user_id);
+                if ($user) {
+                    Mail::to($user)->send(new NewInternalMessage($reply));
+                }
+            } else {
+                Mail::to($this->selectedMessage->email)->send(new NewInternalMessage($reply));
             }
-        } else {
-            // Guest notification could be added here
-            Mail::to($this->selectedMessage->email)->send(new NewInternalMessage($reply));
         }
 
         $this->selectedMessage = $this->selectedMessage->fresh(['replies', 'user']);
         $this->replyMessage = '';
 
-        session()->flash('success', 'Reply sent successfully!');
+        session()->flash('success', $sendEmail ? 'Reply sent and email notification delivered!' : 'Reply sent successfully!');
     }
 
     public function closeMessageModal(): void
