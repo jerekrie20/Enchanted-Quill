@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -35,6 +36,9 @@ class Settings extends Component
 
     #[Validate('nullable|string|min:8|same:new_password')]
     public $new_password_confirmation = '';
+
+    #[Url(as: 'tab')]
+    public $activeTab = 'personal';
 
     public function mount(): void
     {

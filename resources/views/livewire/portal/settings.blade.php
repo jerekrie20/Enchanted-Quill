@@ -17,10 +17,11 @@
     <div class="max-w-4xl mx-auto px-4 py-12">
         {{-- Tab Navigation --}}
         <div class="mb-8 border-b-2 border-purple-500/20">
-            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center justify-center" id="settings-tab" data-tabs-toggle="#settings-tab-content" role="tablist">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center justify-center" role="tablist">
                 <li class="mr-2" role="presentation">
-                    <button class="relative px-6 py-3 font-serif text-sm text-text bg-white/60 dark:bg-accent/20 hover:bg-white dark:hover:bg-accent/30 border-t-2 border-l-2 border-r-2 border-purple-500/30 aria-selected:bg-purple-600 aria-selected:text-white transition-all duration-300 group"
-                            id="personal-tab" data-tabs-target="#personal" type="button" role="tab" aria-controls="personal" aria-selected="false">
+                    <button wire:click="$set('activeTab', 'personal')"
+                            class="relative px-6 py-3 font-serif text-sm text-text bg-white/60 dark:bg-accent/20 hover:bg-white dark:hover:bg-accent/30 border-t-2 border-l-2 border-r-2 border-purple-500/30 aria-selected:bg-purple-600 aria-selected:text-white transition-all duration-300 group"
+                            id="personal-tab" type="button" role="tab" aria-controls="personal" aria-selected="{{ $activeTab === 'personal' ? 'true' : 'false' }}">
                         <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-500/50 group-aria-selected:border-white/30"></span>
                         <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-500/50 group-aria-selected:border-white/30"></span>
                         <span class="flex items-center gap-2">
@@ -30,8 +31,9 @@
                     </button>
                 </li>
                 <li class="mr-2" role="presentation">
-                    <button class="relative px-6 py-3 font-serif text-sm text-text bg-white/60 dark:bg-accent/20 hover:bg-white dark:hover:bg-accent/30 border-t-2 border-l-2 border-r-2 border-purple-500/30 aria-selected:bg-purple-600 aria-selected:text-white transition-all duration-300 group"
-                            id="protective-tab" data-tabs-target="#protective" type="button" role="tab" aria-controls="protective" aria-selected="false">
+                    <button wire:click="$set('activeTab', 'protective')"
+                            class="relative px-6 py-3 font-serif text-sm text-text bg-white/60 dark:bg-accent/20 hover:bg-white dark:hover:bg-accent/30 border-t-2 border-l-2 border-r-2 border-purple-500/30 aria-selected:bg-purple-600 aria-selected:text-white transition-all duration-300 group"
+                            id="protective-tab" type="button" role="tab" aria-controls="protective" aria-selected="{{ $activeTab === 'protective' ? 'true' : 'false' }}">
                         <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-500/50 group-aria-selected:border-white/30"></span>
                         <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-500/50 group-aria-selected:border-white/30"></span>
                         <span class="flex items-center gap-2">
@@ -41,8 +43,9 @@
                     </button>
                 </li>
                 <li role="presentation">
-                    <button class="relative px-6 py-3 font-serif text-sm text-text bg-white/60 dark:bg-accent/20 hover:bg-white dark:hover:bg-accent/30 border-t-2 border-l-2 border-r-2 border-purple-500/30 aria-selected:bg-purple-600 aria-selected:text-white transition-all duration-300 group"
-                            id="notifications-tab" data-tabs-target="#notifications" type="button" role="tab" aria-controls="notifications" aria-selected="false">
+                    <button wire:click="$set('activeTab', 'notifications')"
+                            class="relative px-6 py-3 font-serif text-sm text-text bg-white/60 dark:bg-accent/20 hover:bg-white dark:hover:bg-accent/30 border-t-2 border-l-2 border-r-2 border-purple-500/30 aria-selected:bg-purple-600 aria-selected:text-white transition-all duration-300 group"
+                            id="notifications-tab" type="button" role="tab" aria-controls="notifications" aria-selected="{{ $activeTab === 'notifications' ? 'true' : 'false' }}">
                         <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-purple-500/50 group-aria-selected:border-white/30"></span>
                         <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-purple-500/50 group-aria-selected:border-white/30"></span>
                         <span class="flex items-center gap-2">
@@ -57,7 +60,7 @@
         {{-- Tab Content --}}
         <div id="settings-tab-content">
             {{-- Personal Scrolls Tab --}}
-            <div class="hidden" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+            <div @class(['hidden' => $activeTab !== 'personal']) id="personal" role="tabpanel" aria-labelledby="personal-tab">
                 <div class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm rounded-none border-2 border-purple-500/30 dark:border-purple-400/20 overflow-hidden mb-8">
                     <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
@@ -180,7 +183,7 @@
             </div>
 
             {{-- Protective Wards Tab --}}
-            <div class="hidden" id="protective" role="tabpanel" aria-labelledby="protective-tab">
+            <div @class(['hidden' => $activeTab !== 'protective']) id="protective" role="tabpanel" aria-labelledby="protective-tab">
                 <div class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm rounded-none border-2 border-purple-500/30 dark:border-purple-400/20 overflow-hidden mb-8">
                     <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
@@ -232,7 +235,7 @@
             </div>
 
             {{-- Notifications Tab --}}
-            <div class="hidden" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
+            <div @class(['hidden' => $activeTab !== 'notifications']) id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
                 <div class="relative bg-white/80 dark:bg-accent/30 backdrop-blur-sm rounded-none border-2 border-purple-500/30 dark:border-purple-400/20 overflow-hidden mb-8">
                     <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/50"></div>
