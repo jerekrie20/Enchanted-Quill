@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Services\ImageService;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
@@ -46,7 +47,8 @@ class ChronicleManager extends Component
     #[Locked]
     public $blogId;
 
-    public function getStatusDataProperty(): array
+    #[Computed]
+    public function statusData(): array
     {
         return [
             Blog::STATUS_DRAFT => 'Draft',
@@ -172,6 +174,7 @@ class ChronicleManager extends Component
 
         return view('livewire.general.pages.chronicle-manager', [
             'breadcrumbs' => $breadcrumbs,
+            'statusData' => $this->statusData,
         ])->layout($this->getLayoutProperty());
     }
 }

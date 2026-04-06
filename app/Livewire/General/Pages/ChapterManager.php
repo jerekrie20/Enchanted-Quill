@@ -5,6 +5,7 @@ namespace App\Livewire\General\Pages;
 use App\Models\Book;
 use App\Models\Chapter;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
@@ -32,7 +33,8 @@ class ChapterManager extends Component
 
     public $published_at;
 
-    public function getStatusDataProperty(): array
+    #[Computed]
+    public function statusData(): array
     {
         return [
             Chapter::STATUS_DRAFT => 'Draft',
@@ -155,6 +157,7 @@ class ChapterManager extends Component
 
         return view('livewire.general.pages.chapter-manager', [
             'breadcrumbs' => $breadcrumbs,
+            'statusData' => $this->statusData,
         ])->layout($this->getLayoutProperty());
     }
 }

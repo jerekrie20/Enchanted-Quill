@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Services\ImageService;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
@@ -46,7 +47,8 @@ class BookManager extends Component
     #[Locked]
     public $book;
 
-    public function getStatusDataProperty(): array
+    #[Computed]
+    public function statusData(): array
     {
         return [
             Book::STATUS_DRAFT => 'Draft',
@@ -168,6 +170,7 @@ class BookManager extends Component
 
         return view('livewire.general.pages.book-manager', [
             'breadcrumbs' => $breadcrumbs,
+            'statusData' => $this->statusData,
         ])->layout($this->getLayoutProperty());
     }
 }
