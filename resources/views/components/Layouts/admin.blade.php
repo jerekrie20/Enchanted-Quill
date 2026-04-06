@@ -252,6 +252,17 @@
                         @endif
                     </a>
                 </li>
+                <li class="relative">
+                    <a href="{{route('admin.bosses')}}"
+                       wire:navigate.hover
+                       class="group inline-flex items-center gap-2 py-2 transition-colors duration-300 {{request()->routeIs('admin.bosses') ? 'text-secondary' : 'text-white/90 hover:text-secondary'}}">
+                        <i class="fa-solid fa-dragon w-4 h-4" aria-hidden="true"></i>
+                        <span>Bosses</span>
+                        @if(request()->routeIs('admin.bosses'))
+                            <span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-secondary"></span>
+                        @endif
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -281,6 +292,9 @@
                 </li>
                 <li>
                     <a href="{{route('admin.contact-messages')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Messages</a>
+                </li>
+                <li>
+                    <a href="{{route('admin.bosses')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Bosses</a>
                 </li>
                 <li class="border-t border-white/20 pt-4">
                     <a href="{{route('admin.settings')}}" wire:navigate class="block py-2 text-white/90 hover:text-secondary transition-colors">Settings</a>

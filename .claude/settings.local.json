@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(php artisan:*)",
+      "Read(//usr/**)",
+      "Read(//usr/local/**)",
+      "Bash(command -v php8.4)",
+      "Bash(/c/Users/Jeremiah/.config/herd/bin/php84/php.exe artisan:*)",
+      "Bash(/c/Users/Jeremiah/.config/herd/bin/php84/php.exe vendor/bin/pint --dirty)"
+    ]
+  }
+}

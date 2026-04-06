@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EditorUploadController;
 use App\Livewire\Admin\Books;
+use App\Livewire\Admin\BossManager;
 use App\Livewire\Admin\Categories;
 use App\Livewire\Admin\Comments;
 use App\Livewire\Admin\ContactMessages;
@@ -89,6 +90,7 @@ Route::middleware(['auth', 'can:admin-access'])->group(function () {
     Route::get('/admin/reviews', Reviews::class)->name('admin.reviews');
     Route::get('/admin/categories', Categories::class)->name('admin.categories');
     Route::get('/admin/contact-messages', ContactMessages::class)->name('admin.contact-messages');
+    Route::get('/admin/bosses', BossManager::class)->name('admin.bosses');
     Route::get('/admin/settings', function () {
         return view('livewire.admin.settings');
     })->name('admin.settings');

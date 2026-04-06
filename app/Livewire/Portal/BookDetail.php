@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Portal;
 
+use App\Events\BookmarkCreated;
+use App\Events\ReviewCreated;
 use App\Models\Book;
 use App\Models\Bookmark;
 use App\Rules\NoProfanity;
@@ -96,11 +98,12 @@ class BookDetail extends Component
             $bookmark->delete();
             $this->dispatch('notify', message: 'Removed from library', type: 'success');
         } else {
-            Bookmark::create([
+            $newBookmark = Bookmark::create([
                 'user_id' => auth()->id(),
                 'bookmarkable_type' => Book::class,
                 'bookmarkable_id' => $this->bookId,
             ]);
+            BookmarkCreated::dispatch($newBookmark, auth()->user());
             $this->dispatch('notify', message: 'Added to library', type: 'success');
         }
     }
@@ -136,13 +139,19 @@ class BookDetail extends Component
             'reviewContent' => ['required', 'string', 'min:10', 'max:1000', 'blasp_check', new NoProfanity],
         ]);
 
-        $this->book->reviews()->updateOrCreate(
+        $isNew = ! $this->book->reviews()->where('user_id', auth()->id())->exists();
+
+        $review = $this->book->reviews()->updateOrCreate(
             ['user_id' => auth()->id()],
             [
                 'stars' => $this->reviewRating,
                 'content' => $this->reviewContent,
             ]
         );
+
+        if ($isNew) {
+            ReviewCreated::dispatch($review, auth()->user());
+        }
 
         $this->closeReviewModal();
         $this->dispatch('notify', message: 'Review submitted successfully', type: 'success');

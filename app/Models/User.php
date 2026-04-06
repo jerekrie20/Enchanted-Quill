@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -37,6 +38,10 @@ class User extends Authenticatable
         'notify_author_actions',
         'notify_new_users',
         'notify_payments',
+        'ink_total',
+        'vocation_id',
+        'active_banner_path',
+        'active_title',
     ];
 
     /**
@@ -90,6 +95,7 @@ class User extends Authenticatable
             'notify_author_actions' => 'boolean',
             'notify_new_users' => 'boolean',
             'notify_payments' => 'boolean',
+            'ink_total' => 'integer',
         ];
     }
 
@@ -131,5 +137,46 @@ class User extends Authenticatable
     public function bookmarks(): hasMany
     {
         return $this->hasMany(Bookmark::class);
+    }
+
+    /**
+     * Get the vocation (hidden class) this user has discovered.
+     */
+    public function vocation(): BelongsTo
+    {
+        return $this->belongsTo(Vocation::class);
+    }
+
+    /**
+     * Get all achievements (badges, titles, banners) earned by this user.
+     */
+    public function achievements(): BelongsToMany
+    {
+        return $this->belongsToMany(Achievement::class, 'user_achievements')
+            ->withPivot('earned_at')
+            ->withTimestamps();
+    }
+
+    /**
+     * Check whether this user has earned a specific achievement by slug.
+     */
+    public function hasAchievement(string $slug): bool
+    {
+        return $this->achievements()->where('slug', $slug)->exists();
+    }
+
+    /**
+     * Ink (XP) tier label based on ink_total.
+     */
+    public function inkTierLabel(): string
+    {
+        return match (true) {
+            $this->ink_total >= 50000 => 'The Ancient Scriptorium',
+            $this->ink_total >= 30000 => 'The Star-Charted Sky',
+            $this->ink_total >= 15000 => 'The Arcane Librarian',
+            $this->ink_total >= 5000 => 'The Seasoned Scribe',
+            $this->ink_total >= 1000 => 'The Apprentice Weaver',
+            default => 'The Initiate',
+        };
     }
 }

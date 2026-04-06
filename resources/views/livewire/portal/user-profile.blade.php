@@ -29,6 +29,25 @@
                         <p class="text-white/80 font-serif text-lg">{{ $this->user->bio }}</p>
                     @endif
 
+                    {{-- Active Title & Vocation --}}
+                    <div class="flex items-center gap-2 flex-wrap mt-2">
+                        @if($this->user->active_title)
+                            <span class="text-violet-300 font-serif text-sm italic">{{ $this->user->active_title }}</span>
+                        @endif
+                        @if($this->user->vocation)
+                            <span class="px-2 py-0.5 bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-serif rounded-full"
+                                  title="{{ $this->user->vocation->bonus_description }}">
+                                <i class="fa-solid fa-hat-wizard mr-1" aria-hidden="true"></i>{{ $this->user->vocation->name }}
+                            </span>
+                        @endif
+                        @if($this->user->ink_total > 0)
+                            <span class="px-2 py-0.5 bg-purple-500/10 text-purple-300 border border-purple-500/20 text-xs font-serif rounded-full"
+                                  title="{{ number_format($this->user->ink_total) }} Ink">
+                                <i class="fa-solid fa-droplet mr-1" aria-hidden="true"></i>{{ $this->user->inkTierLabel() }}
+                            </span>
+                        @endif
+                    </div>
+
                     {{-- Stats --}}
                     <div class="flex items-center justify-center md:justify-start gap-6 mt-6 text-white/80 font-serif" role="list" aria-label="User statistics">
                         <div role="listitem" aria-label="{{ $this->publishedBooks->count() }} published {{ str('volume')->plural($this->publishedBooks->count()) }}">
@@ -44,6 +63,11 @@
                         <div role="listitem" aria-label="{{ $this->user->followers()->count() }} followers">
                             <span class="text-2xl font-heading text-white block">{{ $this->user->followers()->count() }}</span>
                             <span class="text-sm">{{ str('Follower')->plural($this->user->followers()->count()) }}</span>
+                        </div>
+                        <div class="w-px h-8 bg-white/20" aria-hidden="true"></div>
+                        <div role="listitem" aria-label="{{ number_format($this->user->ink_total) }} Ink earned">
+                            <span class="text-2xl font-heading text-white block">{{ number_format($this->user->ink_total) }}</span>
+                            <span class="text-sm">Ink Earned</span>
                         </div>
                         <div class="w-px h-8 bg-white/20" aria-hidden="true"></div>
                         <div role="listitem" aria-label="Member since {{ $this->user->created_at->format('Y') }}">
@@ -82,6 +106,45 @@
             </div>
         </div>
     </section>
+
+    {{-- Badge Showcase --}}
+    @php $earnedBadges = $this->user->achievements()->where('type', 'badge')->get(); @endphp
+    @if($earnedBadges->count() > 0)
+        <section class="py-8 border-b-2 border-purple-500/20" aria-labelledby="badge-showcase-heading">
+            <div class="max-w-(--breakpoint-xl) mx-auto px-4">
+                <div class="flex items-center gap-3 mb-5">
+                    <div class="w-10 h-10 rounded-full bg-amber-500/10 dark:bg-amber-500/20 flex items-center justify-center">
+                        <i class="fa-solid fa-shield-halved text-amber-500"></i>
+                    </div>
+                    <h2 id="badge-showcase-heading" class="text-2xl font-heading text-text">Badge Showcase</h2>
+                </div>
+
+                <div class="flex flex-wrap gap-4" role="list" aria-label="Earned badges">
+                    @foreach($earnedBadges as $badge)
+                        <div class="group relative flex flex-col items-center gap-2 p-4 bg-white/80 dark:bg-accent/30 border-2 border-amber-500/20 hover:border-amber-500/50 transition-all duration-300 w-28"
+                             role="listitem" aria-label="{{ $badge->name }}">
+                            <div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-amber-500/30"></div>
+                            <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-amber-500/30"></div>
+                            <div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-amber-500/30"></div>
+                            <div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-amber-500/30"></div>
+
+                            {{-- Badge Icon (placeholder if no icon_path) --}}
+                            <div class="w-14 h-14 rounded-full bg-amber-500/10 border-2 border-amber-500/30 flex items-center justify-center"
+                                 role="img" aria-label="{{ $badge->name }} badge icon">
+                                @if($badge->icon_path)
+                                    <img src="{{ asset($badge->icon_path) }}" alt="{{ $badge->name }}" class="w-10 h-10 object-contain">
+                                @else
+                                    <i class="fa-solid fa-award text-2xl text-amber-500/60" aria-hidden="true"></i>
+                                @endif
+                            </div>
+                            <span class="text-xs font-serif text-text/70 text-center leading-tight">{{ $badge->name }}</span>
+                            <span class="text-xs font-serif text-text/40 italic text-center leading-tight">{{ $badge->pivot->earned_at->format('M Y') }}</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
 
     {{-- Published Volumes --}}
     @if($this->publishedBooks->count() > 0)

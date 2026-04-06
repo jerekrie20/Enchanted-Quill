@@ -20,7 +20,7 @@ class UserProfile extends Component
 
     public function getUserProperty()
     {
-        return User::findOrFail($this->userId);
+        return User::with(['vocation', 'achievements'])->findOrFail($this->userId);
     }
 
     public function getPublishedBooksProperty()

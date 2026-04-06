@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\BookmarkCreated;
 use App\Events\ContentPublished;
+use App\Events\ReviewCreated;
+use App\Listeners\GamificationListener;
 use App\Listeners\NotifyAdminsOfNewRegistration;
 use App\Listeners\SendContentPublishedNotification;
 use Illuminate\Auth\Events\Registered;
@@ -38,6 +41,10 @@ class AppServiceProvider extends ServiceProvider
             ContentPublished::class,
             SendContentPublishedNotification::class,
         );
+
+        Event::listen(ContentPublished::class, GamificationListener::class);
+        Event::listen(ReviewCreated::class, GamificationListener::class);
+        Event::listen(BookmarkCreated::class, GamificationListener::class);
 
         // Define a gate for admin access
         Gate::define('admin-access', function ($user) {

@@ -1,0 +1,140 @@
+ENCHANTED QUILL — GAMIFICATION IMAGE REQUIREMENTS
+==================================================
+Generated: 2026-04-05
+Branch: feature/gamification-system
+
+All images should match the app's dark fantasy / arcane aesthetic:
+rich purples, deep navies, golden ambers, and mystical flourishes.
+Recommended format: .webp (with .png fallback if needed).
+
+==================================================
+SECTION 1: PROFILE BANNERS (stored in: public/banners/)
+==================================================
+Banners are full-width profile header images (recommended: 1200×300px).
+They are referenced via users.active_banner_path and can be awarded as
+achievements of type "banner".
+
+FILE NAME                              | INK TIER      | DESCRIPTION
+---------------------------------------|---------------|-------------------------------------------
+banners/tier-1-initiate.webp           | The Initiate  | Simple quill-and-ink background, subtle
+banners/tier-2-apprentice.webp         | The Apprentice Weaver | Parchment texture with woven rune borders
+banners/tier-3-seasoned-scribe.webp    | The Seasoned Scribe   | Ancient scriptorium shelves, candles
+banners/tier-4-arcane-librarian.webp   | The Arcane Librarian  | Floating books with glowing spines
+banners/tier-5-star-charted-sky.webp   | The Star-Charted Sky  | Celestial map with constellations & quills
+banners/tier-6-ancient-scriptorium.webp| The Ancient Scriptorium | Grand magical library, stained glass light
+
+WHERE USED: resources/views/livewire/portal/user-profile.blade.php
+           (profile header section — replace the bg-navbg section with
+            an <img> when users.active_banner_path is set)
+NOTES:     Admins award banners by attaching an Achievement of type "banner"
+           whose icon_path equals the banner file path above. The user then
+           sets their active_banner_path in Settings.
+
+==================================================
+SECTION 2: BADGE ICONS (stored in: public/badges/)
+==================================================
+Badge icons are circular or square icons (recommended: 128×128px or 256×256px).
+They are referenced via achievements.icon_path.
+
+FILE NAME                              | BADGE NAME              | UNLOCK TRIGGER
+---------------------------------------|-------------------------|-------------------------------------------
+badges/silver-tipped-quill.webp        | Silver-Tipped Quill     | 10 chapters published
+                                       |                         | Unlocks: High Scribe vocation
+badges/golden-quill.webp               | Golden Quill            | 50 chapters published
+badges/librarians-key.webp             | Librarian's Key         | 50 books bookmarked
+                                       |                         | Unlocks: Lore-Keeper vocation
+badges/lantern-of-insight.webp         | Lantern of Insight      | 20 reviews with 4+ stars
+                                       |                         | Unlocks: Ethereal Critic vocation
+badges/first-word.webp                 | The First Word          | First chapter published (1 chapter)
+badges/prolific-author.webp            | Prolific Author         | 100 chapters published
+badges/ink-initiate.webp               | Ink Initiate            | 1,000 Ink (XP) earned
+badges/ink-master.webp                 | Ink Master              | 10,000 Ink (XP) earned
+badges/avid-reader.webp                | Avid Reader             | 10 books bookmarked
+badges/critic-badge.webp               | The Critic              | 5 reviews given
+
+WHERE USED: resources/views/livewire/portal/user-profile.blade.php
+            (Badge Showcase section — shows earned badges with earned_at date)
+            resources/views/livewire/admin/boss-manager.blade.php
+            (not yet — future Achievement management UI)
+NOTES:     The icon_path stored in the DB should be a path relative to
+           the public directory, e.g. "badges/silver-tipped-quill.webp"
+           so it can be passed directly to asset().
+
+==================================================
+SECTION 3: BOSS ARTWORK (stored in: public/bosses/)
+==================================================
+Boss images appear in the Portal BossBar and optionally the BossManager.
+Recommended: 64×64px icon for the BossBar; larger artwork is optional.
+Currently the BossBar shows a dragon icon (Font Awesome fa-dragon) as
+a placeholder until real artwork is provided.
+
+FILE NAME                              | BOSS NAME              | SCOPE / NOTES
+---------------------------------------|------------------------|-------------------------------------------
+bosses/void-eater-icon.webp            | The Void Eater         | Site-wide world boss icon (64×64)
+bosses/void-eater-art.webp             | The Void Eater         | Larger artwork for a future boss page
+bosses/tome-guardian-icon.webp         | Tome Guardian          | Book-scoped boss icon (64×64)
+bosses/authors-trial-icon.webp         | Author's Trial         | Author-scoped boss icon (64×64)
+bosses/monthly-terror-icon.webp        | The Monthly Terror     | Seasonal world boss icon (64×64)
+
+WHERE USED: resources/views/livewire/portal/boss-bar.blade.php
+            (replace the fa-dragon placeholder with <img src="{{ asset('bosses/...') }}")
+            Boss icons should be stored in boss records and referenced
+            via a future bosses.icon_path column.
+NOTES:     The boss icon placeholder in boss-bar.blade.php is the div
+           with "fa-solid fa-dragon" — swap that for <img> once artwork
+           is available.
+
+==================================================
+SECTION 4: VOCATION EMBLEMS (stored in: public/vocations/)
+==================================================
+Small emblem or seal shown next to the vocation name on user profiles.
+Recommended: 48×48px, transparent background.
+
+FILE NAME                              | VOCATION NAME          | UNLOCK PATH
+---------------------------------------|------------------------|-------------------------------------------
+vocations/high-scribe.webp             | The High Scribe        | Silver-Tipped Quill badge (10 chapters)
+vocations/lore-keeper.webp             | The Lore-Keeper        | Librarian's Key badge (50 bookmarks)
+vocations/ethereal-critic.webp         | The Ethereal Critic    | Lantern of Insight badge (20 reviews ≥4★)
+
+WHERE USED: resources/views/livewire/portal/user-profile.blade.php
+            (shown next to the vocation pill badge in the profile header)
+NOTES:     Currently shows a hat-wizard Font Awesome icon as placeholder.
+           Add an <img> alongside it once emblems are ready.
+
+==================================================
+SECTION 5: PLACEHOLDER / LOADING STATE IMAGES
+==================================================
+
+FILE NAME                              | PURPOSE
+---------------------------------------|-------------------------------------------
+graphic/boss-placeholder.webp          | Generic boss silhouette for BossBar
+                                       | when no specific artwork is set
+
+==================================================
+HOW TO ADD IMAGES TO THE DATABASE (SEED EXAMPLE)
+==================================================
+
+After adding image files, seed the Achievement records like this:
+
+Achievement::create([
+    'name'              => 'Silver-Tipped Quill',
+    'slug'              => 'silver-tipped-quill',
+    'description'       => 'Awarded for publishing 10 chapters.',
+    'type'              => 'badge',
+    'icon_path'         => 'badges/silver-tipped-quill.webp',
+    'requirement_type'  => 'chapters_published',
+    'requirement_value' => 10,
+    'is_hidden'         => false,
+]);
+
+Then seed Vocation records:
+
+Vocation::create([
+    'name'                   => 'The High Scribe',
+    'slug'                   => 'high-scribe',
+    'description'            => 'A master of the written word.',
+    'bonus_description'      => '+10% Ink (XP) gain from publishing.',
+    'bonus_type'             => 'ink_multiplier',
+    'bonus_value'            => '1.1',
+    'required_achievement_id'=> Achievement::where('slug', 'silver-tipped-quill')->value('id'),
+]);

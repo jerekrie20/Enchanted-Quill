@@ -347,6 +347,11 @@
 </nav>
 
 
+{{-- Boss Bar (visible only when a site-wide Boss is active) --}}
+@auth
+    <livewire:portal.boss-bar />
+@endauth
+
 {{-- Main Content --}}
 <main id="main-content" role="main">
     {{$slot}}
