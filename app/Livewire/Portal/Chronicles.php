@@ -13,7 +13,7 @@ class Chronicles extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     #[Title('Chronicles - Enchanted Quill')]
     public $search = '';
 

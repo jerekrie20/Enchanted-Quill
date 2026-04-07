@@ -222,7 +222,7 @@
                     title="Silence in the Chronicles"
                     message="No recent chronicles found. Check back soon for new insights from our community!"
                     action-text="Browse Chronicles"
-                    :action-url="route('public.blog')"
+                    :action-url="route('blog')"
                 />
             @endif
     </section>

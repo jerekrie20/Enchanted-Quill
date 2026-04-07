@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class AuthorDashboard extends Component
 {
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     #[Title('My Content - Enchanted Quill')]
     public function render()
     {

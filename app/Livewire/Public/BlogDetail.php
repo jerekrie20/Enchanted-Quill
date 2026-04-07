@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class BlogDetail extends Component
 {
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     public $blogId;
 
     public function getBlogProperty()

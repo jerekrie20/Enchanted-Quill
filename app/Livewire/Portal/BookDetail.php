@@ -162,7 +162,7 @@ class BookDetail extends Component
             ->paginate(5, pageName: 'reviews');
 
         // Use public layout for guests, portal layout for authenticated users
-        $layout = auth()->check() ? 'components.Layouts.portal' : 'components.Layouts.public';
+        $layout = auth()->check() ? 'components.layouts.portal' : 'components.layouts.public';
 
         return view('livewire.portal.book-detail', [
             'reviews' => $reviews,

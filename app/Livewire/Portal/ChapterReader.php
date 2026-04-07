@@ -17,8 +17,8 @@ class ChapterReader extends Component
     {
         // Use portal layout for authors, admin, readers, and public layout for others
         return auth()->user()
-            ? 'components.Layouts.portal'
-            : 'components.Layouts.public';
+            ? 'components.layouts.portal'
+            : 'components.layouts.public';
     }
 
     public $bookId;

@@ -15,7 +15,7 @@ class Messages extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     #[Title('My Messages')]
     public $selectedMessage = null;
 

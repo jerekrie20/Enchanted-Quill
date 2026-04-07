@@ -15,7 +15,7 @@ class ContactMessages extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.admin')]
+    #[Layout('components.layouts.admin')]
     #[Title('Contact Messages')]
 
     #[Url]

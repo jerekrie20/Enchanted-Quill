@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    #[Layout('components.Layouts.admin')]
+    #[Layout('components.layouts.admin')]
     #[Title('Dashboard')]
 
     // All-time totals

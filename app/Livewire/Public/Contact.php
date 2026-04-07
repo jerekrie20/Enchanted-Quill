@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class Contact extends Component
 {
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     #[Title('Contact Us - Enchanted Quill')]
     public $name = '';
 

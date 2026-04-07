@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Policies extends Component
 {
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     #[Title('Policies - Enchanted Quill')]
     public function render()
     {

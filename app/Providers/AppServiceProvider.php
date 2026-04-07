@@ -52,8 +52,6 @@ class AppServiceProvider extends ServiceProvider
             return $user->role === 'admin' || $user->role === 'author';
         });
 
-
-
         // Update the last_active timestamp for the authenticated user
         View::composer('*', function ($view) {
             if (Auth::check()) {
@@ -66,7 +64,6 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
-
 
     }
 }

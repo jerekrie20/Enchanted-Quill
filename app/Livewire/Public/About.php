@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class About extends Component
 {
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     #[Title('About Us - Enchanted Quill')]
     public function render()
     {

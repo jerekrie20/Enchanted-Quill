@@ -13,7 +13,7 @@ class Library extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     #[Title('Library - Enchanted Quill')]
     public $search = '';
 

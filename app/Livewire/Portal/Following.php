@@ -37,7 +37,7 @@ class Following extends Component
         session()->flash('success', 'You have unbound the pact with this author.');
     }
 
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     #[Title('Following - Enchanted Quill')]
     public function render()
     {

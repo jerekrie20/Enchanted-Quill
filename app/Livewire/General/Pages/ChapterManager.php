@@ -19,8 +19,8 @@ class ChapterManager extends Component
     {
         // Use portal layout for authors, admin layout for admins
         return auth()->user()->role === 'admin'
-            ? 'components.Layouts.admin'
-            : 'components.Layouts.portal';
+            ? 'components.layouts.admin'
+            : 'components.layouts.portal';
     }
 
     // Form fields

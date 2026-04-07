@@ -15,7 +15,7 @@ class Settings extends Component
 {
     use WithFileUploads;
 
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     #[Validate('required|string|max:255')]
     public $name = '';
 

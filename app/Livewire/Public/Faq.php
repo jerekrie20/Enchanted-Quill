@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Faq extends Component
 {
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     #[Title('Frequently Asked Questions - Enchanted Quill')]
     public function render()
     {

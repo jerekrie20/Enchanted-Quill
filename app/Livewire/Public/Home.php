@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class Home extends Component
 {
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     #[Title('Welcome to Enchanted Quill - Where Words Weave Magic')]
     public function render()
     {

@@ -12,7 +12,7 @@ class BookDetail extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     public $bookId;
 
     public $canRead = false;

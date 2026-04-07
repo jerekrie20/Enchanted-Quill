@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class UserProfile extends Component
 {
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     public $userId;
 
     public function mount($id): void

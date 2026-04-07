@@ -14,7 +14,7 @@ class Blog extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     #[Title('Blog - Enchanted Quill')]
 
     #[Url]

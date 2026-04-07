@@ -17,7 +17,7 @@ class Users extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.admin')]
+    #[Layout('components.layouts.admin')]
     #[Title('Users')]
 
     // Searches

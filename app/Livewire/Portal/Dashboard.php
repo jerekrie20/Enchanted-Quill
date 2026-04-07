@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class Dashboard extends Component
 {
-    #[Layout('components.Layouts.portal')]
+    #[Layout('components.layouts.portal')]
     #[Title('Home - Enchanted Quill')]
     public function render()
     {

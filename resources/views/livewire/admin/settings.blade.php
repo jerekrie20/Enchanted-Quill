@@ -1,4 +1,4 @@
-<x-Layouts.admin>
+<x-layouts.admin>
 
     <x-slot:title>
         Library Configurations
@@ -92,4 +92,4 @@
         </main>
     </div>
 
-</x-Layouts.admin>
+</x-layouts.admin>

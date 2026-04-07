@@ -1,4 +1,4 @@
-<x-Layouts.auth>
+<x-layouts.auth>
     <x-slot name="title">Confirm Password - Enchanted Quill</x-slot>
 
     <div class="w-full max-w-md">
@@ -45,5 +45,5 @@
         </div>
     </div>
 
-</x-Layouts.auth>
+</x-layouts.auth>
 

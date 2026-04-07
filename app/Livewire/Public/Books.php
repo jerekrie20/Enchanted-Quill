@@ -14,7 +14,7 @@ class Books extends Component
 {
     use WithPagination;
 
-    #[Layout('components.Layouts.public')]
+    #[Layout('components.layouts.public')]
     #[Title('Browse Books - Enchanted Quill')]
 
     #[Url]

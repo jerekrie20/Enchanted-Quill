@@ -1,4 +1,4 @@
-<x-Layouts.auth>
+<x-layouts.auth>
     <x-slot name="title">Register - Enchanted Quill</x-slot>
 
     <div class="w-full xl:w-1/2 mx-auto">
@@ -98,4 +98,4 @@
         </div>
     </div>
 
-</x-Layouts.auth>
+</x-layouts.auth>
