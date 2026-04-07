@@ -145,7 +145,7 @@
                             <a href="{{ route('portal.book.show', $book->id) }}" wire:navigate class="block">
                                 @if($book->cover)
                                     <div class="aspect-[3/4] overflow-hidden">
-                                        <img src="{{ asset('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        <img src="{{ \Storage::url('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
                                 @else
                                     <div class="aspect-[3/4] bg-purple-500/10 flex items-center justify-center">

@@ -68,7 +68,7 @@
                     <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-purple-500/50"></div>
                     <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-purple-500/50"></div>
                     <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-purple-500/50"></div>
-                    <img src="{{ asset('blogs/' . $chronicle->image) }}"
+                    <img src="{{ \Storage::url('blogs/' . $chronicle->image) }}"
                          alt="Featured image for {{ $chronicle->title }}"
                          class="w-full rounded-none shadow-2xl border-2 border-purple-500/20">
                 </div>
@@ -141,7 +141,7 @@
                     <div
                         class="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-purple-500/20">
                         @if($chronicle->user->profile_image)
-                            <img src="{{ asset('storage/' . $chronicle->user->profile_image) }}"
+                            <img src="{{ \Storage::url($chronicle->user->profile_image) }}"
                                  alt="Profile picture of {{ $chronicle->user->name }}"
                                  class="w-full h-full rounded-full object-cover">
                         @else
@@ -234,7 +234,7 @@
                                 <div
                                     class="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-purple-500/20">
                                     @if($comment->user->profile_image)
-                                        <img src="{{ asset('storage/' . $comment->user->profile_image) }}"
+                                        <img src="{{ \Storage::url($comment->user->profile_image) }}"
                                              alt="Profile picture of {{ $comment->user->name }}"
                                              class="w-full h-full rounded-full object-cover">
                                     @else

@@ -262,7 +262,7 @@
 
                                 {{-- Cover Image --}}
                                 @if($book->cover)
-                                    <img src="{{asset('books/' . $book->cover)}}"
+                                    <img src="{{ \Storage::url('books/' . $book->cover) }}"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                          alt="{{$book->title}}">
                                 @else

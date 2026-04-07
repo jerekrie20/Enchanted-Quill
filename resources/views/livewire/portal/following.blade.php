@@ -34,7 +34,7 @@
                 <div class="flex items-start gap-4">
                     <a href="{{ route('portal.profile', $author->id) }}" wire:navigate class="shrink-0 relative">
                         @if($author->profile_image)
-                            <img src="{{ asset('storage/' . $author->profile_image) }}" alt="{{ $author->name }}" class="w-16 h-16 rounded-full object-cover border-2 border-purple-500/30">
+                            <img src="{{ \Storage::url($author->profile_image) }}" alt="{{ $author->name }}" class="w-16 h-16 rounded-full object-cover border-2 border-purple-500/30">
                         @else
                             <div class="w-16 h-16 rounded-full bg-purple-500/10 flex items-center justify-center border-2 border-purple-500/30">
                                 <i class="fa-solid fa-user-nib text-2xl text-purple-500"></i>

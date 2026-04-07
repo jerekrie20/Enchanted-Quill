@@ -139,7 +139,7 @@
                         <div class="flex items-start gap-6">
                             <div class="w-24 h-24 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 border-4 border-purple-500/30" role="img" aria-label="Current profile picture">
                                 @if(auth()->user()->profile_image)
-                                    <img src="{{ asset('storage/' . auth()->user()->profile_image) }}" alt="Profile picture" class="w-full h-full rounded-full object-cover">
+                                    <img src="{{ \Storage::url(auth()->user()->profile_image) }}" alt="Profile picture" class="w-full h-full rounded-full object-cover">
                                 @else
                                     <i class="fa-solid fa-user text-4xl text-purple-500 dark:text-violet-400" aria-hidden="true"></i>
                                 @endif

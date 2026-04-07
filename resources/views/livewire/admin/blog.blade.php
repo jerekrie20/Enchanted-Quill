@@ -159,7 +159,7 @@
 
                                 {{-- Banner Image --}}
                                 @if($blog->image)
-                                    <img src="{{asset('blogs/' . $blog->image)}}"
+                                    <img src="{{ \Storage::url('blogs/' . $blog->image) }}"
                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                          alt="{{$blog->title}}">
                                 @else

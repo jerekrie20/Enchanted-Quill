@@ -14,7 +14,7 @@
                             <div class="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-purple-500/50"></div>
                             <div class="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-purple-500/50"></div>
                             <div class="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-purple-500/50"></div>
-                            <img src="{{ asset('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full rounded-sm shadow-2xl border-2 border-purple-500/30">
+                            <img src="{{ \Storage::url('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full rounded-sm shadow-2xl border-2 border-purple-500/30">
                         </div>
                     @else
                         <div class="relative w-full aspect-[3/4] bg-purple-500/10 rounded-sm flex items-center justify-center border-2 border-purple-500/30" role="img" aria-label="Placeholder book cover">

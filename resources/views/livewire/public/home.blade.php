@@ -73,7 +73,7 @@
                             <a href="{{ route('public.book.show', $book->id) }}" wire:navigate class="block">
                                 @if($book->cover)
                                     <div class="aspect-[3/4] overflow-hidden">
-                                        <img src="{{ asset('books/' . $book->cover) }}"
+                                        <img src="{{ \Storage::url('books/' . $book->cover) }}"
                                              alt="Cover of {{ $book->title }}"
                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
@@ -145,7 +145,7 @@
                                 <a href="{{ route('public.blog.show', $blog->id) }}" wire:navigate class="block">
                                     @if($blog->image)
                                         <div class="aspect-video overflow-hidden">
-                                            <img src="{{ asset('blogs/' . $blog->image) }}"
+                                            <img src="{{ \Storage::url('blogs/' . $blog->image) }}"
                                                  alt="Featured image for {{ $blog->title }}"
                                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                         </div>

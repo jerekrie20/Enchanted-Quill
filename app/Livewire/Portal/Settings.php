@@ -75,10 +75,10 @@ class Settings extends Component
         $user = Auth::user();
 
         if ($user->profile_image) {
-            \Storage::disk('public')->delete($user->profile_image);
+            \Storage::delete($user->profile_image);
         }
 
-        $path = $this->profile_image->store('profile-images', 'public');
+        $path = $this->profile_image->store('profile-images');
         $user->profile_image = $path;
         $user->save();
 
@@ -91,7 +91,7 @@ class Settings extends Component
         $user = Auth::user();
 
         if ($user->profile_image) {
-            \Storage::disk('public')->delete($user->profile_image);
+            \Storage::delete($user->profile_image);
             $user->profile_image = null;
             $user->save();
             session()->flash('image-removed', 'Profile image removed successfully.');

@@ -9,7 +9,7 @@
                 {{-- Profile Image --}}
                 <div class="w-32 h-32 bg-purple-500/10 rounded-full flex items-center justify-center flex-shrink-0 border-4 border-purple-500/30" role="img" aria-label="Profile picture for {{ $this->user->name }}">
                     @if($this->user->profile_image)
-                        <img src="{{ asset('storage/' . $this->user->profile_image) }}" alt="Profile picture of {{ $this->user->name }}" class="w-full h-full rounded-full object-cover">
+                        <img src="{{ \Storage::url($this->user->profile_image) }}" alt="Profile picture of {{ $this->user->name }}" class="w-full h-full rounded-full object-cover">
                     @else
                         <i class="fa-solid fa-user text-6xl text-purple-500 dark:text-violet-400" aria-hidden="true"></i>
                     @endif
@@ -105,7 +105,7 @@
                             <a href="{{ route('portal.book.show', $book->id) }}" wire:navigate class="block" aria-label="View {{ $book->title }}">
                                 @if($book->cover)
                                     <div class="aspect-[3/4] overflow-hidden">
-                                        <img src="{{ asset('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        <img src="{{ \Storage::url('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
                                 @else
                                     <div class="aspect-[3/4] bg-purple-500/10 flex items-center justify-center" role="img" aria-label="No cover image available for {{ $book->title }}">
@@ -150,7 +150,7 @@
                             <a href="{{ route('portal.chronicle.show', $chronicle->id) }}" wire:navigate class="block" aria-label="View {{ $chronicle->title }}">
                                 @if($chronicle->image)
                                     <div class="aspect-video overflow-hidden">
-                                        <img src="{{ asset('blogs/' . $chronicle->image) }}" alt="Featured image for {{ $chronicle->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        <img src="{{ \Storage::url('blogs/' . $chronicle->image) }}" alt="Featured image for {{ $chronicle->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
                                 @else
                                     <div class="aspect-video bg-purple-500/10 flex items-center justify-center" role="img" aria-label="No featured image available for {{ $chronicle->title }}">
@@ -197,7 +197,7 @@
                             <a href="{{ route('portal.book.show', $book->id) }}" wire:navigate class="block" aria-label="View {{ $book->title }}">
                                 @if($book->cover)
                                     <div class="aspect-[3/4] overflow-hidden">
-                                        <img src="{{ asset('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                        <img src="{{ \Storage::url('books/' . $book->cover) }}" alt="Cover image for {{ $book->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     </div>
                                 @else
                                     <div class="aspect-[3/4] bg-purple-500/10 flex items-center justify-center" role="img" aria-label="No cover image available for {{ $book->title }}">

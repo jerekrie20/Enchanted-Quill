@@ -36,25 +36,22 @@ class ImageService
             $day = date('d');
             $pathPrefix = "{$folder}/{$year}/{$month}/{$day}";
 
-            // Create the directory if it doesn't exist
-            Storage::disk('public')->makeDirectory($pathPrefix);
-
             // Generate a unique filename
             do {
                 $filename = $base.'_'.rand(1000, 9999).'.'.$extension;
                 $fullPath = "{$pathPrefix}/{$filename}";
-            } while (Storage::disk('public')->exists($fullPath));
+            } while (Storage::exists($fullPath));
 
             // Delete the old image if it exists
             if (! empty($current)) {
                 $currentPath = "{$folder}/{$current}";
-                if (Storage::disk('public')->exists($currentPath)) {
-                    Storage::disk('public')->delete($currentPath);
+                if (Storage::exists($currentPath)) {
+                    Storage::delete($currentPath);
                 }
             }
 
             // Save the image
-            $img->save(Storage::disk('public')->path($fullPath));
+            Storage::put($fullPath, $img->encodeByExtension($extension)->toString());
 
             // Return the new filename with date path
             return "{$year}/{$month}/{$day}/{$filename}";
@@ -75,9 +72,6 @@ class ImageService
         if (! empty($images)) {
             $pathPrefix = "{$folder}/{$subfolder}";
 
-            // Create the directory if it doesn't exist
-            Storage::disk('public')->makeDirectory($pathPrefix);
-
             foreach ($images as $image) {
                 // Read the uploaded image file
                 $img = Image::read($image->getRealPath());
@@ -89,7 +83,7 @@ class ImageService
                 $fullPath = "{$pathPrefix}/{$filename}";
 
                 // Save the image
-                $img->save(Storage::disk('public')->path($fullPath));
+                Storage::put($fullPath, $img->encodeByExtension($extension)->toString());
 
                 // Add the filename to the array
                 $filenames[] = "{$subfolder}/{$filename}";
@@ -106,8 +100,8 @@ class ImageService
     {
         $path = $folder ? "{$folder}/{$image}" : $image;
 
-        if (Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+        if (Storage::exists($path)) {
+            Storage::delete($path);
         } else {
             Log::warning("File not found or invalid path: {$path}");
         }
@@ -147,24 +141,22 @@ class ImageService
             // Get the subfolder
             $firstImageParts = explode('/', array_values($images)[0]);
             $subfolder = count($firstImageParts) > 1 ? $firstImageParts[0] : null;
-            $disk = Storage::disk('public');
-
             foreach ($images as $image) {
                 $fullPath = "{$folder}/{$image}";
-                if ($disk->exists($fullPath)) {
-                    $disk->delete($fullPath);
+                if (Storage::exists($fullPath)) {
+                    Storage::delete($fullPath);
                 }
             }
 
             // Check if the subfolder exists and is empty
             if ($subfolder) {
                 $subfolderPath = "{$folder}/{$subfolder}";
-                if ($disk->exists($subfolderPath)) {
-                    $files = $disk->files($subfolderPath);
-                    $directories = $disk->directories($subfolderPath);
+                if (Storage::exists($subfolderPath)) {
+                    $files = Storage::files($subfolderPath);
+                    $directories = Storage::directories($subfolderPath);
 
                     if (empty($files) && empty($directories)) {
-                        $disk->deleteDirectory($subfolderPath);
+                        Storage::deleteDirectory($subfolderPath);
                     }
                 }
             }

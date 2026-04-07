@@ -18,7 +18,7 @@
                         <img class="w-32 h-32 rounded-full" src="{{ $avatar->temporaryUrl() }}" alt="Image Preview" />
                     @elseif(!empty($currentAvatar))
                         {{-- Show current image --}}
-                        <img class="w-32 h-32 rounded-full" src="{{ asset('avatars/' . $currentAvatar) }}" alt="{{$currentAvatar}}" />
+                        <img class="w-32 h-32 rounded-full" src="{{ \Storage::url('avatars/' . $currentAvatar) }}" alt="{{$currentAvatar}}" />
                     @else
                         {{-- Default Placeholder Image --}}
                         <img class="w-32 h-32 rounded-full" src="https://images.pexels.com/photos/2690323/pexels-photo-2690323.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="Default Image" />

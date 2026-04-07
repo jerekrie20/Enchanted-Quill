@@ -90,7 +90,7 @@
                             <div class="absolute top-0 left-0 right-0 h-px bg-secondary/30"></div>
 
                             @if($currentImage)
-                                <img class="w-full h-full object-cover" src="{{ asset('blogs/' . $currentImage) }}" alt="Chronicle Cover"/>
+                                <img class="w-full h-full object-cover" src="{{ \Storage::url('blogs/' . $currentImage) }}" alt="Chronicle Cover"/>
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary/10 to-primary/10">
                                     <svg class="w-16 h-16 text-text/20" fill="currentColor" viewBox="0 0 24 24">
