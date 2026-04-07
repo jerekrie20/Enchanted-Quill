@@ -24,8 +24,8 @@ class ImageService
     public function saveImage($image, $current, $folder, $base = 'img')
     {
         if ($image) {
-            // Read the uploaded image file
-            $img = Image::read($image->getRealPath());
+            // Read the uploaded image file (use get() to support both local and S3 storage)
+            $img = Image::read($image->get());
             // Resize the image to 300x300
             $img->cover(300, 300, 'center');
 
@@ -73,8 +73,8 @@ class ImageService
             $pathPrefix = "{$folder}/{$subfolder}";
 
             foreach ($images as $image) {
-                // Read the uploaded image file
-                $img = Image::read($image->getRealPath());
+                // Read the uploaded image file (use get() to support both local and S3 storage)
+                $img = Image::read($image->get());
                 // Resize the image to 300x300
                 $img->cover(300, 300, 'center');
 
